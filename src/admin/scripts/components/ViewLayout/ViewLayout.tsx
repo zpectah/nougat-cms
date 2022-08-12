@@ -6,14 +6,16 @@ import {
     HEADER_HEIGHT,
     SIDEBAR_WIDTH,
     TRANSITION_DEFAULT_SUFFIX,
-} from '../../styles/const';
+} from '../../const';
+import { viewLayoutKeyType } from '../../types';
 import { Header } from './Header';
 import { Footer } from './Footer';
 import { Sidebar } from './Sidebar';
+import { AnnouncementBanner } from './AnnouncementBanner';
 
 type ViewLayoutBaseProps = {
     children?: React.ReactNode,
-    variant?: 'default' | 'minimal',
+    variant?: viewLayoutKeyType,
 }
 export type ViewLayoutProps = ViewLayoutBaseProps
 
@@ -61,6 +63,7 @@ const ViewLayout: React.FC<ViewLayoutProps> = (props) => {
                     }}
                 >
                     <Container>
+                        <AnnouncementBanner />
                         {children}
                     </Container>
                 </Box>

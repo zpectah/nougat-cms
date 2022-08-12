@@ -6,7 +6,8 @@ import {
     HEADER_HEIGHT,
     SIDEBAR_WIDTH,
     TRANSITION_DEFAULT_SUFFIX,
-} from '../../../styles/const';
+    HEADER_ZINDEX,
+} from '../../../const';
 
 const Header = () => {
     const { sidebarOpen, toggleSidebar } = useSidebar();
@@ -27,7 +28,7 @@ const Header = () => {
                 transition: `width ${TRANSITION_DEFAULT_SUFFIX}, left ${TRANSITION_DEFAULT_SUFFIX}`,
                 height: HEADER_HEIGHT,
                 top: 0,
-                zIndex: 1100,
+                zIndex: HEADER_ZINDEX,
                 display: 'flex',
                 flexDirection: 'row',
                 alignItems: 'center',

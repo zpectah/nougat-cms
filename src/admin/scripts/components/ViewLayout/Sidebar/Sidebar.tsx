@@ -2,7 +2,7 @@ import React from 'react';
 import { Drawer } from '@mui/material';
 
 import { useSidebar } from '../../../hooks';
-import { SIDEBAR_WIDTH } from '../../../styles/const';
+import { SIDEBAR_WIDTH } from '../../../const';
 
 const Sidebar = () => {
     const { sidebarOpen, toggleSidebar } = useSidebar();

@@ -6,10 +6,11 @@ import {
     FOOTER_HEIGHT,
     SIDEBAR_WIDTH,
     TRANSITION_DEFAULT_SUFFIX,
-} from '../../../styles/const';
+} from '../../../const';
+import { viewLayoutKeyType } from '../../../types';
 
 type FooterBaseProps = {
-    variant?: 'default' | 'minimal',
+    variant?: viewLayoutKeyType,
 }
 export type FooterProps = FooterBaseProps
 

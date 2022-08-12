@@ -99,6 +99,10 @@ module.exports = (env) => {
     };
     const resolveModules = [ path.join(__dirname, 'node_modules') ];
     const configTarget = `../${destination}/${constants.APP.config}`;
+	const extraBundleEnv = {
+		BUNDLE_ENVIRONMENT: JSON.stringify(mode),
+		BUNDLE_DEBUG: env.env === constants.ENV.dev.key,
+	};
 
     return [
 			{
@@ -159,9 +163,7 @@ module.exports = (env) => {
 						],
 					}),
 					new DefinePlugin({
-						'process.env': {
-							BUILD_ENVIRONMENT: JSON.stringify(mode),
-						}
+						'process.env': extraBundleEnv
 					}),
 				],
 				output: {
@@ -206,6 +208,9 @@ module.exports = (env) => {
 						__VUE_PROD_DEVTOOLS__: env.env === constants.ENV.dev.key,
 					}),
 					new VueLoaderPlugin(),
+					new DefinePlugin({
+						'process.env': extraBundleEnv
+					}),
 				],
 				output: {
 					path: path.resolve(__dirname, destination),

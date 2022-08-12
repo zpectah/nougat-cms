@@ -1,4 +1,8 @@
+export type environmentalKeyType = 'development' | 'test' | 'production';
+
 export type themeKeyType = 'light' | 'dark';
+
+export type viewLayoutKeyType = 'default' | 'minimal';
 
 export type toastItemType = {
     id?: string | number;

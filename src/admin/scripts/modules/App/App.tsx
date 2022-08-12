@@ -7,6 +7,7 @@ import {
     useSidebar,
     useMeta,
 } from '../../hooks';
+import { Toasts } from '../Toasts';
 import {
     Error404View,
     DashboardView,
@@ -32,6 +33,7 @@ const App = () => {
                     <Route path="*" element={<Error404View />} />
                 </Routes>
             </BrowserRouter>
+            <Toasts />
         </ThemeProvider>
     );
 };

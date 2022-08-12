@@ -51,7 +51,7 @@
     "copyright": 2022,
     "color": "#000000",
     "background": "#ffffff",
-    "repository": "...TODO...",
+    "repository": "https://github.com/zpectah/nougat-cms",
     "themes": {
       "default": "light",
       "list": [ "light", "dark" ]
