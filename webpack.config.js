@@ -142,7 +142,7 @@ module.exports = (env) => {
 								transform(content) {
 									return modifyWebManifest(content);
 								},
-							},
+							}
 						],
 					}),
 					new NodePolyfillPlugin(),
@@ -157,6 +157,11 @@ module.exports = (env) => {
 							`../${destination}/main.js`,
 							`../${destination}/main.js.LICENSE.txt`,
 						],
+					}),
+					new DefinePlugin({
+						'process.env': {
+							BUILD_ENVIRONMENT: JSON.stringify(mode),
+						}
 					}),
 				],
 				output: {

@@ -8,4 +8,5 @@ export type storeProps = {
     theme: themeKeyType,
     toasts: toastItemType[],
     announcementBanner: React.ReactNode | null,
+    meta: any, // TODO
 };

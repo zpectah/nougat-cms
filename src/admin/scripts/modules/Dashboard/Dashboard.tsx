@@ -1,8 +1,14 @@
 import React from 'react';
 
+import config from '../../config';
+import { useMeta } from '../../hooks';
 import { Button } from '../../components';
 
 const Dashboard = () => {
+    const { meta } = useMeta();
+
+    console.log('config', config);
+    console.log('meta', meta);
 
     return (
         <>

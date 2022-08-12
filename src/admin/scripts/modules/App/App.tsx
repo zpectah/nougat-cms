@@ -2,7 +2,11 @@ import React, {useEffect} from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 
-import { useTheme, useSidebar } from '../../hooks';
+import {
+    useTheme,
+    useSidebar,
+    useMeta,
+} from '../../hooks';
 import {
     Error404View,
     DashboardView,
@@ -11,9 +15,11 @@ import {
 const App = () => {
     const { themeObject } = useTheme();
     const { sidebarInit } = useSidebar();
+    const { loadMeta } = useMeta();
 
     useEffect(() => {
         sidebarInit();
+        loadMeta();
 
     }, []);
 

@@ -1,8 +1,11 @@
 import React from 'react';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { KEYS } from '../const';
-import { LANGUAGE, THEME } from '../config';
+import {
+    KEYS,
+    LANGUAGE,
+    THEME,
+} from '../const';
 import {
     storeProps,
     themeKeyType,
@@ -15,6 +18,7 @@ const initialState: storeProps = {
     theme: ((localStorage.getItem(KEYS.APP_THEME) === 'light' || localStorage.getItem(KEYS.APP_THEME) === 'dark') && localStorage.getItem(KEYS.APP_THEME) as themeKeyType) || THEME.default,
     toasts: [],
     announcementBanner: null,
+    meta: {},
 };
 
 const slice = createSlice({
@@ -40,6 +44,9 @@ const slice = createSlice({
         },
         setAnnouncement(state, action: PayloadAction<React.ReactNode | null>) {
             state.announcementBanner = action.payload;
+        },
+        setMeta(state, action: PayloadAction<any>) {
+            state.meta = action.payload;
         },
     },
 });

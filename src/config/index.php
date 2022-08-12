@@ -18,6 +18,7 @@ define("DEBUG", $CFG_ENV['debug']);
 /* ==== Configuration files ==== */
 define("__META", $CFG_ENV['_meta']);
 define("__CONSTANTS", $CFG_ENV['_constants']);
+define("__ENV_META", $CFG_ENV); // Whole generated 'env.json' file
 define("__ENVIRONMENTAL", $CFG_ENVIRONMENTAL[ENV]);
 define("__GLOBAL", $CFG_GLOBAL);
 define("__LOCALES", $CFG_LOCALES);
