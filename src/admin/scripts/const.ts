@@ -1,0 +1,7 @@
+export const TOAST_DEFAULT_TIMEOUT = 3500;
+
+export const KEYS = {
+    APP_SIDEBAR: 'APP.SIDEBAR',
+    APP_LANGUAGE: 'APP.LANGUAGE',
+    APP_THEME: 'APP.THEME',
+};

@@ -1,0 +1,20 @@
+{
+  "name": "MY PROJECT NAME",
+  "short_name": "MY PROJECT",
+  "author": "Tomas Sychra | zpecter.com",
+  "copyright": 2022,
+  "color": "#000000",
+  "background": "#ffffff",
+  "document": {
+    "meta": {
+      "title": "MY PROJECT TITLE",
+      "description": "My project document default description, will be changed during rendering with data",
+      "robots": "noindex",
+      "keywords": "test,demo,project",
+      "author": "Tomas Sychra | zpecter.com",
+      "charset": "utf-8",
+      "viewport": "width=device-width,initial-scale=1",
+      "lang": "en-US"
+    }
+  }
+}

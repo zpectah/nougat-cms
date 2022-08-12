@@ -1,0 +1,11 @@
+{
+  "development": {
+    "base_path": "http://cms23/"
+  },
+  "test": {
+    "base_path": "http://test.cms23/"
+  },
+  "production": {
+    "base_path": "https://www.cms23.io/"
+  }
+}

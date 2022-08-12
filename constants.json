@@ -1,0 +1,76 @@
+{
+  "ENV": {
+    "src": {
+      "key": "source",
+      "folder": "src"
+    },
+    "dev": {
+      "key": "development",
+      "folder": "dist"
+    },
+    "test": {
+      "key": "test",
+      "folder": "test"
+    },
+    "prod": {
+      "key": "production",
+      "folder": "prod"
+    }
+  },
+  "APP": {
+    "config": "config",
+    "uploads": "uploads",
+    "logs": "logs",
+    "assets": "assets",
+    "admin": {
+      "path": "/admin",
+      "folder": "admin",
+      "scripts": "scripts"
+    },
+    "api": {
+      "path": "/api",
+      "folder": "api"
+    },
+    "web": {
+      "path": "/",
+      "folder": "web",
+      "scripts": "scripts",
+      "styles": "styles",
+      "views": "views",
+      "views_compiled": "compiled"
+    }
+  },
+  "DEFAULTS": {
+    "no_js_text": "You need to enable JavaScript to run this app."
+  },
+  "CMS": {
+    "name": "Nougat CMS",
+    "short_name": "NougatCMS",
+    "description": "Content managing system based on React admin & static web and GraphQl",
+    "author": "Tomas Sychra | zpecter.com",
+    "copyright": 2022,
+    "color": "#000000",
+    "background": "#ffffff",
+    "repository": "...TODO...",
+    "themes": {
+      "default": "light",
+      "list": [ "light", "dark" ]
+    },
+    "languages": {
+      "default": "en-US",
+      "list": [ "en-US", "cs-CZ" ]
+    },
+    "document": {
+      "meta": {
+        "title": "NougatCMS",
+        "description": "Content managing system based on React admin & static web and GraphQl",
+        "robots": "noindex",
+        "keywords": "cms,react,admin,graphql,nougat",
+        "author": "Tomas Sychra | zpecter.com",
+        "charset": "utf-8",
+        "viewport": "width=device-width,initial-scale=1",
+        "lang": "en-US"
+      }
+    }
+  }
+}

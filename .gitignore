@@ -1,0 +1,7 @@
+/node_modules
+/dist
+/prod
+/test
+/src/vendor
+/.idea
+/yarn-error.log
