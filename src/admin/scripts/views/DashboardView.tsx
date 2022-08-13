@@ -6,9 +6,10 @@ import { ViewLayout } from '../components';
 const DashboardView = () => {
 
     return (
-        <ViewLayout>
-            <Dashboard />
-        </ViewLayout>
+        <ViewLayout
+            name="Dashboard"
+            children={<Dashboard />}
+        />
     );
 };
 

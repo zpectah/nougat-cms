@@ -1,24 +1,24 @@
 import React from 'react';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import {
-    KEYS,
-    LANGUAGE,
-    THEME,
-} from '../const';
+import config from '../config';
+import { KEYS } from '../const';
 import {
     storeProps,
     themeKeyType,
     toastItemType,
+    routeItemType,
 } from '../types';
 
 const initialState: storeProps = {
     sidebar: localStorage.getItem(KEYS.APP_SIDEBAR) === 'true',
-    language: localStorage.getItem(KEYS.APP_LANGUAGE) || LANGUAGE.default,
-    theme: ((localStorage.getItem(KEYS.APP_THEME) === 'light' || localStorage.getItem(KEYS.APP_THEME) === 'dark') && localStorage.getItem(KEYS.APP_THEME) as themeKeyType) || THEME.default,
+    language: localStorage.getItem(KEYS.APP_LANGUAGE) || config.constants.CMS.languages.default,
+    theme: ((localStorage.getItem(KEYS.APP_THEME) === 'light' || localStorage.getItem(KEYS.APP_THEME) === 'dark') && localStorage.getItem(KEYS.APP_THEME) as themeKeyType) || config.constants.CMS.themes.default as themeKeyType,
     toasts: [],
     announcementBanner: null,
-    meta: {},
+    route: null,
+    meta: {}, // TODO
+    // entity: {}, // TODO
 };
 
 const slice = createSlice({
@@ -47,6 +47,9 @@ const slice = createSlice({
         },
         setMeta(state, action: PayloadAction<any>) {
             state.meta = action.payload;
+        },
+        setRoute(state, action: PayloadAction<routeItemType>) {
+            state.route = action.payload;
         },
     },
 });

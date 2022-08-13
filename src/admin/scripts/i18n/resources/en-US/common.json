@@ -3,5 +3,8 @@
     "ok": "Ok",
     "open": "Open",
     "close": "Close"
-  }
+  },
+  "page": "Page",
+  "detail": "Detail",
+  "panel": "Panel"
 }

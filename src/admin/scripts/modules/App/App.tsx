@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 
+import routes from '../../routes';
 import {
     useTheme,
     useSidebar,
@@ -11,6 +12,10 @@ import { Toasts } from '../Toasts';
 import {
     Error404View,
     DashboardView,
+    SettingsView,
+    ProfileView,
+    LoginView,
+    LostPasswordView,
 } from '../../views';
 
 const App = () => {
@@ -29,8 +34,12 @@ const App = () => {
             <CssBaseline />
             <BrowserRouter>
                 <Routes>
-                    <Route path="/admin/" element={<DashboardView />} />
-                    <Route path="*" element={<Error404View />} />
+                    <Route path={routes.Dashboard.match} element={<DashboardView />} />
+                    <Route path={routes.Settings.match} element={<SettingsView />} />
+                    <Route path={routes.Profile.match} element={<ProfileView />} />
+                    <Route path={routes.Login.match} element={<LoginView />} />
+                    <Route path={routes.LostPassword.match} element={<LostPasswordView />} />
+                    <Route path={routes.Error404.match} element={<Error404View />} />
                 </Routes>
             </BrowserRouter>
             <Toasts />

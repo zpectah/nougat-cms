@@ -11,6 +11,7 @@ import {
 } from '../../../const';
 import palette from '../../../styles/palette';
 import { SidebarToggle } from '../SidebarToggle';
+import { Breadcrumbs } from './Breadcrumbs';
 
 const Header = () => {
     const { sidebarOpen } = useSidebar();
@@ -54,7 +55,16 @@ const Header = () => {
                         <MenuIcon />
                     </SidebarToggle>
                 )}
-                ... breadcrumbs ???
+                <Box
+                    sx={{
+                        display: {
+                            xs: 'none',
+                            md: 'block',
+                        },
+                    }}
+                >
+                    <Breadcrumbs />
+                </Box>
             </Box>
             <Box>
                 settings

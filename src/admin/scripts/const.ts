@@ -1,20 +1,9 @@
-import { themeKeyType } from './types';
-
-export const API_BASE = '/api/';
+export const API_BASE = '/api/'; // TODO: make it from config object !!!
 
 export const KEYS = {
     APP_SIDEBAR: 'APP.SIDEBAR',
     APP_LANGUAGE: 'APP.LANGUAGE',
     APP_THEME: 'APP.THEME',
-};
-
-export const LANGUAGE = {
-    default: 'en-US',
-    list: [ 'en-US', 'cs-CZ' ],
-};
-export const THEME: { default: themeKeyType, list: themeKeyType[] } = {
-    default: 'light',
-    list: [ 'light', 'dark' ],
 };
 
 export const TRANSITION_DURATION = '.225s';

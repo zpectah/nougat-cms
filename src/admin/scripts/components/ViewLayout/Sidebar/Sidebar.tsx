@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 
-import { useSidebar } from '../../../hooks';
+import { useSidebar, useBreadcrumbs } from '../../../hooks';
 import {
     SIDEBAR_WIDTH,
     HEADER_HEIGHT,
@@ -24,6 +24,7 @@ const Sidebar = (props: SidebarProps) => {
     const { actions } = props;
 
     const { sidebarOpen } = useSidebar();
+    const { cms } = useBreadcrumbs();
 
     return (
         <Drawer
@@ -74,7 +75,7 @@ const Sidebar = (props: SidebarProps) => {
                         <MenuOpenIcon />
                     </SidebarToggle>
                     <>
-                        cms logo
+                        {cms.short_name}
                     </>
                 </Box>
                 <Box
@@ -84,14 +85,7 @@ const Sidebar = (props: SidebarProps) => {
                     }}
                 >
                     <Scrollable>
-                        <Box
-                            sx={{
-                                py: 1,
-                                px: 2,
-                            }}
-                        >
-                            <Navbar />
-                        </Box>
+                        <Navbar />
                     </Scrollable>
                 </Box>
                 {actions && (

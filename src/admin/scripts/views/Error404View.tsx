@@ -7,10 +7,10 @@ const Error404View = () => {
 
     return (
         <ViewLayout
+            name="Error404"
             variant="minimal"
-        >
-            <Error404 />
-        </ViewLayout>
+            children={<Error404 />}
+        />
     );
 };
 

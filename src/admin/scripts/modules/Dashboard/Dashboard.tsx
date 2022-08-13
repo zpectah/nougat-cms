@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Stack } from '@mui/material';
 
-import config from '../../config';
+// import config from '../../config';
 import { useMeta, useToasts, useAnnouncementBanner } from '../../hooks';
 import { TOAST_DEFAULT_TIMEOUT } from '../../const';
 import { Button, CloseButton, Card } from '../../components';
@@ -11,12 +11,12 @@ const Dashboard = () => {
     const { createToast } = useToasts();
     const { addBanner } = useAnnouncementBanner();
 
-    useEffect(() => {
-        if (meta && meta.version) {
-            console.log('config', config);
-            console.log('meta', meta);
-        }
-    }, [ meta ]);
+    // useEffect(() => {
+    //     if (meta && meta.version) {
+    //         console.log('config', config);
+    //         console.log('meta', meta);
+    //     }
+    // }, [ meta ]);
 
     return (
         <>

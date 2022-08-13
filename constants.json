@@ -45,7 +45,7 @@
   },
   "CMS": {
     "name": "Nougat CMS",
-    "short_name": "NougatCMS",
+    "short_name": "Nougat",
     "description": "Content managing system based on React admin & static web and GraphQl",
     "author": "Tomas Sychra | zpecter.com",
     "copyright": 2022,

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { themeKeyType, toastItemType } from '../types';
+import { themeKeyType, toastItemType, routeItemType } from '../types';
 
 export type storeProps = {
     sidebar: boolean,
@@ -9,4 +9,5 @@ export type storeProps = {
     toasts: toastItemType[],
     announcementBanner: React.ReactNode | null,
     meta: any, // TODO
+    route: routeItemType | null,
 };

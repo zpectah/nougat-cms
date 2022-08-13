@@ -10,3 +10,14 @@ export type toastItemType = {
     timeout?: number;
     onRemove?: (id: string) => void;
 };
+
+export type routeItemType = {
+    key: string,
+    i18n_key?: string,
+    match: string,
+    path: string | null,
+    auth: boolean,
+    level?: number,
+};
+
+export type routesType = { [k: string]: routeItemType };

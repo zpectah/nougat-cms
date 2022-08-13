@@ -1,7 +1,7 @@
 import React from 'react';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
-import { useSidebar } from '../../../hooks';
+import { useSidebar, useBreadcrumbs } from '../../../hooks';
 import {
     FOOTER_HEIGHT,
     SIDEBAR_WIDTH,
@@ -19,6 +19,7 @@ const Footer = (props: FooterProps) => {
     const isNotMinimal = variant !== 'minimal';
 
     const { sidebarOpen } = useSidebar();
+    const { cms, copyright } = useBreadcrumbs();
 
     return (
         <Box
@@ -42,7 +43,11 @@ const Footer = (props: FooterProps) => {
                 gap: 1,
             }}
         >
-            footer
+            <Typography
+                variant="caption"
+            >
+               &copy; {copyright} {cms.name} | All right reserved
+            </Typography>
         </Box>
     );
 };
