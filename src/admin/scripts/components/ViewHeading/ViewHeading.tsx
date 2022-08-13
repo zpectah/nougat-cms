@@ -6,12 +6,15 @@ import {
     SxProps,
 } from '@mui/material';
 
+import { Breadcrumbs } from '../Breadcrumbs';
+
 type ViewHeadingBaseProps = {
     title?: string,
     subtitle?: string,
     actions?: React.ReactNode,
     sx?: SxProps,
     centered?: boolean,
+    withBreadcrumbs?: boolean,
 }
 export type ViewHeadingProps = ViewHeadingBaseProps
 
@@ -22,6 +25,7 @@ const ViewHeading = (props: ViewHeadingProps) => {
         actions,
         sx,
         centered,
+        withBreadcrumbs,
     } = props;
 
     return (
@@ -30,16 +34,18 @@ const ViewHeading = (props: ViewHeadingProps) => {
                 width: '100%',
                 mb: 3,
                 display: 'flex',
-                alignItems: 'flex-start',
                 justifyContent: centered ? 'center' : 'space-between',
                 gap: 2,
                 textAlign: centered ? 'center' : 'inherit',
+                flexDirection: 'column',
                 ...sx,
             }}
         >
+            {withBreadcrumbs && <Breadcrumbs />}
             <Stack
                 direction="column"
                 gap={1}
+                alignItems={centered ? 'center' : 'flex-start'}
             >
                 {title && (
                     <Typography

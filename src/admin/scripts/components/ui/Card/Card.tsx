@@ -27,6 +27,7 @@ type CardBaseProps = {
     dividers?: boolean,
     cardContentProps?: CardContentProps,
     cardActionsProps?: CardActionsProps,
+    hiddenArrowButton?: boolean,
 }
 export type CardProps = CardBaseProps & MuiCardProps
 
@@ -42,6 +43,7 @@ const Card: React.FC<CardProps> = (props) => {
         dividers,
         cardContentProps,
         cardActionsProps,
+        hiddenArrowButton,
         ...rest
     } = props;
 
@@ -84,7 +86,7 @@ const Card: React.FC<CardProps> = (props) => {
                             spacing={1}
                         >
                             {headerActions}
-                            {collapsible && (
+                            {(collapsible && !hiddenArrowButton) && (
                                 <IconButton
                                     size="small"
                                     onClick={toggle}

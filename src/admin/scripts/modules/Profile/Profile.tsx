@@ -12,6 +12,7 @@ const Profile = () => {
             <ViewHeading
                 title={t('views:Profile.title')}
                 subtitle={t('views:Profile.subtitle')}
+                withBreadcrumbs
             />
             <Box>
                 Profile

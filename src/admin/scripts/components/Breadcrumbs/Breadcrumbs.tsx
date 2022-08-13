@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Breadcrumbs as MuiBreadcrumbs, Typography } from '@mui/material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
-import { useBreadcrumbs, useRoutes } from '../../../../hooks';
+import { useBreadcrumbs, useRoutes } from '../../hooks';
 
 const Breadcrumbs = () => {
     const { t } = useTranslation([ 'common', 'views' ]);
@@ -39,9 +39,10 @@ const Breadcrumbs = () => {
             aria-label="breadcrumbs"
         >
             <MuiBreadcrumbs
+                sx={{ fontSize: '.85rem' }}
                 separator={
                     <NavigateNextIcon
-                        fontSize="small"
+                        fontSize="inherit"
                     />
                 }
             >

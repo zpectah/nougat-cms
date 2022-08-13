@@ -14,6 +14,7 @@ const themeCommonProps = {
     typography: {
         h1: {
             fontSize: '2.25rem',
+            fontWeight: 700,
         },
         h2: {
             fontSize: '2rem',
@@ -23,7 +24,7 @@ const themeCommonProps = {
         },
         h4: {
             fontSize: '1.5rem',
-            fontWeight: '700',
+            fontWeight: 600,
         },
         h5: {
             fontSize: '1.25rem',

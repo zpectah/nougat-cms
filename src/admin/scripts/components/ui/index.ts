@@ -3,3 +3,4 @@ export * from './IconButton';
 export * from './Chip';
 export * from './Card';
 export * from './Scrollable';
+export * from './Section';

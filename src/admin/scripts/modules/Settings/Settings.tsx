@@ -12,6 +12,7 @@ const Settings = () => {
             <ViewHeading
                 title={t('views:Settings.title')}
                 subtitle={t('views:Settings.subtitle')}
+                withBreadcrumbs
             />
             <Box>
                 Settings
