@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
+import { Stack } from '@mui/material';
 
 import config from '../../config';
 import { useMeta, useToasts, useAnnouncementBanner } from '../../hooks';
 import { TOAST_DEFAULT_TIMEOUT } from '../../const';
-import { Button, CloseButton } from '../../components';
+import { Button, CloseButton, Card } from '../../components';
 
 const Dashboard = () => {
     const { meta } = useMeta();
@@ -74,6 +75,51 @@ const Dashboard = () => {
             <CloseButton
                 tooltip="Some demo tooltip on button"
             />
+
+            <br />
+
+            <Stack direction="row" spacing={2}>
+
+                <Card>
+                    <>
+                        Card content ...
+                    </>
+                </Card>
+
+                <Card
+                    title="Some card title"
+                    dividers
+                >
+                    <>
+                        Card content ...
+                    </>
+                </Card>
+
+                <Card
+                    title="Some card title"
+                    subtitle="some card subtitle"
+                >
+                    <>
+                        Card content ...
+                    </>
+                </Card>
+
+                <Card
+                    title="Some card title"
+                    subtitle="some card subtitle"
+                    collapsible
+                    dividers
+                    actions={
+                        <span>some actions</span>
+                    }
+                >
+                    <>
+                        Card content ...
+                    </>
+                </Card>
+
+            </Stack>
+
         </>
     );
 };
