@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import { useSidebar } from '../../../hooks';
@@ -13,6 +13,7 @@ import { SidebarToggle } from '../SidebarToggle';
 
 const Header = () => {
     const { sidebarOpen } = useSidebar();
+    const { palette } = useTheme();
 
     return (
         <Box
@@ -37,6 +38,10 @@ const Header = () => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 gap: 1,
+                backgroundColor: {
+                    xs: palette.background.paper,
+                    lg: 'transparent',
+                },
             }}
         >
             <Box

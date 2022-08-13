@@ -1,4 +1,5 @@
 import React from 'react';
+import { isMobile } from 'react-device-detect';
 import {
     useNavigate,
     useMatch,
@@ -13,13 +14,14 @@ import {
     ListItemText,
 } from '@mui/material';
 
-import { useBreadcrumbs, useRoutes } from '../../../../hooks';
+import { useBreadcrumbs, useRoutes, useSidebar } from '../../../../hooks';
 
 const Navbar = () => {
     const { t } = useTranslation('views');
     const navigate = useNavigate();
     const { page } = useBreadcrumbs();
     const { routes } = useRoutes();
+    const { toggleSidebar } = useSidebar();
 
     const navItems = [
         {
@@ -69,7 +71,10 @@ const Navbar = () => {
         },
     ];
 
-    const linkHandler = (path: string) => navigate(path);
+    const linkHandler = (path: string) => {
+        navigate(path);
+        if (isMobile) toggleSidebar();
+    };
 
     const linkSelected = (path: string, key: string) => {
         const resolved = useResolvedPath(path);

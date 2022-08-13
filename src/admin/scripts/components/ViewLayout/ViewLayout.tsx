@@ -85,6 +85,7 @@ const ViewLayout: React.FC<ViewLayoutProps> = (props) => {
                     paddingTop: isNotMinimal ? HEADER_HEIGHT : 0,
                     flex: 'auto',
                     display: 'flex',
+                    flexDirection: 'column',
                 }}
             >
                 <Box
