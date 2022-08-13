@@ -8,6 +8,7 @@ import {
     useSidebar,
     useMeta,
 } from '../../hooks';
+import { ErrorBoundary } from '../../components/ErrorBoundary';
 import { Toasts } from '../Toasts';
 import {
     Error404View,
@@ -32,17 +33,19 @@ const App = () => {
     return (
         <ThemeProvider theme={themeObject}>
             <CssBaseline />
-            <BrowserRouter>
-                <Routes>
-                    <Route path={routes.Dashboard.match} element={<DashboardView />} />
-                    <Route path={routes.Settings.match} element={<SettingsView />} />
-                    <Route path={routes.Profile.match} element={<ProfileView />} />
-                    <Route path={routes.Login.match} element={<LoginView />} />
-                    <Route path={routes.LostPassword.match} element={<LostPasswordView />} />
-                    <Route path={routes.Error404.match} element={<Error404View />} />
-                </Routes>
-            </BrowserRouter>
-            <Toasts />
+            <ErrorBoundary>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path={routes.Dashboard.match} element={<DashboardView />} />
+                        <Route path={routes.Settings.match} element={<SettingsView />} />
+                        <Route path={routes.Profile.match} element={<ProfileView />} />
+                        <Route path={routes.Login.match} element={<LoginView />} />
+                        <Route path={routes.LostPassword.match} element={<LostPasswordView />} />
+                        <Route path={routes.Error404.match} element={<Error404View />} />
+                    </Routes>
+                </BrowserRouter>
+                <Toasts />
+            </ErrorBoundary>
         </ThemeProvider>
     );
 };

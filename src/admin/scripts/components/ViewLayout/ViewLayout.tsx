@@ -13,6 +13,7 @@ import {
     useBreadcrumbs,
     useRoutes,
 } from '../../hooks';
+import { BackdropPreloader } from '../ui';
 import { Header } from './Header';
 import { Footer } from './Footer';
 import { Sidebar } from './Sidebar';
@@ -67,53 +68,56 @@ const ViewLayout: React.FC<ViewLayoutProps> = (props) => {
     useEffect(() => onLayoutLoad(), []);
 
     return (
-        <Box
-            sx={{
-                width: '100%',
-                height: 'auto',
-                minHeight: '100vh',
-                display: 'flex',
-                alignItems: 'center',
-                flexDirection: 'column',
-            }}
-        >
-            {isNotMinimal && (<Header />)}
+        <>
+            {!loaded && <BackdropPreloader />}
             <Box
-                component="main"
                 sx={{
                     width: '100%',
-                    paddingTop: isNotMinimal ? HEADER_HEIGHT : 0,
-                    flex: 'auto',
+                    height: 'auto',
+                    minHeight: '100vh',
                     display: 'flex',
+                    alignItems: 'center',
                     flexDirection: 'column',
                 }}
             >
+                {isNotMinimal && (<Header />)}
                 <Box
+                    component="main"
                     sx={{
-                        width: {
-                            xs: '100%',
-                            md: (sidebarOpen && isNotMinimal) ? `calc(100% - ${SIDEBAR_WIDTH})` : '100%',
-                        },
-                        left: {
-                            xs: 0,
-                            md: (sidebarOpen && isNotMinimal) ? SIDEBAR_WIDTH : 0,
-                        },
-                        position: 'relative',
-                        transition: `width ${TRANSITION_DEFAULT_SUFFIX}, left ${TRANSITION_DEFAULT_SUFFIX}`,
-                        ...centeredContentProps,
+                        width: '100%',
+                        paddingTop: isNotMinimal ? HEADER_HEIGHT : 0,
+                        flex: 'auto',
+                        display: 'flex',
+                        flexDirection: 'column',
                     }}
                 >
-                    <Container
-                        sx={{ py: 2 }}
+                    <Box
+                        sx={{
+                            width: {
+                                xs: '100%',
+                                md: (sidebarOpen && isNotMinimal) ? `calc(100% - ${SIDEBAR_WIDTH})` : '100%',
+                            },
+                            left: {
+                                xs: 0,
+                                md: (sidebarOpen && isNotMinimal) ? SIDEBAR_WIDTH : 0,
+                            },
+                            position: 'relative',
+                            transition: `width ${TRANSITION_DEFAULT_SUFFIX}, left ${TRANSITION_DEFAULT_SUFFIX}`,
+                            ...centeredContentProps,
+                        }}
                     >
-                        <AnnouncementBanner />
-                        {children}
-                    </Container>
+                        <Container
+                            sx={{ py: 2 }}
+                        >
+                            <AnnouncementBanner />
+                            {children}
+                        </Container>
+                    </Box>
+                    {isNotMinimal && (<Sidebar />)}
                 </Box>
-                {isNotMinimal && (<Sidebar />)}
+                <Footer variant={variant} />
             </Box>
-            <Footer variant={variant} />
-        </Box>
+        </>
     );
 };
 
