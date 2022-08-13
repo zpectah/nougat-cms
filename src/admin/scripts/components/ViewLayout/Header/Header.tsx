@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 
 import { useSidebar } from '../../../hooks';
 import {
@@ -8,9 +9,11 @@ import {
     TRANSITION_DEFAULT_SUFFIX,
     HEADER_ZINDEX,
 } from '../../../const';
+import palette from '../../../styles/palette';
+import { SidebarToggle } from '../SidebarToggle';
 
 const Header = () => {
-    const { sidebarOpen, toggleSidebar } = useSidebar();
+    const { sidebarOpen } = useSidebar();
 
     return (
         <Box
@@ -27,6 +30,7 @@ const Header = () => {
                 position: 'fixed',
                 transition: `width ${TRANSITION_DEFAULT_SUFFIX}, left ${TRANSITION_DEFAULT_SUFFIX}`,
                 height: HEADER_HEIGHT,
+                px: 2,
                 top: 0,
                 zIndex: HEADER_ZINDEX,
                 display: 'flex',
@@ -34,21 +38,29 @@ const Header = () => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 gap: 1,
+                backgroundColor: palette.light, // TODO
             }}
         >
-            <div>
-                <button
-                    onClick={() => toggleSidebar()}
-                >
-                    menu
-                </button>
-            </div>
-            <div>
-                b
-            </div>
-            <div>
-                c
-            </div>
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 2,
+                }}
+            >
+                {!sidebarOpen && (
+                    <SidebarToggle>
+                        <MenuIcon />
+                    </SidebarToggle>
+                )}
+                ... breadcrumbs ???
+            </Box>
+            <Box>
+                settings
+                &nbsp;
+                entity dropdown
+            </Box>
         </Box>
     );
 };
