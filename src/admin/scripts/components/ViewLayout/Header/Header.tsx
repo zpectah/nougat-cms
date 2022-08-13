@@ -53,7 +53,28 @@ const Header = () => {
                 }}
             >
                 {!sidebarOpen && (
-                    <SidebarToggle>
+                    <SidebarToggle
+                        sx={{
+                            backgroundColor: {
+                                xs: 'inherit',
+                                lg: palette.primary.main,
+                            },
+                            color: {
+                                xs: 'inherit',
+                                lg: palette.primary.contrastText,
+                            },
+                            '&:hover': {
+                                backgroundColor: {
+                                    xs: 'inherit',
+                                    lg: palette.primary.dark,
+                                },
+                                color: {
+                                    xs: 'inherit',
+                                    lg: palette.primary.contrastText,
+                                },
+                            },
+                        }}
+                    >
                         <MenuIcon />
                     </SidebarToggle>
                 )}
