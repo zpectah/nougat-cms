@@ -8,6 +8,7 @@ const LostPasswordView = () => (
         name="LostPassword"
         variant="minimal"
         children={<LostPassword />}
+        centered
     />
 );
 

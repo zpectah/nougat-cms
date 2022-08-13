@@ -8,6 +8,7 @@ const Error404View = () => (
         name="Error404"
         variant="minimal"
         children={<Error404 />}
+        centered
     />
 );
 

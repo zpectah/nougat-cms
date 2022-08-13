@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Container } from '@mui/material';
+import { Box, Container, SxProps } from '@mui/material';
 
 import {
     HEADER_HEIGHT,
@@ -23,6 +23,7 @@ type ViewLayoutBaseProps = {
     children?: React.ReactNode,
     variant?: viewLayoutKeyType,
     onLoad?: (name: string, route: routeItemType ) => void,
+    centered?: boolean,
 }
 export type ViewLayoutProps = ViewLayoutBaseProps
 
@@ -32,6 +33,7 @@ const ViewLayout: React.FC<ViewLayoutProps> = (props) => {
         children,
         variant = 'default',
         onLoad,
+        centered,
     } = props;
 
     const [ loaded, setLoaded ] = useState(false);
@@ -50,6 +52,17 @@ const ViewLayout: React.FC<ViewLayoutProps> = (props) => {
         setLoaded(true);
         if (onLoad) onLoad(name, route);
     };
+
+    const centeredContentProps = useMemo(() => {
+        if (centered) return {
+            flex: '1 1 auto',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        };
+
+        return {};
+    }, [ centered ]);
 
     useEffect(() => onLayoutLoad(), []);
 
@@ -71,6 +84,7 @@ const ViewLayout: React.FC<ViewLayoutProps> = (props) => {
                     width: '100%',
                     paddingTop: isNotMinimal ? HEADER_HEIGHT : 0,
                     flex: 'auto',
+                    display: 'flex',
                 }}
             >
                 <Box
@@ -85,6 +99,7 @@ const ViewLayout: React.FC<ViewLayoutProps> = (props) => {
                         },
                         position: 'relative',
                         transition: `width ${TRANSITION_DEFAULT_SUFFIX}, left ${TRANSITION_DEFAULT_SUFFIX}`,
+                        ...centeredContentProps,
                     }}
                 >
                     <Container

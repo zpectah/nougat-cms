@@ -4,14 +4,14 @@
       "title": "Page not found"
     },
     "title": "Error 404",
-    "description": "This page was not found or was deleted"
+    "subtitle": "This page was not found or was deleted"
   },
   "Dashboard": {
     "meta": {
       "title": "Dashboard"
     },
     "title": "Dashboard",
-    "description": "Dashboard page view",
+    "subtitle": "Dashboard page view",
     "label": "Dashboard"
   },
   "Profile": {
@@ -19,7 +19,7 @@
       "title": "Profile"
     },
     "title": "Profile",
-    "description": "Profile page view",
+    "subtitle": "Profile page view",
     "label": "Profile"
   },
   "Settings": {
@@ -27,7 +27,7 @@
       "title": "Settings"
     },
     "title": "Settings",
-    "description": "Settings page view",
+    "subtitle": "Settings page view",
     "label": "Settings"
   },
   "Login": {
@@ -35,7 +35,7 @@
       "title": "Login"
     },
     "title": "Login to system",
-    "description": "Login page view",
+    "subtitle": "Login page view",
     "label": "Login"
   },
   "LostPassword": {
@@ -43,7 +43,7 @@
       "title": "Lost password"
     },
     "title": "Lost password",
-    "description": "LostPassword page view",
+    "subtitle": "LostPassword page view",
     "label": "Lost password"
   }
 }

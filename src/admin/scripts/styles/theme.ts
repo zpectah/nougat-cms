@@ -31,6 +31,14 @@ const themeCommonProps = {
         h6: {
             fontSize: '1.1rem',
         },
+        subtitle1: {
+            fontSize: '1.05rem',
+            fontWeight: 300,
+        },
+        subtitle2: {
+            fontSize: '.9rem',
+            fontWeight: 400,
+        },
     },
 };
 const paletteCommonProps = {

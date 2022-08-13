@@ -8,6 +8,7 @@ const LoginView = () => (
         name="Login"
         variant="minimal"
         children={<Login />}
+        centered
     />
 );
 

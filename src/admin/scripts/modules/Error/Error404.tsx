@@ -1,9 +1,23 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
+
+import { ViewHeading } from '../../components';
 
 const Error404 = () => {
+    const { t } = useTranslation([ 'views' ]);
 
     return (
-        <>Error 404 view</>
+        <>
+            <ViewHeading
+                title={t('views:Error404.title')}
+                subtitle={t('views:Error404.subtitle')}
+                centered
+            />
+            <Box>
+                Error404 ... only button back to dashboard
+            </Box>
+        </>
     );
 };
 
