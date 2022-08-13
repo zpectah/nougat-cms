@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import config from '../../config';
 import { useMeta, useToasts, useAnnouncementBanner } from '../../hooks';
 import { TOAST_DEFAULT_TIMEOUT } from '../../const';
-import { Button } from '../../components';
+import { Button, CloseButton } from '../../components';
 
 const Dashboard = () => {
     const { meta } = useMeta();
@@ -37,28 +37,43 @@ const Dashboard = () => {
             </p>
             <br />
             <div>
-                <button
+                <Button
+                    secondary
                     onClick={() => createToast({
                         title: 'Test toast item title',
                         context: 'info',
-                        timeout: TOAST_DEFAULT_TIMEOUT,
                     })}
                 >
                     add toast
-                </button>
+                </Button>
+                <Button
+                    secondary
+                    onClick={() => createToast({
+                        title: 'Test toast item title',
+                        context: 'success',
+                        timeout: TOAST_DEFAULT_TIMEOUT,
+                    })}
+                >
+                    add toast & timeout
+                </Button>
                 <br />
-                <button
+                <Button
+                    secondary
                     onClick={() => addBanner(
                         <>Some ReactNode content banner ...</>
                     )}
                 >
                     add announcement banner
-                </button>
+                </Button>
             </div>
             <br />
-            <Button>
+            <Button primary>
                 Button
             </Button>
+            <br />
+            <CloseButton
+                tooltip="Some demo tooltip on button"
+            />
         </>
     );
 };

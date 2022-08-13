@@ -2,6 +2,7 @@ import React from 'react';
 import { Alert } from '@mui/material';
 
 import { useAnnouncementBanner } from '../../../hooks';
+import { CloseButton } from '../../ui';
 
 const AnnouncementBanner = () => {
     const { banner, removeBanner } = useAnnouncementBanner();
@@ -14,15 +15,16 @@ const AnnouncementBanner = () => {
                 <Alert
                     severity="info"
                     action={
-                        <button
+                        <CloseButton
                             onClick={removeBanner}
-                            // size="small"
+                            size="small"
                             color="inherit"
+                            iconProps={{ fontSize: 'small' }}
                         />
                     }
                     sx={{
                         width: '100%',
-                        mb: 1,
+                        mb: 2,
                     }}
                 >
                     {banner}

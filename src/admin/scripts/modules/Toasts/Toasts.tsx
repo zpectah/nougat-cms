@@ -16,7 +16,7 @@ const Toasts = () => {
         <Box
             sx={{
                 width: {
-                    xs: '90%',
+                    xs: '100%',
                     md: TOASTS_TABLET_WIDTH,
                     lg: TOASTS_DESKTOP_WIDTH,
                 },
@@ -24,7 +24,7 @@ const Toasts = () => {
                 position: 'fixed',
                 overflow: 'visible',
                 left: {
-                    xs: '5%',
+                    xs: '0',
                     md: `calc(50% - (${TOASTS_TABLET_WIDTH} / 2))`,
                     lg: `calc(50% - (${TOASTS_DESKTOP_WIDTH} / 2))`,
                 },

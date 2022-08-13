@@ -26,8 +26,8 @@ export const HEADER_ZINDEX = 1100;
 export const SIDEBAR_WIDTH = '250px';
 export const FOOTER_HEIGHT = '60px';
 
-export const TOASTS_DESKTOP_WIDTH = '250px';
-export const TOASTS_TABLET_WIDTH = '325px';
+export const TOASTS_DESKTOP_WIDTH = '300px';
+export const TOASTS_TABLET_WIDTH = '400px';
 export const TOASTS_WRAPPER_ZINDEX = 1990;
 export const TOAST_DEFAULT_TIMEOUT = 3500;
 export const TOAST_HIDE_TIMEOUT = 300;

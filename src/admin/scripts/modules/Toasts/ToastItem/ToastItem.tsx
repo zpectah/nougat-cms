@@ -3,6 +3,7 @@ import { Alert, AlertTitle, Zoom } from '@mui/material';
 
 import { TOAST_HIDE_TIMEOUT } from '../../../const';
 import { toastItemType } from '../../../types';
+import { CloseButton } from '../../../components';
 
 type ToastItemBaseProps = {}
 export type ToastItemProps = ToastItemBaseProps & toastItemType
@@ -35,11 +36,11 @@ const ToastItem = (props: ToastItemProps) => {
                 severity={context}
                 icon={false}
                 action={
-                    <button
+                    <CloseButton
                         onClick={closeHandler}
-                        // size="small"
+                        size="small"
                         color="inherit"
-                        // iconProps={{ fontSize: 'small' }}
+                        iconProps={{ fontSize: 'small' }}
                     />
                 }
                 sx={{ mb: 1 }}

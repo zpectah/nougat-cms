@@ -108,7 +108,8 @@ module.exports = (env) => {
 			{
 				/* React (admin) */
 				...moduleBase,
-				mode: 'production', // Temporary fix for loose-envify error message in console, keep mode in production, but mode constant keep as it is
+				// Temporary fix for loose-envify error message in console, keep mode in production, but mode constant keep as it is
+				mode: 'production',
 				entry: `./${conf.entries.admin}.tsx`,
 				plugins: [
 					new CopyWebpackPlugin({
@@ -151,9 +152,6 @@ module.exports = (env) => {
 					}),
 					new NodePolyfillPlugin(),
 					new CleanWebpackPlugin({
-						/*
-						Cleaning emitted webpack files in root destination folder
-						*/
 						dry: false,
 						dangerouslyAllowCleanPatternsOutsideProject: true,
 						cleanOnceBeforeBuildPatterns: [],
@@ -169,6 +167,7 @@ module.exports = (env) => {
 				output: {
 					path: path.resolve(__dirname, destination),
 					filename: `${conf.entries.admin}.js`,
+					clean: true,
 				},
 				resolve: {
 					extensions: [
@@ -215,6 +214,7 @@ module.exports = (env) => {
 				output: {
 					path: path.resolve(__dirname, destination),
 					filename: `${conf.entries.web}.js`,
+					clean: true,
 				},
 				resolve: {
 					extensions: [...extensions, ...stylesExtensions, '.vue'],
@@ -261,7 +261,7 @@ module.exports = (env) => {
 				],
 				output: {
 					path: path.resolve(__dirname, destination),
-					// filename: `${conf.styles.web}.css`,
+					clean: true,
 				},
 				resolve: {
 					extensions: stylesExtensions,
