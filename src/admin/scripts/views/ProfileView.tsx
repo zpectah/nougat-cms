@@ -1,17 +1,13 @@
 import React from 'react';
 
+import { Profile } from '../modules/Profile';
 import { ViewLayout } from '../components';
 
-const ProfileView = () => {
-
-    return (
-        <ViewLayout
-            name="Profile"
-            children={
-                <>Profile View</>
-            }
-        />
-    );
-};
+const ProfileView = () => (
+    <ViewLayout
+        name="Profile"
+        children={<Profile />}
+    />
+);
 
 export default ProfileView;

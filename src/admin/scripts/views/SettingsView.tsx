@@ -1,17 +1,13 @@
 import React from 'react';
 
+import { Settings } from '../modules/Settings';
 import { ViewLayout } from '../components';
 
-const SettingsView = () => {
-
-    return (
-        <ViewLayout
-            name="Settings"
-            children={
-                <>Settings View</>
-            }
-        />
-    );
-};
+const SettingsView = () => (
+    <ViewLayout
+        name="Settings"
+        children={<Settings />}
+    />
+);
 
 export default SettingsView;
