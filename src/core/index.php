@@ -12,8 +12,11 @@ require ROOT_PATH . 'core/controller/web/WebViewController.php';
 require ROOT_PATH . 'core/controller/admin/AdminViewController.php';
 
 // core:model
+require ROOT_PATH . 'core/model/Users.php';
 
 // core:provider
+require ROOT_PATH . 'core/provider/DataProvider.php';
+require ROOT_PATH . 'core/provider/GraphQlProvider.php';
 
 // core:service
 

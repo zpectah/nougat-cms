@@ -1,6 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Container, SxProps } from '@mui/material';
+import {
+    Box,
+    Container,
+    ContainerProps,
+} from '@mui/material';
 
 import {
     HEADER_HEIGHT,
@@ -25,6 +29,7 @@ type ViewLayoutBaseProps = {
     variant?: viewLayoutKeyType,
     onLoad?: (name: string, route: routeItemType ) => void,
     centered?: boolean,
+    containerProps?: ContainerProps,
 }
 export type ViewLayoutProps = ViewLayoutBaseProps
 
@@ -35,6 +40,7 @@ const ViewLayout: React.FC<ViewLayoutProps> = (props) => {
         variant = 'default',
         onLoad,
         centered,
+        containerProps,
     } = props;
 
     const [ loaded, setLoaded ] = useState(false);
@@ -108,6 +114,7 @@ const ViewLayout: React.FC<ViewLayoutProps> = (props) => {
                     >
                         <Container
                             sx={{ py: 2 }}
+                            {...containerProps}
                         >
                             <AnnouncementBanner />
                             {children}

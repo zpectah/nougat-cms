@@ -17,6 +17,7 @@ import {
     ProfileView,
     LoginView,
     LostPasswordView,
+    UsersView,
 } from '../../views';
 
 const App = () => {
@@ -39,6 +40,7 @@ const App = () => {
                         <Route path={routes.Dashboard.match} element={<DashboardView />} />
                         <Route path={routes.Settings.match} element={<SettingsView />} />
                         <Route path={routes.Profile.match} element={<ProfileView />} />
+                        <Route path={routes.Users.match} element={<UsersView />} />
                         <Route path={routes.Login.match} element={<LoginView />} />
                         <Route path={routes.LostPassword.match} element={<LostPasswordView />} />
                         <Route path={routes.Error404.match} element={<Error404View />} />

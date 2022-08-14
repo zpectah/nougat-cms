@@ -12,9 +12,27 @@ import {
     ListItem,
     ListItemButton,
     ListItemText,
+    ListItemIcon,
+    SvgIconProps,
 } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
+import SettingsIcon from '@mui/icons-material/Settings';
+import GroupIcon from '@mui/icons-material/Group';
+// import CategoryIcon from '@mui/icons-material/Category';
+import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
+// import MenuIcon from '@mui/icons-material/Menu';
+// import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+// import AutoAwesomeMotionIcon from '@mui/icons-material/AutoAwesomeMotion';
+// import BookmarkIcon from '@mui/icons-material/Bookmark';
+// import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+// import LanguageIcon from '@mui/icons-material/Language';
+// import MessageIcon from '@mui/icons-material/Message';
 
-import { useBreadcrumbs, useRoutes, useSidebar } from '../../../../hooks';
+import {
+    useBreadcrumbs,
+    useRoutes,
+    useSidebar,
+} from '../../../../hooks';
 
 const Navbar = () => {
     const { t } = useTranslation('views');
@@ -23,6 +41,10 @@ const Navbar = () => {
     const { routes } = useRoutes();
     const { toggleSidebar } = useSidebar();
 
+    const iconProps: SvgIconProps = {
+        fontSize: 'small',
+        color: 'inherit',
+    };
     const navItems = [
         {
             key: routes.Dashboard.key,
@@ -30,6 +52,7 @@ const Navbar = () => {
             path: routes.Dashboard.path,
             disabled: false,
             active: true,
+            icon: <HomeIcon {...iconProps} />,
         },
         {
             key: routes.Settings.key,
@@ -37,6 +60,15 @@ const Navbar = () => {
             path: routes.Settings.path,
             disabled: false,
             active: true,
+            icon: <SettingsIcon {...iconProps} />,
+        },
+        {
+            key: routes.Users.key,
+            label: t('Users.label'),
+            path: routes.Users.path,
+            disabled: false,
+            active: true,
+            icon: <GroupIcon {...iconProps} />,
         },
 
         {
@@ -45,6 +77,7 @@ const Navbar = () => {
             path: routes.Profile.path,
             disabled: false,
             active: true,
+            icon: <SupervisedUserCircleIcon {...iconProps} />,
         },
 
         {
@@ -53,6 +86,7 @@ const Navbar = () => {
             path: routes.Login.path,
             disabled: false,
             active: true,
+            icon: <SupervisedUserCircleIcon {...iconProps} />,
         },
         {
             key: routes.LostPassword.key,
@@ -60,6 +94,7 @@ const Navbar = () => {
             path: routes.LostPassword.path,
             disabled: false,
             active: true,
+            icon: <SupervisedUserCircleIcon {...iconProps} />,
         },
 
         {
@@ -68,6 +103,7 @@ const Navbar = () => {
             path: '/admin/dkfjhgkdjf',
             disabled: false,
             active: true,
+            icon: <SupervisedUserCircleIcon {...iconProps} />,
         },
     ];
 
@@ -103,6 +139,19 @@ const Navbar = () => {
                                     disabled={item.disabled}
                                     onClick={() => linkHandler(item.path as string)}
                                 >
+                                    {item.icon && (
+                                        <ListItemIcon
+                                            sx={{
+                                                minWidth: {
+                                                    xs: '2.5rem',
+                                                    md: '2rem',
+                                                },
+                                                color: 'inherit',
+                                            }}
+                                        >
+                                            {item.icon}
+                                        </ListItemIcon>
+                                    )}
                                     <ListItemText
                                         primary={item.label}
                                     />

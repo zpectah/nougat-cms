@@ -9,6 +9,9 @@ const LoginView = () => (
         variant="minimal"
         children={<Login />}
         centered
+        containerProps={{
+            maxWidth: 'md',
+        }}
     />
 );
 

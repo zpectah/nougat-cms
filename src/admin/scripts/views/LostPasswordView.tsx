@@ -9,6 +9,9 @@ const LostPasswordView = () => (
         variant="minimal"
         children={<LostPassword />}
         centered
+        containerProps={{
+            maxWidth: 'md',
+        }}
     />
 );
 

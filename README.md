@@ -15,6 +15,7 @@ Modern content managing system with React admin and static PHP pages with Blade 
 - ReactJS 18+
 - Vue.js 3+
 - MaterialUI
+- Doctrine DBAL (https://github.com/doctrine/dbal/)
 
 ### Environment
 #### Virtual Host
@@ -64,5 +65,7 @@ Modern content managing system with React admin and static PHP pages with Blade 
 - prepare configuration and environment =OK
 - bundle project for development/test/production =OK
 - prepare admin base routing
-- prepare web base routing
+- prepare web base routing, replace bladeone with twig? (https://twig.symfony.com/)
+- take a look at this article: https://www.cloudways.com/blog/php-libraries/
+- graphql: https://medium.com/swlh/setting-up-graphql-with-php-9baba3f21501
 

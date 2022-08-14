@@ -21,11 +21,12 @@ const modifyWebManifest = (buffer) => {
 
     return JSON.stringify(manifest, null, 2);
 };
-const modifyEnv = (buffer, env) => {
+const modifyEnv = (buffer, env, token) => {
     const envFile = JSON.parse(buffer.toString());
     envFile.version = pkg.version;
     envFile['environment'] = env;
     envFile['timestamp'] = Math.round(new Date().getTime()/1000);
+	envFile['token'] = token;
     envFile['debug'] = env !== 'prod';
     envFile['_meta'] = meta;
     envFile['_constants'] = constants;
@@ -79,6 +80,7 @@ const extensions = [
 
 module.exports = (env) => {
     const mode = env.env === constants.ENV.test.key ? constants.ENV.prod.key : env.env;
+	const clean = false;
     const destination = conf.target[env.env];
     const moduleBase = {
         mode,
@@ -99,9 +101,11 @@ module.exports = (env) => {
     };
     const resolveModules = [ path.join(__dirname, 'node_modules') ];
     const configTarget = `../${destination}/${constants.APP.config}`;
+	const token = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 12);
 	const extraBundleEnv = {
 		BUNDLE_ENVIRONMENT: JSON.stringify(mode),
 		BUNDLE_DEBUG: env.env === constants.ENV.dev.key,
+		BUNDLE_TOKEN: JSON.stringify(token),
 	};
 
     return [
@@ -138,7 +142,7 @@ module.exports = (env) => {
 								from: conf.config.env,
 								to: configTarget,
 								transform(content) {
-									return modifyEnv(content, env.env);
+									return modifyEnv(content, env.env, token);
 								},
 							},
 							{
@@ -167,7 +171,7 @@ module.exports = (env) => {
 				output: {
 					path: path.resolve(__dirname, destination),
 					filename: `${conf.entries.admin}.js`,
-					clean: true,
+					clean,
 				},
 				resolve: {
 					extensions: [
@@ -214,7 +218,7 @@ module.exports = (env) => {
 				output: {
 					path: path.resolve(__dirname, destination),
 					filename: `${conf.entries.web}.js`,
-					clean: true,
+					clean,
 				},
 				resolve: {
 					extensions: [...extensions, ...stylesExtensions, '.vue'],
@@ -261,7 +265,7 @@ module.exports = (env) => {
 				],
 				output: {
 					path: path.resolve(__dirname, destination),
-					clean: true,
+					clean,
 				},
 				resolve: {
 					extensions: stylesExtensions,

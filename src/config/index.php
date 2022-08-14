@@ -48,12 +48,13 @@ const __TOKEN = [
 
 /* ==== Database ==== */
 const __SQL = DB_ENV[ENV]['SQL'];
-const __SQL_CONN = [
-    __SQL['server'],
-    __SQL['user'],
-    __SQL['password'],
-    __SQL['name'],
-    __SQL['port'],
+const __SQL_DOC_CONN = [
+    'dbname' => __SQL['dbname'],
+    'user' => __SQL['user'],
+    'password' => __SQL['password'],
+    'host' => __SQL['host'],
+    'driver' => __SQL['driver'],
+    'port' => __SQL['port'],
 ];
 
 

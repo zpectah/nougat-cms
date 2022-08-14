@@ -1,10 +1,9 @@
-export const API_BASE = '/api/'; // TODO: make it from config object !!!
-
 export const KEYS = {
     APP_SIDEBAR: 'APP.SIDEBAR',
     APP_LANGUAGE: 'APP.LANGUAGE',
     APP_THEME: 'APP.THEME',
 };
+export const ROOT_REDUCER_KEY = 'rootReducer';
 
 export const TRANSITION_DURATION = '.225s';
 export const TRANSITION_TRANSITION = 'cubic-bezier(0.4, 0, 0.2, 1)';

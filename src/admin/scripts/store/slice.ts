@@ -2,12 +2,13 @@ import React from 'react';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import config from '../config';
-import { KEYS } from '../const';
+import { KEYS, ROOT_REDUCER_KEY } from '../const';
 import {
     storeProps,
     themeKeyType,
     toastItemType,
     routeItemType,
+    entityItemProps,
 } from '../types';
 
 const initialState: storeProps = {
@@ -16,13 +17,13 @@ const initialState: storeProps = {
     theme: ((localStorage.getItem(KEYS.APP_THEME) === 'light' || localStorage.getItem(KEYS.APP_THEME) === 'dark') && localStorage.getItem(KEYS.APP_THEME) as themeKeyType) || config.constants.CMS.themes.default as themeKeyType,
     toasts: [],
     announcementBanner: null,
+    meta: {}, // TODO #delete
     route: null,
-    meta: {}, // TODO
-    // entity: {}, // TODO
+    entity: null,
 };
 
 const slice = createSlice({
-    name: 'rootReducer',
+    name: ROOT_REDUCER_KEY,
     initialState,
     reducers: {
         sidebarToggle(state, action: PayloadAction<boolean>) {
@@ -31,7 +32,7 @@ const slice = createSlice({
         languageToggle(state, action: PayloadAction<string>) {
             state.language = action.payload;
         },
-        themeToggle(state, action: PayloadAction<themeKeyType>) {
+        setTheme(state, action: PayloadAction<themeKeyType>) {
             state.theme = action.payload;
         },
         addToast(state, action: PayloadAction<toastItemType>) {
@@ -50,6 +51,9 @@ const slice = createSlice({
         },
         setRoute(state, action: PayloadAction<routeItemType>) {
             state.route = action.payload;
+        },
+        setEntity(state, action: PayloadAction<entityItemProps>) {
+            state.entity = action.payload;
         },
     },
 });

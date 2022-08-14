@@ -5,6 +5,8 @@ type ButtonBaseProps = {
     primary?: boolean,
     secondary?: boolean,
     submit?: boolean,
+    small?: boolean,
+    large?: boolean,
 }
 export type ButtonProps = ButtonBaseProps & MuiButtonProps;
 
@@ -13,6 +15,8 @@ const Button = (props: ButtonProps) => {
         primary,
         secondary,
         submit,
+        small,
+        large,
         ...rest
     } = props;
 
@@ -33,9 +37,23 @@ const Button = (props: ButtonProps) => {
         if (submit) prop = {
             type: 'submit',
         };
+        if (small) prop = {
+            ...prop,
+            size: 'small',
+        };
+        if (large) prop = {
+            ...prop,
+            size: 'large',
+        };
 
         return prop;
-    }, [ primary, secondary, submit ]);
+    }, [
+        primary,
+        secondary,
+        submit,
+        small,
+        large,
+    ]);
 
     return (
         <MuiButton

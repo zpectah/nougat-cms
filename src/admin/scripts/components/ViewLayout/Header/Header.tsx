@@ -1,5 +1,9 @@
 import React from 'react';
-import { Box, useTheme } from '@mui/material';
+import {
+    Box,
+    Zoom,
+    useTheme,
+} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import { useSidebar } from '../../../hooks';
@@ -10,6 +14,7 @@ import {
     HEADER_ZINDEX,
 } from '../../../const';
 import { SidebarToggle } from '../SidebarToggle';
+import { EntityMenu } from '../EntityMenu';
 
 const Header = () => {
     const { sidebarOpen } = useSidebar();
@@ -40,7 +45,7 @@ const Header = () => {
                 gap: 1,
                 backgroundColor: {
                     xs: palette.background.paper,
-                    lg: 'transparent',
+                    md: 'transparent',
                 },
             }}
         >
@@ -57,20 +62,20 @@ const Header = () => {
                         sx={{
                             backgroundColor: {
                                 xs: 'inherit',
-                                lg: palette.primary.main,
+                                md: palette.primary.main,
                             },
                             color: {
                                 xs: 'inherit',
-                                lg: palette.primary.contrastText,
+                                md: palette.primary.contrastText,
                             },
                             '&:hover': {
                                 backgroundColor: {
                                     xs: 'inherit',
-                                    lg: palette.primary.dark,
+                                    md: palette.primary.dark,
                                 },
                                 color: {
                                     xs: 'inherit',
-                                    lg: palette.primary.contrastText,
+                                    md: palette.primary.contrastText,
                                 },
                             },
                         }}
@@ -79,10 +84,15 @@ const Header = () => {
                     </SidebarToggle>
                 )}
             </Box>
-            <Box>
-                settings
-                &nbsp;
-                entity dropdown
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 2,
+                }}
+            >
+                <EntityMenu />
             </Box>
         </Box>
     );

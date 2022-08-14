@@ -8,7 +8,8 @@
 		"ext-mysqli": "*",
 		"gumlet/php-image-resize": "^2.0",
 		"ifsnop/mysqldump-php": "^2.9",
-		"webonyx/graphql-php": "^14.11"
+		"webonyx/graphql-php": "^14.11",
+		"doctrine/dbal": "^3.3"
 	},
 	"config": {
 		"vendor-dir": "src/vendor"

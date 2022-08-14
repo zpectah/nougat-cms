@@ -9,6 +9,9 @@ const Error404View = () => (
         variant="minimal"
         children={<Error404 />}
         centered
+        containerProps={{
+            maxWidth: 'md',
+        }}
     />
 );
 

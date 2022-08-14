@@ -45,5 +45,13 @@
     "title": "Lost password",
     "subtitle": "LostPassword page view",
     "label": "Lost password"
+  },
+  "Users": {
+    "meta": {
+      "title": "Users"
+    },
+    "title": "Users",
+    "subtitle": "Users page view",
+    "label": "Users"
   }
 }

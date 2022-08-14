@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { API_BASE } from '../const';
+import { paths } from '../config';
 import { storeProps } from '../types';
 import actions from '../store/actions';
 
@@ -10,7 +10,7 @@ const useMeta = () => {
     const dispatch = useDispatch();
 
     // TODO: Temporary calling env.json
-    const loadFile = () => axios.get(`${API_BASE}meta`);
+    const loadFile = () => axios.get(`${paths.api}/meta`);
     // const loadFile = () => axios.get(`${API_BASE_PATH}meta`,{
     //     headers: {
     //         'content-type': 'application/json',

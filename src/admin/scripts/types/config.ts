@@ -1,4 +1,9 @@
-export type environmentalKeyType = 'development' | 'test' | 'production';
+import environmental from "../../../config/environmental.json";
+import constants from "../../../../constants.json";
+import {paths} from "../config";
+
+export type environmentalNameType = 'development' | 'test' | 'production';
+export type environmentalKeyType = 'dev' | 'test' | 'prod';
 
 type propValueType = string | number | boolean | undefined;
 
@@ -41,6 +46,13 @@ type localesObjectType = {
         datetime_alt: string,
     },
     direction: string,
+};
+
+export type pathsType = {
+    base: string,
+    root: string,
+    api: string,
+    web: string,
 };
 
 export interface configProps {
@@ -89,7 +101,7 @@ export interface configProps {
             meta: documentMetaType
         }
     },
-    env: environmentalKeyType,
+    env: environmentalNameType,
     global: {
         admin: unknown,
         api: unknown,
@@ -102,4 +114,5 @@ export interface configProps {
     options: propObjectType,
     environmental: propObjectType,
     debug: boolean,
+    token: string | 'unknown',
 }

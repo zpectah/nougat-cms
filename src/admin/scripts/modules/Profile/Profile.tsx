@@ -1,16 +1,25 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Grid } from '@mui/material';
+import {
+    Box,
+    Grid,
+    Stack,
+} from '@mui/material';
 
+import { useEntity } from '../../hooks';
 import {
     ViewHeading,
     List,
     Chip,
     Card,
+    Button,
 } from '../../components';
 
 const Profile = () => {
     const { t } = useTranslation([ 'views' ]);
+    const { entity, getAvataaarImageSrc } = useEntity();
+
+    const image = getAvataaarImageSrc();
 
     return (
         <>
@@ -39,14 +48,13 @@ const Profile = () => {
                     >
                         <Box
                             sx={{
-                                height: '100%',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                             }}
                         >
                             <img
-                                src="https://avataaars.io/?avatarStyle=Circle&topType=WinterHat2&accessoriesType=Sunglasses&hatColor=Pink&facialHairType=BeardMedium&facialHairColor=Red&clotheType=ShirtScoopNeck&clotheColor=Blue01&eyeType=Dizzy&eyebrowType=AngryNatural&mouthType=Default&skinColor=Yellow"
+                                src={image}
                                 alt="avatar"
                                 style={{
                                     maxWidth: '75%',
@@ -62,23 +70,34 @@ const Profile = () => {
                         md={7}
                         lg={8}
                     >
-                        <Box
-                            sx={{
-                                height: '100%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'flex-start',
-                            }}
-                        >
+                        <Box>
                             <List
                                 items={[
-                                    { primary: <>Name: <b>John Doe</b></> },
-                                    { primary: <>Email: <b>john.doe@gooogle.com</b></> },
+                                    { primary: <>Name: <b>{entity.fullname}</b></> },
+                                    { primary: <>Nickname: <b>{entity.nickname}</b></> },
+                                    { primary: <>Email: <b>{entity.email}</b></> },
                                     { primary: <>Role: <Chip label="Administrator" size="small" /></> },
                                     { primary: <>Group: <Chip label="Company" size="small" /></> },
                                 ]}
                             />
                         </Box>
+                        <Stack
+                            direction="row"
+                            spacing={2}
+                        >
+                            <Button
+                                secondary
+                                small
+                            >
+                                Edit avatar
+                            </Button>
+                            <Button
+                                secondary
+                                small
+                            >
+                                Edit credentials
+                            </Button>
+                        </Stack>
                     </Grid>
                 </Grid>
                 <Card>
