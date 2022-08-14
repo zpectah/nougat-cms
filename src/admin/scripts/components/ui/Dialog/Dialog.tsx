@@ -52,20 +52,20 @@ const Dialog: React.FC<DialogProps> = (props) => {
         ...rest
     } = props;
 
-    const [ dialogOpen, setDialogOpen ] = useState(false);
+    const [ isOpen, setIsOpen ] = useState(false);
 
     const { t } = useTranslation();
 
     const closeHandler = () => {
-        setDialogOpen(false);
+        setIsOpen(false);
         if (onClose) onClose();
     };
 
-    useEffect(() => setDialogOpen(open), [ open ]);
+    useEffect(() => setIsOpen(open), [ open ]);
 
     return (
         <MuiDialog
-            open={dialogOpen}
+            open={isOpen}
             onClose={closeHandler}
             fullWidth
             maxWidth={maxWidth}

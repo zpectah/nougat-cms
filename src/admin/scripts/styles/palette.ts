@@ -1,6 +1,7 @@
 const palette = {
     primary: 'rgb(41,40,45)',
     secondary: 'rgb(98,93,96)',
+    action: 'rgb(104,104,172)',
     //
     red: 'rgb(211,47,47)',
     pink: 'rgb(194,24,91)',

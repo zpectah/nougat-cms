@@ -48,8 +48,8 @@ const Sidebar = (props: SidebarProps) => {
                     },
                     boxSizing: 'border-box',
                     borderRight: 0,
-                    backgroundColor: palette.primary, // TODO
-                    color: palette.light, // TODO
+                    backgroundColor: palette.primary,
+                    color: palette.light,
                 },
             }}
         >
@@ -74,9 +74,11 @@ const Sidebar = (props: SidebarProps) => {
                     <SidebarToggle>
                         <MenuOpenIcon />
                     </SidebarToggle>
-                    <>
+                    <Box
+                        component="span"
+                    >
                         {cms.short_name}
-                    </>
+                    </Box>
                 </Box>
                 <Box
                     sx={{

@@ -27,20 +27,20 @@ const ConfirmDialog = (props: ConfirmDialogProps) => {
         ...rest
     } = props;
 
-    const [ dialogOpen, setDialogOpen ] = useState(false);
+    const [ isOpen, setIsOpen ] = useState(false);
 
     const { t } = useTranslation();
 
     const closeHandler = () => {
-        setDialogOpen(false);
+        setIsOpen(false);
         if (onClose) onClose();
     };
 
-    useEffect(() => setDialogOpen(open), [ open ]);
+    useEffect(() => setIsOpen(open), [ open ]);
 
     return (
         <Dialog
-            open={dialogOpen}
+            open={isOpen}
             onClose={closeHandler}
             maxWidth="xs"
             {...rest}

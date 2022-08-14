@@ -1,12 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
+import routes from '../routes';
 import { entityItemProps, storeProps } from '../types';
 import actions from '../store/actions';
 
 const useEntity = () => {
     const { entity } = useSelector((store: storeProps) => store);
     const dispatch = useDispatch();
-    
+    const navigate = useNavigate();
+
     const demoEntity: entityItemProps = {
 			id: 12,
 			type: 'default',
@@ -37,6 +40,7 @@ const useEntity = () => {
 		};
 
     const getAvataaarImageSrc = () => {
+        // https://getavataaars.com/
         const root = 'https://avataaars.io/';
         let path = '';
         const a = demoEntity.user_meta.avataaar;
@@ -55,8 +59,12 @@ const useEntity = () => {
         setEntity: (entity: entityItemProps) => dispatch(actions.setEntity(entity)),
         reloadEntity: () => {},
         updateEntity: (entity: Partial<entityItemProps>) => {},
-        getAvataaarImageSrc,
         avataaarSrc: getAvataaarImageSrc(),
+        logout: () => {
+            // TODO Handle log out request
+            // Make this as callback of request
+            navigate(routes.Login.path as string);
+        },
     };
 };
 

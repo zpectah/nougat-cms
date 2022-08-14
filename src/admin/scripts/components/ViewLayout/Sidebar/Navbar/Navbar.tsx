@@ -28,6 +28,7 @@ import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 // import LanguageIcon from '@mui/icons-material/Language';
 // import MessageIcon from '@mui/icons-material/Message';
 
+import palette from '../../../../styles/palette';
 import {
     useBreadcrumbs,
     useRoutes,
@@ -129,35 +130,43 @@ const Navbar = () => {
             <nav aria-label="main navigation">
                 <List>
                     {navItems.map((item) => {
-                        if (item.active) return (
-                            <ListItem
-                                key={item.key}
-                                disablePadding
-                            >
-                                <ListItemButton
-                                    selected={linkSelected(item.path as string, item.key)}
-                                    disabled={item.disabled}
-                                    onClick={() => linkHandler(item.path as string)}
+                        if (item.active) {
+                            const selected = linkSelected(item.path as string, item.key);
+
+                            return (
+                                <ListItem
+                                    key={item.key}
+                                    disablePadding
                                 >
-                                    {item.icon && (
-                                        <ListItemIcon
-                                            sx={{
-                                                minWidth: {
-                                                    xs: '2.5rem',
-                                                    md: '2rem',
-                                                },
-                                                color: 'inherit',
-                                            }}
-                                        >
-                                            {item.icon}
-                                        </ListItemIcon>
-                                    )}
-                                    <ListItemText
-                                        primary={item.label}
-                                    />
-                                </ListItemButton>
-                            </ListItem>
-                        );
+                                    <ListItemButton
+                                        selected={selected}
+                                        disabled={item.disabled}
+                                        onClick={() => linkHandler(item.path as string)}
+                                        sx={{
+                                            backgroundColor: selected ? `${palette.action} !important` : 'inherit',
+                                            borderRadius: 1,
+                                        }}
+                                    >
+                                        {item.icon && (
+                                            <ListItemIcon
+                                                sx={{
+                                                    minWidth: {
+                                                        xs: '2.5rem',
+                                                        md: '2rem',
+                                                    },
+                                                    color: 'inherit',
+                                                }}
+                                            >
+                                                {item.icon}
+                                            </ListItemIcon>
+                                        )}
+                                        <ListItemText
+                                            primary={item.label}
+                                        />
+                                    </ListItemButton>
+                                </ListItem>
+                            );
+                        }
                     })}
                 </List>
             </nav>

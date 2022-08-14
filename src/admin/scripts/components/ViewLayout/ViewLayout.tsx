@@ -6,6 +6,7 @@ import {
     ContainerProps,
 } from '@mui/material';
 
+import config from '../../config';
 import {
     HEADER_HEIGHT,
     SIDEBAR_WIDTH,
@@ -77,6 +78,7 @@ const ViewLayout: React.FC<ViewLayoutProps> = (props) => {
         <>
             {!loaded && <BackdropPreloader />}
             <Box
+                data-token={config.token}
                 sx={{
                     width: '100%',
                     height: 'auto',

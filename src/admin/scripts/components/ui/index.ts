@@ -8,3 +8,4 @@ export * from './BackdropPreloader';
 export * from './List';
 export * from './Dialog';
 export * from './ConfirmDialog';
+export * from './Drawer';

@@ -15,7 +15,11 @@ const EntityMenu = () => {
 
     const navigate = useNavigate();
     const { palette } = useTheme();
-    const { entity, avataaarSrc } = useEntity();
+    const {
+        entity,
+        logout,
+        avataaarSrc,
+    } = useEntity();
     const { theme, toggleTheme } = useUiTheme();
 
     const open = Boolean(anchorEl);
@@ -40,7 +44,7 @@ const EntityMenu = () => {
     };
     const logoutConfirmHandler = () => {
         closeConfirmHandler();
-        navigate(routes.Profile.path as string);
+        logout();
     };
 
     const menuItems = [

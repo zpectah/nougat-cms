@@ -13,6 +13,7 @@ define("VERSION", $CFG_ENV['version']);
 define("ENV", $CFG_ENV['environment']);
 define("TIMESTAMP", $CFG_ENV['timestamp']);
 define("DEBUG", $CFG_ENV['debug']);
+define("TOKEN", $CFG_ENV['token']);
 
 
 /* ==== Configuration files ==== */
