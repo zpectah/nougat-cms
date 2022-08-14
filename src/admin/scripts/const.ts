@@ -23,3 +23,8 @@ export const TOAST_DEFAULT_TIMEOUT = 3500;
 export const TOAST_HIDE_TIMEOUT = 300;
 
 export const EMAIL_REGEX = /^(?:(?!.*?[.]{2})[a-zA-Z0-9](?:[a-zA-Z0-9.+!%-]{1,64}|)|"[a-zA-Z0-9.+!% -]{1,64}")@[a-zA-Z0-9][a-zA-Z0-9.-]+(.[a-z]{2,}|.[0-9]+)$/;
+
+/* Feature toggles */
+export const FEATURES = {
+    breadcrumbsShowLanguage: true,
+};

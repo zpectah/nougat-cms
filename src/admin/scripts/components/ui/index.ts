@@ -6,3 +6,5 @@ export * from './Scrollable';
 export * from './Section';
 export * from './BackdropPreloader';
 export * from './List';
+export * from './Dialog';
+export * from './ConfirmDialog';

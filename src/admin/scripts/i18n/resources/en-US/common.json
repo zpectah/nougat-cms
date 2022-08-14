@@ -2,7 +2,10 @@
   "btn": {
     "ok": "Ok",
     "open": "Open",
-    "close": "Close"
+    "close": "Close",
+    "confirm": "Confirm",
+    "accept": "Accept",
+    "reject": "Reject"
   },
   "page": "Page",
   "detail": "Detail",

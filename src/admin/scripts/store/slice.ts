@@ -17,7 +17,6 @@ const initialState: storeProps = {
     theme: ((localStorage.getItem(KEYS.APP_THEME) === 'light' || localStorage.getItem(KEYS.APP_THEME) === 'dark') && localStorage.getItem(KEYS.APP_THEME) as themeKeyType) || config.constants.CMS.themes.default as themeKeyType,
     toasts: [],
     announcementBanner: null,
-    meta: {}, // TODO #delete
     route: null,
     entity: null,
 };
@@ -45,9 +44,6 @@ const slice = createSlice({
         },
         setAnnouncement(state, action: PayloadAction<React.ReactNode | null>) {
             state.announcementBanner = action.payload;
-        },
-        setMeta(state, action: PayloadAction<any>) {
-            state.meta = action.payload;
         },
         setRoute(state, action: PayloadAction<routeItemType>) {
             state.route = action.payload;

@@ -6,7 +6,6 @@ import routes from '../../routes';
 import {
     useTheme,
     useSidebar,
-    useMeta,
 } from '../../hooks';
 import { ErrorBoundary } from '../../components/ErrorBoundary';
 import { Toasts } from '../Toasts';
@@ -23,11 +22,9 @@ import {
 const App = () => {
     const { themeObject } = useTheme();
     const { sidebarInit } = useSidebar();
-    const { loadMeta } = useMeta();
 
     useEffect(() => {
         sidebarInit();
-        loadMeta();
 
     }, []);
 

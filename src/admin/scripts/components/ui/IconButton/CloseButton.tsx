@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { SvgIconProps } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -15,8 +16,11 @@ const CloseButton = (props: CloseButtonProps) => {
         ...rest
     } = props;
 
+    const { t } = useTranslation();
+
     return (
         <IconButton
+            title={t('btn.close')}
             {...rest}
         >
             <CloseIcon

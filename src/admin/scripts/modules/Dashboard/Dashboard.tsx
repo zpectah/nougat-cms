@@ -3,7 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { Box, Stack } from '@mui/material';
 
 // import config from '../../config';
-import { useMeta, useToasts, useAnnouncementBanner } from '../../hooks';
+import {
+    useToasts,
+    useAnnouncementBanner,
+    useEntity,
+} from '../../hooks';
 import { TOAST_DEFAULT_TIMEOUT } from '../../const';
 import {
     Button,
@@ -15,21 +19,14 @@ import {
 
 const Dashboard = () => {
     const { t } = useTranslation([ 'views' ]);
-    const { meta } = useMeta();
     const { createToast } = useToasts();
     const { addBanner } = useAnnouncementBanner();
-
-    // useEffect(() => {
-    //     if (meta && meta.version) {
-    //         console.log('config', config);
-    //         console.log('meta', meta);
-    //     }
-    // }, [ meta ]);
+    const { entity } = useEntity();
 
     return (
         <Box>
             <ViewHeading
-                title={t('views:Dashboard.title')}
+                title={`${t('views:Dashboard.title')} ${entity.firstname}`}
                 subtitle={t('views:Dashboard.subtitle')}
                 withBreadcrumbs
             />

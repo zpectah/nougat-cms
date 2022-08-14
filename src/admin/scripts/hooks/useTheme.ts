@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 
+import config from '../config';
 import { KEYS } from '../const';
 import { Themes } from '../enums';
 import { storeProps, themeKeyType } from '../types';
@@ -34,6 +35,7 @@ const useTheme = () => {
         setTheme,
         toggleTheme,
         themeObject: themes[theme],
+        themesList: config.constants.CMS.themes.list as string[],
     };
 };
 

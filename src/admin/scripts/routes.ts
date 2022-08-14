@@ -45,7 +45,7 @@ const routes: routesType = {
     Profile: {
         key: 'profile',
         i18n_key: 'Profile',
-        match: `${paths.root}/profile/*`,
+        match: `${paths.root}/profile/`,
         path: `${paths.root}/profile/`,
         auth: true,
         level: 3,

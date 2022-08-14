@@ -21,14 +21,14 @@ const useEntity = () => {
                     avatarStyle: 'Circle',
                     topType: 'LongHairBob',
                     accessoriesType: 'Round',
-                    hairColor: 'Auburn',
+                    hairColor: 'Black',
                     facialHairType: 'BeardMedium',
                     facialHairColor: 'BrownDark',
                     clotheType: 'ShirtCrewNeck',
                     clotheColor: 'Gray01',
-                    eyeType: 'Happy',
+                    eyeType: 'Wink',
                     eyebrowType: 'UnibrowNatural',
-                    mouthType: 'Grimace',
+                    mouthType: 'Serious',
                     skinColor: 'DarkBrown',
                 },
             },
@@ -56,6 +56,7 @@ const useEntity = () => {
         reloadEntity: () => {},
         updateEntity: (entity: Partial<entityItemProps>) => {},
         getAvataaarImageSrc,
+        avataaarSrc: getAvataaarImageSrc(),
     };
 };
 
