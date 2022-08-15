@@ -1,5 +1,11 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
+import { RouteParamKeys } from '../../enums';
+import {
+    useBreadcrumbs,
+    useRoutes,
+} from '../../hooks';
+// import { ConfirmDialog } from '../ui';
 import { DetailDrawer } from './DetailDrawer';
 
 type DataTableBaseProps = {}
@@ -8,16 +14,45 @@ export type DataTableProps = DataTableBaseProps
 const DataTable = (props: DataTableProps) => {
     const {} = props;
 
+    const [ detailOpen, setDetailOpen ] = useState(false);
+    const [ detailData, setDetailData ] = useState<any | null>(null); // TODO
+
+    const { detail } = useBreadcrumbs();
+    const { routes, navigate } = useRoutes();
+
+    const openDetailHandler = (id: string) => {
+
+        // TODO ... check if detail exist in array, else show error toast and return to list ...
+        setDetailData({
+            id,
+        });
+
+        setDetailOpen(true);
+
+    };
+    const closeDetailHandler = () => {
+        setDetailOpen(false);
+        navigate(routes.Users.path as string);
+        setTimeout(() => setDetailData(null), 350);
+    };
+    const submitDetailHandler = () => {
+        closeDetailHandler();
+    };
+    const confirmDeleteDetailHandler = () => {
+
+        // ... confirmed action from drawer
+        // TODO ... proceed delete request
+
+    };
+
+    useEffect(() => {
+        if (detail) openDetailHandler(detail);
+    }, [ detail ]);
+
     return (
         <>
             <div>
                 DataTable with routing to detail as drawer ...
-            </div>
-            <DetailDrawer
-                title="Some detail title"
-                scrollable
-            >
-                detail drawer custom content ...
                 <br />
                 <p>
                     Odio leo rhoncus, ligula urna mauris nunc ut enim et tincidunt rhoncus at sem, dolor ut tellus sed porttitor dui vel. Ullamcorper varius, consectetur ornare id consequat id dolor id lacinia, venenatis a dui vel dolor auctor. Mauris ipsum, nibh maximus egestas consequat congue nulla cras dictum nec placerat, ut venenatis elit posuere nibh maximus. Ut venenatis placerat, sit amet elit libero sed suspendisse libero dui duis id, quis ut hendrerit donec dolor quis. Curabitur sem, metus vestibulum interdum commodo hendrerit in donec cursus, luctus mauris eu elementum luctus maximus. Dolor quis a lacinia, adipiscing et nullam fermentum imperdiet convallis nam, et condimentum pellentesque neque.
@@ -29,16 +64,71 @@ const DataTable = (props: DataTableProps) => {
                     <br />
                     Porttitor condimentum, dolor sit amet cursus sollicitudin nunc mauris et elit condimentum, quis orci fusce nulla vitae. Lacinia quis, porttitor sapien euismod et elit ut id ante bibendum vel arcu, nunc quam metus ut. Non libero vitae, pellentesque curabitur hendrerit semper auctor ipsum potenti, auctor congue fringilla metus. Fusce dui, bibendum erat id sapien molestie aliquam at sem ornare, et vehicula finibus dui et tempus sed. Pulvinar nec commodo, vivamus elit nulla a nulla rhoncus phasellus luctus, dui adipiscing ut nisl mauris mi orci. Ac nibh semper, odio leo vestibulum bibendum sed felis scelerisque integer varius, curabitur proin imperdiet nibh.
                 </p>
-                <p>
-                    Odio leo rhoncus, ligula urna mauris nunc ut enim et tincidunt rhoncus at sem, dolor ut tellus sed porttitor dui vel. Ullamcorper varius, consectetur ornare id consequat id dolor id lacinia, venenatis a dui vel dolor auctor. Mauris ipsum, nibh maximus egestas consequat congue nulla cras dictum nec placerat, ut venenatis elit posuere nibh maximus. Ut venenatis placerat, sit amet elit libero sed suspendisse libero dui duis id, quis ut hendrerit donec dolor quis. Curabitur sem, metus vestibulum interdum commodo hendrerit in donec cursus, luctus mauris eu elementum luctus maximus. Dolor quis a lacinia, adipiscing et nullam fermentum imperdiet convallis nam, et condimentum pellentesque neque.
+                <br />
+                <div>
+                    <button
+                        onClick={() => navigate(`${routes.Users.path}/${RouteParamKeys['detail']}/3`)}
+                    >
+                        go to detail #3
+                    </button>
                     <br />
-                    Porttitor condimentum, dolor sit amet cursus sollicitudin nunc mauris et elit condimentum, quis orci fusce nulla vitae. Lacinia quis, porttitor sapien euismod et elit ut id ante bibendum vel arcu, nunc quam metus ut. Non libero vitae, pellentesque curabitur hendrerit semper auctor ipsum potenti, auctor congue fringilla metus. Fusce dui, bibendum erat id sapien molestie aliquam at sem ornare, et vehicula finibus dui et tempus sed. Pulvinar nec commodo, vivamus elit nulla a nulla rhoncus phasellus luctus, dui adipiscing ut nisl mauris mi orci. Ac nibh semper, odio leo vestibulum bibendum sed felis scelerisque integer varius, curabitur proin imperdiet nibh.
-                </p>
-                <p>
-                    Odio leo rhoncus, ligula urna mauris nunc ut enim et tincidunt rhoncus at sem, dolor ut tellus sed porttitor dui vel. Ullamcorper varius, consectetur ornare id consequat id dolor id lacinia, venenatis a dui vel dolor auctor. Mauris ipsum, nibh maximus egestas consequat congue nulla cras dictum nec placerat, ut venenatis elit posuere nibh maximus. Ut venenatis placerat, sit amet elit libero sed suspendisse libero dui duis id, quis ut hendrerit donec dolor quis. Curabitur sem, metus vestibulum interdum commodo hendrerit in donec cursus, luctus mauris eu elementum luctus maximus. Dolor quis a lacinia, adipiscing et nullam fermentum imperdiet convallis nam, et condimentum pellentesque neque.
+                    <button
+                        onClick={() => navigate(`${routes.Users.path}/${RouteParamKeys['detail']}/77`)}
+                    >
+                        go to detail #77
+                    </button>
                     <br />
-                    Porttitor condimentum, dolor sit amet cursus sollicitudin nunc mauris et elit condimentum, quis orci fusce nulla vitae. Lacinia quis, porttitor sapien euismod et elit ut id ante bibendum vel arcu, nunc quam metus ut. Non libero vitae, pellentesque curabitur hendrerit semper auctor ipsum potenti, auctor congue fringilla metus. Fusce dui, bibendum erat id sapien molestie aliquam at sem ornare, et vehicula finibus dui et tempus sed. Pulvinar nec commodo, vivamus elit nulla a nulla rhoncus phasellus luctus, dui adipiscing ut nisl mauris mi orci. Ac nibh semper, odio leo vestibulum bibendum sed felis scelerisque integer varius, curabitur proin imperdiet nibh.
-                </p>
+                    <button
+                        onClick={() => navigate(`${routes.Users.path}/${RouteParamKeys['detail']}/100`)}
+                    >
+                        go to detail #100
+                    </button>
+                </div>
+            </div>
+            <DetailDrawer
+                open={detailOpen}
+                detailId={detailData?.id}
+                onClose={closeDetailHandler}
+                onSubmit={submitDetailHandler}
+                onDelete={confirmDeleteDetailHandler}
+                title="Some detail title"
+                formProps={{
+                    id: 'FormDetailName',
+                    name: 'FormDetailName',
+                }}
+            >
+                {detailData && (
+                    <>
+                        {/* render form by data model type */}
+                        <pre>
+                            <code>
+                            {JSON.stringify(detailData, null, 2)}
+                            </code>
+                        </pre>
+                        detail drawer custom content ...
+                        <br />
+                        <p>
+                            Odio leo rhoncus, ligula urna mauris nunc ut enim et tincidunt rhoncus at sem, dolor ut tellus sed porttitor dui vel. Ullamcorper varius, consectetur ornare id consequat id dolor id lacinia, venenatis a dui vel dolor auctor. Mauris ipsum, nibh maximus egestas consequat congue nulla cras dictum nec placerat, ut venenatis elit posuere nibh maximus. Ut venenatis placerat, sit amet elit libero sed suspendisse libero dui duis id, quis ut hendrerit donec dolor quis. Curabitur sem, metus vestibulum interdum commodo hendrerit in donec cursus, luctus mauris eu elementum luctus maximus. Dolor quis a lacinia, adipiscing et nullam fermentum imperdiet convallis nam, et condimentum pellentesque neque.
+                            <br />
+                            Porttitor condimentum, dolor sit amet cursus sollicitudin nunc mauris et elit condimentum, quis orci fusce nulla vitae. Lacinia quis, porttitor sapien euismod et elit ut id ante bibendum vel arcu, nunc quam metus ut. Non libero vitae, pellentesque curabitur hendrerit semper auctor ipsum potenti, auctor congue fringilla metus. Fusce dui, bibendum erat id sapien molestie aliquam at sem ornare, et vehicula finibus dui et tempus sed. Pulvinar nec commodo, vivamus elit nulla a nulla rhoncus phasellus luctus, dui adipiscing ut nisl mauris mi orci. Ac nibh semper, odio leo vestibulum bibendum sed felis scelerisque integer varius, curabitur proin imperdiet nibh.
+                        </p>
+                        <p>
+                            Odio leo rhoncus, ligula urna mauris nunc ut enim et tincidunt rhoncus at sem, dolor ut tellus sed porttitor dui vel. Ullamcorper varius, consectetur ornare id consequat id dolor id lacinia, venenatis a dui vel dolor auctor. Mauris ipsum, nibh maximus egestas consequat congue nulla cras dictum nec placerat, ut venenatis elit posuere nibh maximus. Ut venenatis placerat, sit amet elit libero sed suspendisse libero dui duis id, quis ut hendrerit donec dolor quis. Curabitur sem, metus vestibulum interdum commodo hendrerit in donec cursus, luctus mauris eu elementum luctus maximus. Dolor quis a lacinia, adipiscing et nullam fermentum imperdiet convallis nam, et condimentum pellentesque neque.
+                            <br />
+                            Porttitor condimentum, dolor sit amet cursus sollicitudin nunc mauris et elit condimentum, quis orci fusce nulla vitae. Lacinia quis, porttitor sapien euismod et elit ut id ante bibendum vel arcu, nunc quam metus ut. Non libero vitae, pellentesque curabitur hendrerit semper auctor ipsum potenti, auctor congue fringilla metus. Fusce dui, bibendum erat id sapien molestie aliquam at sem ornare, et vehicula finibus dui et tempus sed. Pulvinar nec commodo, vivamus elit nulla a nulla rhoncus phasellus luctus, dui adipiscing ut nisl mauris mi orci. Ac nibh semper, odio leo vestibulum bibendum sed felis scelerisque integer varius, curabitur proin imperdiet nibh.
+                        </p>
+                        <p>
+                            Odio leo rhoncus, ligula urna mauris nunc ut enim et tincidunt rhoncus at sem, dolor ut tellus sed porttitor dui vel. Ullamcorper varius, consectetur ornare id consequat id dolor id lacinia, venenatis a dui vel dolor auctor. Mauris ipsum, nibh maximus egestas consequat congue nulla cras dictum nec placerat, ut venenatis elit posuere nibh maximus. Ut venenatis placerat, sit amet elit libero sed suspendisse libero dui duis id, quis ut hendrerit donec dolor quis. Curabitur sem, metus vestibulum interdum commodo hendrerit in donec cursus, luctus mauris eu elementum luctus maximus. Dolor quis a lacinia, adipiscing et nullam fermentum imperdiet convallis nam, et condimentum pellentesque neque.
+                            <br />
+                            Porttitor condimentum, dolor sit amet cursus sollicitudin nunc mauris et elit condimentum, quis orci fusce nulla vitae. Lacinia quis, porttitor sapien euismod et elit ut id ante bibendum vel arcu, nunc quam metus ut. Non libero vitae, pellentesque curabitur hendrerit semper auctor ipsum potenti, auctor congue fringilla metus. Fusce dui, bibendum erat id sapien molestie aliquam at sem ornare, et vehicula finibus dui et tempus sed. Pulvinar nec commodo, vivamus elit nulla a nulla rhoncus phasellus luctus, dui adipiscing ut nisl mauris mi orci. Ac nibh semper, odio leo vestibulum bibendum sed felis scelerisque integer varius, curabitur proin imperdiet nibh.
+                        </p>
+                        <p>
+                            Odio leo rhoncus, ligula urna mauris nunc ut enim et tincidunt rhoncus at sem, dolor ut tellus sed porttitor dui vel. Ullamcorper varius, consectetur ornare id consequat id dolor id lacinia, venenatis a dui vel dolor auctor. Mauris ipsum, nibh maximus egestas consequat congue nulla cras dictum nec placerat, ut venenatis elit posuere nibh maximus. Ut venenatis placerat, sit amet elit libero sed suspendisse libero dui duis id, quis ut hendrerit donec dolor quis. Curabitur sem, metus vestibulum interdum commodo hendrerit in donec cursus, luctus mauris eu elementum luctus maximus. Dolor quis a lacinia, adipiscing et nullam fermentum imperdiet convallis nam, et condimentum pellentesque neque.
+                            <br />
+                            Porttitor condimentum, dolor sit amet cursus sollicitudin nunc mauris et elit condimentum, quis orci fusce nulla vitae. Lacinia quis, porttitor sapien euismod et elit ut id ante bibendum vel arcu, nunc quam metus ut. Non libero vitae, pellentesque curabitur hendrerit semper auctor ipsum potenti, auctor congue fringilla metus. Fusce dui, bibendum erat id sapien molestie aliquam at sem ornare, et vehicula finibus dui et tempus sed. Pulvinar nec commodo, vivamus elit nulla a nulla rhoncus phasellus luctus, dui adipiscing ut nisl mauris mi orci. Ac nibh semper, odio leo vestibulum bibendum sed felis scelerisque integer varius, curabitur proin imperdiet nibh.
+                        </p>
+                    </>
+                )}
             </DetailDrawer>
         </>
     );

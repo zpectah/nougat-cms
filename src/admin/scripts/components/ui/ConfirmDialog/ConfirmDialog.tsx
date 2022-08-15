@@ -70,6 +70,9 @@ const ConfirmDialog = (props: ConfirmDialogProps) => {
                     direction="row"
                     spacing={2}
                     justifyContent="space-evenly"
+                    sx={{
+                        pt: 3,
+                    }}
                 >
                     <Button
                         onClick={closeHandler}

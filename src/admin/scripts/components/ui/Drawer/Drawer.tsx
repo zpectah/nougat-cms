@@ -1,4 +1,5 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, { useEffect, useState } from 'react';
+import { merge } from 'lodash';
 import {
     Drawer as MuiDrawer,
     Box,
@@ -18,8 +19,10 @@ type DrawerBaseProps = {
     bodySx?: SxProps,
     headerSx?: SxProps,
     contentSx?: SxProps,
-    width?: string | number,
     scrollable?: boolean,
+    actions?: React.ReactNode,
+    actionsSx?: SxProps,
+    spacing?: number,
 }
 export type DrawerProps = MuiDrawerProps & DrawerBaseProps
 
@@ -32,8 +35,10 @@ const Drawer: React.FC<DrawerProps> = (props) => {
         bodySx,
         headerSx,
         contentSx,
-        width,
         scrollable,
+        actions,
+        actionsSx,
+        spacing = 2,
         open,
         sx,
         ...rest
@@ -65,15 +70,13 @@ const Drawer: React.FC<DrawerProps> = (props) => {
                 variant: 'elevation',
                 elevation: 0,
             }}
-            sx={{
-                width: width,
-                flexShrink: 0,
-                '& .MuiDrawer-paper': {
-                    width: width,
-                    boxSizing: 'border-box',
-                },
-                ...sx,
-            }}
+            sx={merge(sx, {
+                    flexShrink: 0,
+                    '& .MuiDrawer-paper': {
+                        boxSizing: 'border-box',
+                    },
+                }
+            )}
             {...rest}
         >
             {!disableClose && (
@@ -83,9 +86,6 @@ const Drawer: React.FC<DrawerProps> = (props) => {
                         position: 'absolute',
                         top: '.5rem',
                         right: '.5rem',
-                    }}
-                    iconProps={{
-                        fontSize: 'small',
                     }}
                 />
             )}
@@ -102,7 +102,7 @@ const Drawer: React.FC<DrawerProps> = (props) => {
                     <Box
                         sx={{
                             width: '100%',
-                            p: 2,
+                            p: spacing,
                             display: 'flex',
                             alignItems: 'flex-start',
                             justifyContent: 'flex-start',
@@ -128,6 +128,21 @@ const Drawer: React.FC<DrawerProps> = (props) => {
                 >
                     {renderContent()}
                 </Box>
+                {actions && (
+                    <Box
+                        sx={{
+                            width: '100%',
+                            p: spacing,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: spacing,
+                            ...actionsSx,
+                        }}
+                    >
+                        {actions}
+                    </Box>
+                )}
             </Box>
         </MuiDrawer>
     );

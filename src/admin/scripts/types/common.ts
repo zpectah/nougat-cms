@@ -1,6 +1,8 @@
-export type themeKeyType = 'light' | 'dark';
+import { Themes, ViewTypes, RouteParamKeys } from '../enums';
 
-export type viewLayoutKeyType = 'default' | 'minimal';
+export type themeKeyType = keyof typeof Themes;
+export type viewLayoutKeyType = keyof typeof ViewTypes;
+export type routeParamKeyType = keyof typeof RouteParamKeys;
 
 export type toastItemType = {
     id?: string | number;

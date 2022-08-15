@@ -5,7 +5,11 @@
     "close": "Close",
     "confirm": "Confirm",
     "accept": "Accept",
-    "reject": "Reject"
+    "reject": "Reject",
+    "update": "Update",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "delete": "Delete"
   },
   "page": "Page",
   "detail": "Detail",

@@ -1,6 +1,8 @@
 import { useLocation, useParams } from 'react-router-dom';
 
 import config from '../config';
+import { RouteParamKeys } from '../enums';
+import { routeParamKeyType } from '../types';
 
 const useBreadcrumbs = () => {
     const doc = window.document;
@@ -12,6 +14,7 @@ const useBreadcrumbs = () => {
     const parsedPathRaw = location.pathname.split('/');
     const parsedPath = parsedPathRaw.filter(p => p);
 
+    const getParamByKey = (key: routeParamKeyType) => (parsedPath[2] === key && parsedPath[3]) && parsedPath[3];
     const setDocumentMeta = (
         pageTitle?: string,
         pageDescription?: string,
@@ -30,8 +33,9 @@ const useBreadcrumbs = () => {
         params,
         parsedPath,
         page: parsedPath[1],
-        detail: (parsedPath[2] === 'detail' && parsedPath[3]) && parsedPath[3],
-        panel: (parsedPath[2] === 'panel' && parsedPath[3]) && parsedPath[3],
+        detail: getParamByKey(RouteParamKeys['detail']),
+        panel: getParamByKey(RouteParamKeys['panel']),
+        token: getParamByKey(RouteParamKeys['token']),
         setDocumentMeta,
     };
 };

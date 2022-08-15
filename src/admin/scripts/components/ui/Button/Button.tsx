@@ -5,6 +5,7 @@ type ButtonBaseProps = {
     primary?: boolean,
     secondary?: boolean,
     submit?: boolean,
+    warning?: boolean,
     small?: boolean,
     large?: boolean,
 }
@@ -15,6 +16,7 @@ const Button = (props: ButtonProps) => {
         primary,
         secondary,
         submit,
+        warning,
         small,
         large,
         ...rest
@@ -34,7 +36,13 @@ const Button = (props: ButtonProps) => {
             color: 'secondary',
             variant: 'outlined',
         };
+        if (warning) prop = {
+            ...prop,
+            color: 'warning',
+            variant: 'outlined',
+        };
         if (submit) prop = {
+            ...prop,
             type: 'submit',
         };
         if (small) prop = {
@@ -50,6 +58,7 @@ const Button = (props: ButtonProps) => {
     }, [
         primary,
         secondary,
+        warning,
         submit,
         small,
         large,
