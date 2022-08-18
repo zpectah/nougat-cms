@@ -8,6 +8,7 @@ import {
     Button,
     DrawerProps,
     ConfirmDialog,
+    MenuItemProps,
 } from '../../ui';
 
 type DetailDrawerBaseProps = {
@@ -84,15 +85,6 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
             >
                 {t('btn.cancel')}
             </Button>
-            {(onDelete && deleteButtonText) && (
-                <Button
-                    warning
-                    onClick={deleteDetailHandler}
-                    disabled={deleteDisabled}
-                >
-                    {deleteButtonText}
-                </Button>
-            )}
             {(onSubmit && submitButtonText) && (
                 <Button
                     submit={!!formProps?.name}
@@ -106,6 +98,25 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
             )}
         </>
     );
+
+    const actionBarMenu = useMemo(() => {
+        const menu: MenuItemProps[] = [
+            {
+                key: 'toggle',
+                children: 'Disable item',
+            },
+        ];
+        if (onDelete && deleteButtonText) {
+            menu.push({
+                key: 'delete',
+                children: deleteButtonText,
+                disabled: deleteDisabled,
+                onClick: deleteDetailHandler,
+            });
+        }
+
+        return menu;
+    }, [ onDelete, deleteButtonText, deleteDisabled ]);
 
     const renderContent = useMemo(() => {
         const node = <>{children}</>;
@@ -136,6 +147,7 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
                     },
                 })}
                 scrollable
+                actionBarProps={{ menu: actionBarMenu }}
                 {...rest}
             >
                 <Box

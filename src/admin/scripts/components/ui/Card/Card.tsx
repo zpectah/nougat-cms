@@ -11,10 +11,12 @@ import {
     Stack,
     Typography,
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+// import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+// import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
-import { IconButton } from '../IconButton';
+// import { IconButton } from '../IconButton';
+import { ActionBar, ActionBarProps } from '../ActionBar';
 
 type CardBaseProps = {
     children?: React.ReactNode,
@@ -28,6 +30,7 @@ type CardBaseProps = {
     cardContentProps?: CardContentProps,
     cardActionsProps?: CardActionsProps,
     hiddenArrowButton?: boolean,
+    actionBarProps?: ActionBarProps,
 }
 export type CardProps = CardBaseProps & MuiCardProps
 
@@ -44,6 +47,7 @@ const Card: React.FC<CardProps> = (props) => {
         cardContentProps,
         cardActionsProps,
         hiddenArrowButton,
+        actionBarProps,
         ...rest
     } = props;
 
@@ -80,28 +84,14 @@ const Card: React.FC<CardProps> = (props) => {
                             </Typography>
                         )}
                     </Stack>
-                    {(headerActions || collapsible) && (
-                        <Stack
-                            direction="row"
-                            spacing={1}
-                        >
-                            {headerActions}
-                            {(collapsible && !hiddenArrowButton) && (
-                                <IconButton
-                                    size="small"
-                                    onClick={toggle}
-                                    sx={{
-                                        flex: 'none',
-                                    }}
-                                >
-                                    {open ? (
-                                        <ExpandLessIcon />
-                                    ) : (
-                                        <ExpandMoreIcon />
-                                    )}
-                                </IconButton>
-                            )}
-                        </Stack>
+                    {(headerActions || collapsible || actionBarProps) && (
+                        <ActionBar
+                            onExpandToggle={(collapsible && !hiddenArrowButton) && toggle}
+                            expanded={open}
+                            children={headerActions}
+                            iconButtonSize="small"
+                            {...actionBarProps}
+                        />
                     )}
                 </Stack>
                 {dividers && <Divider />}

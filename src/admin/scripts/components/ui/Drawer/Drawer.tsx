@@ -4,12 +4,15 @@ import {
     Drawer as MuiDrawer,
     Box,
     Typography,
+    Stack,
     DrawerProps as MuiDrawerProps,
     SxProps,
 } from '@mui/material';
+// import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
-import { CloseButton } from '../IconButton';
+// import { IconButton, CloseButton } from '../IconButton';
 import { Scrollable } from '../Scrollable';
+import { ActionBar, ActionBarProps } from '../ActionBar';
 
 type DrawerBaseProps = {
     children?: React.ReactNode,
@@ -23,6 +26,7 @@ type DrawerBaseProps = {
     actions?: React.ReactNode,
     actionsSx?: SxProps,
     spacing?: number,
+    actionBarProps?: ActionBarProps,
 }
 export type DrawerProps = MuiDrawerProps & DrawerBaseProps
 
@@ -39,6 +43,7 @@ const Drawer: React.FC<DrawerProps> = (props) => {
         actions,
         actionsSx,
         spacing = 2,
+        actionBarProps,
         open,
         sx,
         ...rest
@@ -79,16 +84,15 @@ const Drawer: React.FC<DrawerProps> = (props) => {
             )}
             {...rest}
         >
-            {!disableClose && (
-                <CloseButton
-                    onClick={closeHandler}
-                    sx={{
-                        position: 'absolute',
-                        top: '.5rem',
-                        right: '.5rem',
-                    }}
-                />
-            )}
+            <ActionBar
+                onClose={!disableClose && closeHandler}
+                sx={{
+                    position: 'absolute',
+                    top: '.5rem',
+                    right: '.5rem',
+                }}
+                {...actionBarProps}
+            />
             <Box
                 sx={{
                     width: '100%',

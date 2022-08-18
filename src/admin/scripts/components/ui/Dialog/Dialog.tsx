@@ -6,14 +6,17 @@ import {
     DialogContent,
     DialogActions,
     Typography,
+    Stack,
     DialogProps as MuiDialogProps,
     DialogTitleProps,
     DialogContentProps,
     DialogActionsProps,
 } from '@mui/material';
+// import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 import { Button } from '../Button';
-import { CloseButton } from '../IconButton';
+// import { IconButton, CloseButton } from '../IconButton';
+import { ActionBar, ActionBarProps } from '../ActionBar';
 
 type DialogBaseProps = {
     children?: React.ReactNode,
@@ -29,6 +32,7 @@ type DialogBaseProps = {
     secondary?: React.ReactNode,
     secondaryContentProps?: DialogContentProps,
     dividers?: boolean,
+    actionBarProps?: ActionBarProps,
 }
 export type DialogProps = MuiDialogProps & DialogBaseProps
 
@@ -47,6 +51,7 @@ const Dialog: React.FC<DialogProps> = (props) => {
         secondary,
         secondaryContentProps,
         dividers,
+        actionBarProps,
         open,
         maxWidth = 'md',
         ...rest
@@ -71,16 +76,14 @@ const Dialog: React.FC<DialogProps> = (props) => {
             maxWidth={maxWidth}
             {...rest}
         >
-            <CloseButton
-                onClick={closeHandler}
+            <ActionBar
+                onClose={closeHandler}
                 sx={{
                     position: 'absolute',
                     top: '.5rem',
                     right: '.5rem',
                 }}
-                iconProps={{
-                    fontSize: 'small',
-                }}
+                {...actionBarProps}
             />
             {title && (
                 <DialogTitle

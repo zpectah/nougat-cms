@@ -9,3 +9,5 @@ export * from './List';
 export * from './Dialog';
 export * from './ConfirmDialog';
 export * from './Drawer';
+export * from './ActionBar';
+export * from './Menu';

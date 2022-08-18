@@ -7,6 +7,8 @@ import {
     SxProps,
 } from '@mui/material';
 
+import { ActionBar, ActionBarProps } from '../ActionBar';
+
 type SectionBaseProps = {
     children?: React.ReactNode,
     title?: string,
@@ -15,6 +17,7 @@ type SectionBaseProps = {
     sx?: SxProps,
     contentSx?: SxProps,
     id?: string,
+    actionBarProps?: ActionBarProps,
 }
 export type SectionProps = SectionBaseProps
 
@@ -27,10 +30,12 @@ const Section: React.FC<SectionProps> = (props) => {
         sx,
         contentSx,
         id,
+        actionBarProps,
     } = props;
 
     const showHeading = title || subtitle || actions;
 
+    console.log('actionBarProps', actionBarProps);
     return (
         <Box
             component="section"
@@ -48,6 +53,7 @@ const Section: React.FC<SectionProps> = (props) => {
                     direction="row"
                     spacing={2}
                     justifyContent="space-between"
+                    alignItems="flex-start"
                 >
                     <Stack
                         direction="column"
@@ -71,13 +77,11 @@ const Section: React.FC<SectionProps> = (props) => {
                             </Typography>
                         )}
                     </Stack>
-                    {actions && (
-                        <Stack
-                            direction="row"
-                            spacing={1}
-                        >
-                            actions
-                        </Stack>
+                    {(actions || actionBarProps) && (
+                        <ActionBar
+                            children={actions}
+                            {...actionBarProps}
+                        />
                     )}
                 </Stack>
             )}

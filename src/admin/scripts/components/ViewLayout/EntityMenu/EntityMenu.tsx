@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Menu, useTheme } from '@mui/material';
+import { useTheme } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Avatar from '@mui/material/Avatar';
 
 import routes from '../../../routes';
 import { useEntity, useTheme as useUiTheme } from '../../../hooks';
 import { Themes } from '../../../enums';
-import { Button, ConfirmDialog } from '../../ui';
+import {
+    Button,
+    ConfirmDialog,
+    Menu,
+    MenuItemProps,
+} from '../../ui';
 
 const EntityMenu = () => {
     const [ anchorEl, setAnchorEl ] = useState<null | HTMLElement>(null);
@@ -47,24 +52,21 @@ const EntityMenu = () => {
         logout();
     };
 
-    const menuItems = [
+    const menuItems: MenuItemProps[] = [
         {
             key: 'profile',
-            label: 'Profile',
-            callback: profileHandler,
-            active: true,
+            children: 'Profile',
+            onClick: profileHandler,
         },
         {
             key: 'theme',
-            label: `Set mode to ${theme === Themes['light'] ? Themes['dark'] : Themes['light']}`,
-            callback: switchThemeHandler,
-            active: true,
+            children: `Set mode to ${theme === Themes['light'] ? Themes['dark'] : Themes['light']}`,
+            onClick: switchThemeHandler,
         },
         {
             key: 'logout',
-            label: 'Log out',
-            callback: logoutHandler,
-            active: true,
+            children: 'Log out',
+            onClick: logoutHandler,
         },
     ];
 
@@ -127,18 +129,8 @@ const EntityMenu = () => {
                             vertical: 'bottom',
                             horizontal: 'right',
                         }}
-                    >
-                        {menuItems.map((item) => {
-                            if (item.active) return (
-                                <MenuItem
-                                    key={item.key}
-                                    onClick={item.callback}
-                                >
-                                    {item.label}
-                                </MenuItem>
-                            );
-                        })}
-                    </Menu>
+                        items={menuItems}
+                    />
                     <ConfirmDialog
                         open={confirmOpen}
                         onClose={closeConfirmHandler}
