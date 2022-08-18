@@ -35,7 +35,6 @@ const Section: React.FC<SectionProps> = (props) => {
 
     const showHeading = title || subtitle || actions;
 
-    console.log('actionBarProps', actionBarProps);
     return (
         <Box
             component="section"
@@ -80,6 +79,7 @@ const Section: React.FC<SectionProps> = (props) => {
                     {(actions || actionBarProps) && (
                         <ActionBar
                             children={actions}
+                            id={`${id}-actionBar`}
                             {...actionBarProps}
                         />
                     )}

@@ -12,13 +12,14 @@ export type MenuItemProps = MuiMenuItemProps & {
 }
 
 type MenuBaseProps = {
-    items: MenuItemProps[],
+    items?: MenuItemProps[] | null,
 }
 export type MenuProps = MuiMenuProps & MenuBaseProps
 
 const Menu = (props: MenuProps) => {
     const {
         items = [],
+        children,
         ...rest
     } = props;
 
@@ -26,7 +27,8 @@ const Menu = (props: MenuProps) => {
         <MuiMenu
             {...rest}
         >
-            {items.map((item) => (
+            {children && children}
+            {items && items.map((item) => (
                 <MuiMenuItem
                     {...item}
                 />

@@ -1,8 +1,9 @@
 import React, {useMemo, useState} from 'react';
 import { merge } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
+import { Breadcrumbs } from '../../Breadcrumbs';
 import {
     Drawer,
     Button,
@@ -24,6 +25,12 @@ type DetailDrawerBaseProps = {
     deleteText?: string,
     deleteDisabled?: boolean,
     formProps?: React.HTMLProps<HTMLFormElement> & React.HTMLAttributes<HTMLFormElement>,
+    availableActions?: {
+        toggle: boolean,
+        create: boolean,
+        update: boolean,
+        delete: boolean,
+    },
 }
 export type DetailDrawerProps = DrawerProps & DetailDrawerBaseProps
 
@@ -41,9 +48,16 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
         deleteText,
         deleteDisabled,
         formProps,
+        availableActions = {
+            toggle: true,
+            create: true,
+            update: true,
+            delete: true,
+        },
         children,
         onClose,
         sx,
+        title,
         ...rest
     } = props;
 
@@ -85,7 +99,7 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
             >
                 {t('btn.cancel')}
             </Button>
-            {(onSubmit && submitButtonText) && (
+            {(onSubmit && submitButtonText && (availableActions.create || availableActions.update)) && (
                 <Button
                     submit={!!formProps?.name}
                     primary={!(!!formProps?.name)}
@@ -103,10 +117,11 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
         const menu: MenuItemProps[] = [
             {
                 key: 'toggle',
-                children: 'Disable item',
+                children: t('btn.disable'),
+                disabled: !availableActions.toggle,
             },
         ];
-        if (onDelete && deleteButtonText) {
+        if (onDelete && deleteButtonText && (availableActions.update && availableActions.delete)) {
             menu.push({
                 key: 'delete',
                 children: deleteButtonText,
@@ -116,7 +131,7 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
         }
 
         return menu;
-    }, [ onDelete, deleteButtonText, deleteDisabled ]);
+    }, [ onDelete, deleteButtonText, deleteDisabled, availableActions ]);
 
     const renderContent = useMemo(() => {
         const node = <>{children}</>;
@@ -137,6 +152,7 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
     return (
         <>
             <Drawer
+                id={`${detailType}-${confirmData?.id}-detailDrawer`}
                 anchor="right"
                 onClose={onClose}
                 actions={renderActions()}
@@ -147,7 +163,24 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
                     },
                 })}
                 scrollable
-                actionBarProps={{ menu: actionBarMenu }}
+                actionBarProps={{
+                    id: `${detailType}-${confirmData?.id}-detailDrawer-actionBar`,
+                    menu: actionBarMenu
+                }}
+                headerNode={
+                    <>
+                        <Typography
+                            component="header"
+                            variant="h4"
+                        >
+                            {title}
+                        </Typography>
+                        <Breadcrumbs withDetailLink />
+                    </>
+                }
+                headerSx={{
+                    flexDirection: 'column',
+                }}
                 {...rest}
             >
                 <Box

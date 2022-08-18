@@ -11,11 +11,7 @@ import {
     Stack,
     Typography,
 } from '@mui/material';
-// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-// import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-// import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
-// import { IconButton } from '../IconButton';
 import { ActionBar, ActionBarProps } from '../ActionBar';
 
 type CardBaseProps = {
@@ -48,6 +44,7 @@ const Card: React.FC<CardProps> = (props) => {
         cardActionsProps,
         hiddenArrowButton,
         actionBarProps,
+        id,
         ...rest
     } = props;
 
@@ -86,6 +83,7 @@ const Card: React.FC<CardProps> = (props) => {
                     </Stack>
                     {(headerActions || collapsible || actionBarProps) && (
                         <ActionBar
+                            id={`${id}-actionBar`}
                             onExpandToggle={(collapsible && !hiddenArrowButton) && toggle}
                             expanded={open}
                             children={headerActions}
@@ -166,6 +164,7 @@ const Card: React.FC<CardProps> = (props) => {
         <MuiCard
             elevation={0}
             variant="outlined"
+            id={id}
             {...rest}
         >
             {renderHeader}

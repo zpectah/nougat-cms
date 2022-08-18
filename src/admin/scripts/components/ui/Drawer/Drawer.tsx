@@ -4,13 +4,10 @@ import {
     Drawer as MuiDrawer,
     Box,
     Typography,
-    Stack,
     DrawerProps as MuiDrawerProps,
     SxProps,
 } from '@mui/material';
-// import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
-// import { IconButton, CloseButton } from '../IconButton';
 import { Scrollable } from '../Scrollable';
 import { ActionBar, ActionBarProps } from '../ActionBar';
 
@@ -27,6 +24,7 @@ type DrawerBaseProps = {
     actionsSx?: SxProps,
     spacing?: number,
     actionBarProps?: ActionBarProps,
+    headerNode?: React.ReactNode,
 }
 export type DrawerProps = MuiDrawerProps & DrawerBaseProps
 
@@ -44,8 +42,10 @@ const Drawer: React.FC<DrawerProps> = (props) => {
         actionsSx,
         spacing = 2,
         actionBarProps,
+        headerNode,
         open,
         sx,
+        id,
         ...rest
     } = props;
 
@@ -69,6 +69,7 @@ const Drawer: React.FC<DrawerProps> = (props) => {
 
     return (
         <MuiDrawer
+            id={id}
             open={isOpen}
             onClose={closeHandler}
             PaperProps={{
@@ -85,6 +86,7 @@ const Drawer: React.FC<DrawerProps> = (props) => {
             {...rest}
         >
             <ActionBar
+                id={`${id}-actionBar`}
                 onClose={!disableClose && closeHandler}
                 sx={{
                     position: 'absolute',
@@ -102,7 +104,7 @@ const Drawer: React.FC<DrawerProps> = (props) => {
                     ...bodySx,
                 }}
             >
-                {title && (
+                {(title || headerNode) && (
                     <Box
                         sx={{
                             width: '100%',
@@ -113,12 +115,19 @@ const Drawer: React.FC<DrawerProps> = (props) => {
                             ...headerSx,
                         }}
                     >
-                        <Typography
-                            component="header"
-                            variant="h4"
-                        >
-                            {title}
-                        </Typography>
+                        {title && (
+                            <Typography
+                                component="header"
+                                variant="h4"
+                            >
+                                {title}
+                            </Typography>
+                        )}
+                        {headerNode && (
+                            <>
+                                {headerNode}
+                            </>
+                        )}
                     </Box>
                 )}
                 <Box

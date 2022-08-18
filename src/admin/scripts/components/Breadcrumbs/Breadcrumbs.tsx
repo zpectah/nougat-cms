@@ -6,13 +6,25 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 import { FEATURES } from '../../const';
 import routes from '../../routes';
+import { RouteParamKeys } from '../../enums';
 import {
     useBreadcrumbs,
     useRoutes,
     useLanguage,
 } from '../../hooks';
 
-const Breadcrumbs = () => {
+type BreadcrumbsBaseProps = {
+    withListLink?: boolean,
+    withDetailLink?: boolean,
+}
+export type BreadcrumbsProps = BreadcrumbsBaseProps
+
+const Breadcrumbs = (props: BreadcrumbsProps) => {
+    const {
+        withListLink,
+        withDetailLink,
+    } = props;
+
     const { t } = useTranslation([ 'common', 'views' ]);
     const { cms, detail, panel } = useBreadcrumbs();
     const { route } = useRoutes();
@@ -34,11 +46,13 @@ const Breadcrumbs = () => {
             key: 'page',
             label: t(`views:${route?.i18n_key}.label`),
             active: !!route?.key,
+            path: withListLink && route?.path,
         },
         {
             key: 'detail',
             label: `${t(`common:detail`)}: ${detail}`,
             active: !!detail,
+            path: withDetailLink && `${route?.path}/${RouteParamKeys['detail']}/${detail}`,
         },
         {
             key: 'panel',

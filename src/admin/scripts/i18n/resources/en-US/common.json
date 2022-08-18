@@ -9,7 +9,13 @@
     "update": "Update",
     "cancel": "Cancel",
     "submit": "Submit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "more": "More",
+    "less": "Less",
+    "expand": "Expand",
+    "collapse": "Collapse",
+    "disable": "Disable",
+    "active": "Active"
   },
   "page": "Page",
   "detail": "Detail",

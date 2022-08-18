@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { Stack, StackProps } from '@mui/material';
+import {
+    Stack,
+    StackProps,
+    MenuItem, MenuItem as MuiMenuItem,
+} from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -26,6 +30,7 @@ type ActionBarBaseProps = {
     iconButtonSize?: 'small' | 'medium' | 'large' | undefined,
     iconButtonProps?: IconButtonProps,
     id?: string,
+    closableMenuItemClick?: boolean,
 }
 export type ActionBarProps = StackProps & ActionBarBaseProps
 
@@ -41,6 +46,7 @@ const ActionBar: React.FC<ActionBarProps> = (props) => {
         iconButtonSize,
         iconButtonProps,
         id = 'action-menu',
+        closableMenuItemClick = true,
         ...rest
     } = props;
 
@@ -56,6 +62,12 @@ const ActionBar: React.FC<ActionBarProps> = (props) => {
     };
     const openMenuHandler = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
     const closeMenuHandler = () => setAnchorEl(null);
+    const extendMenuOnClickHandler = (event: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLLIElement>, callback: (event: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLLIElement>) => void) => {
+        if (callback) {
+            callback(event);
+            closeMenuHandler();
+        }
+    };
 
     return (
         <Stack
@@ -83,12 +95,22 @@ const ActionBar: React.FC<ActionBarProps> = (props) => {
                         open={menuOpen}
                         onClose={closeMenuHandler}
                         anchorEl={anchorEl}
-                        items={menu}
+                        items={!closableMenuItemClick ? menu : null}
                         MenuListProps={{ 'aria-labelledby': `${id}-button` }}
                         anchorOrigin={{
                             vertical: 'bottom',
                             horizontal: 'left',
                         }}
+                        children={(
+                            <>
+                                {closableMenuItemClick && menu.map(({ onClick, ...rest}) => (
+                                    <MuiMenuItem
+                                        onClick={(e) => onClick && extendMenuOnClickHandler(e, () => onClick(e))}
+                                        {...rest}
+                                    />
+                                ))}
+                            </>
+                        )}
                         {...menuProps}
                     />
                 </>
