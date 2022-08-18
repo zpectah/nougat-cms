@@ -1,14 +1,20 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
 
+import { Model } from '../../enums';
+import { useEntity } from '../../hooks';
 import {
     ViewHeading,
     DataTable,
+    CreateButton,
 } from '../../components';
 
 const Users = () => {
     const { t } = useTranslation([ 'views' ]);
+    const { entity } = useEntity();
+
+    const model = Model['Users'];
+    const actions = entity.availableActions[model];
 
     return (
         <>
@@ -16,12 +22,17 @@ const Users = () => {
                 title={t('views:Users.title')}
                 subtitle={t('views:Users.subtitle')}
                 withBreadcrumbs
+                actions={(
+                    <CreateButton
+                        model={model}
+                        disabled={!actions.create}
+                    />
+                )}
             />
-            <Box>
-
-                <DataTable />
-
-            </Box>
+            <DataTable
+                model={model}
+                availableActions={actions}
+            />
         </>
     );
 };

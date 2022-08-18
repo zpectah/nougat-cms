@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
     Stack,
     StackProps,
-    MenuItem, MenuItem as MuiMenuItem,
+    MenuItem,
 } from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -27,10 +27,12 @@ type ActionBarBaseProps = {
     menu?: MenuItemProps[],
     menuIcon?: React.ReactNode,
     menuProps?: MenuProps,
-    iconButtonSize?: 'small' | 'medium' | 'large' | undefined,
+    iconButtonSize?: IconButtonProps['size'],
     iconButtonProps?: IconButtonProps,
     id?: string,
     closableMenuItemClick?: boolean,
+    menuItemProps?: MenuItemProps,
+    menuButtonTooltip?: string,
 }
 export type ActionBarProps = StackProps & ActionBarBaseProps
 
@@ -47,6 +49,8 @@ const ActionBar: React.FC<ActionBarProps> = (props) => {
         iconButtonProps,
         id = 'action-menu',
         closableMenuItemClick = true,
+        menuItemProps,
+        menuButtonTooltip = 'Menu',
         ...rest
     } = props;
 
@@ -86,6 +90,7 @@ const ActionBar: React.FC<ActionBarProps> = (props) => {
                         aria-expanded={menuOpen ? 'true' : undefined}
                         size={iconButtonSize}
                         onClick={openMenuHandler}
+                        tooltip={menuButtonTooltip}
                         {...iconButtonProps}
                     >
                         {menuIcon ? menuIcon : <MoreHorizIcon />}
@@ -104,9 +109,10 @@ const ActionBar: React.FC<ActionBarProps> = (props) => {
                         children={(
                             <>
                                 {closableMenuItemClick && menu.map(({ onClick, ...rest}) => (
-                                    <MuiMenuItem
+                                    <MenuItem
                                         onClick={(e) => onClick && extendMenuOnClickHandler(e, () => onClick(e))}
                                         {...rest}
+                                        {...menuItemProps}
                                     />
                                 ))}
                             </>

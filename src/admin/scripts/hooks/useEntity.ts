@@ -5,39 +5,59 @@ import routes from '../routes';
 import { entityItemProps, storeProps } from '../types';
 import actions from '../store/actions';
 
+const demoEntity: entityItemProps = {
+    id: 12,
+    type: 'default',
+    email: 'email@email.email',
+    firstname: 'John',
+    lastname: 'Doe',
+    nickname: 'johnny',
+    fullname: 'John Doe',
+    user_group: 'public',
+    user_meta: {
+        avataaar: {
+            avatarStyle: 'Circle',
+            topType: 'LongHairBob',
+            accessoriesType: 'Round',
+            hairColor: 'Black',
+            facialHairType: 'BeardMedium',
+            facialHairColor: 'BrownDark',
+            clotheType: 'ShirtCrewNeck',
+            clotheColor: 'Gray01',
+            eyeType: 'Wink',
+            eyebrowType: 'UnibrowNatural',
+            mouthType: 'Serious',
+            skinColor: 'DarkBrown',
+        },
+    },
+    user_level: 7,
+    active: true,
+    availableActions: {
+        common: {
+            toggle: true,
+            create: true,
+            update: true,
+            delete: true,
+        },
+        Users: {
+            toggle: true,
+            create: true,
+            update: true,
+            delete: true,
+        },
+        Posts: {
+            toggle: true,
+            create: true,
+            update: true,
+            delete: true,
+        },
+    },
+};
+
 const useEntity = () => {
     const { entity } = useSelector((store: storeProps) => store);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const demoEntity: entityItemProps = {
-			id: 12,
-			type: 'default',
-			email: 'email@email.email',
-			firstname: 'John',
-			lastname: 'Doe',
-			nickname: 'johnny',
-            fullname: 'John Doe',
-			user_group: 'public',
-			user_meta: {
-                avataaar: {
-                    avatarStyle: 'Circle',
-                    topType: 'LongHairBob',
-                    accessoriesType: 'Round',
-                    hairColor: 'Black',
-                    facialHairType: 'BeardMedium',
-                    facialHairColor: 'BrownDark',
-                    clotheType: 'ShirtCrewNeck',
-                    clotheColor: 'Gray01',
-                    eyeType: 'Wink',
-                    eyebrowType: 'UnibrowNatural',
-                    mouthType: 'Serious',
-                    skinColor: 'DarkBrown',
-                },
-            },
-			user_level: 7,
-			active: true,
-		};
 
     const getAvataaarImageSrc = () => {
         // https://getavataaars.com/

@@ -43,33 +43,41 @@ const ViewHeading = (props: ViewHeadingProps) => {
         >
             {withBreadcrumbs && <Breadcrumbs />}
             <Stack
-                direction="column"
-                gap={1}
+                direction="row"
                 alignItems={centered ? 'center' : 'flex-start'}
+                justifyContent="space-between"
+                gap={1}
             >
-                {title && (
-                    <Typography
-                        variant="h1"
+                <Stack
+                    direction="column"
+                    gap={1}
+                    alignItems={centered ? 'center' : 'flex-start'}
+                    sx={{ width: '100%' }}
+                >
+                    {title && (
+                        <Typography
+                            variant="h1"
+                        >
+                            {title}
+                        </Typography>
+                    )}
+                    {subtitle && (
+                        <Typography
+                            variant="subtitle1"
+                        >
+                            {subtitle}
+                        </Typography>
+                    )}
+                </Stack>
+                {actions && (
+                    <Stack
+                        direction="row"
+                        gap={1}
                     >
-                        {title}
-                    </Typography>
-                )}
-                {subtitle && (
-                    <Typography
-                        variant="subtitle1"
-                    >
-                        {subtitle}
-                    </Typography>
+                        {actions}
+                    </Stack>
                 )}
             </Stack>
-            {actions && (
-                <Stack
-                    direction="row"
-                    gap={1}
-                >
-                    {actions}
-                </Stack>
-            )}
         </Box>
     );
 };

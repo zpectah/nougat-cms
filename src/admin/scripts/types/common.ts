@@ -1,8 +1,14 @@
-import { Themes, ViewTypes, RouteParamKeys } from '../enums';
+import {
+    Themes,
+    ViewTypes,
+    RouteParamKeys,
+    Model,
+} from '../enums';
 
 export type themeKeyType = keyof typeof Themes;
 export type viewLayoutKeyType = keyof typeof ViewTypes;
 export type routeParamKeyType = keyof typeof RouteParamKeys;
+export type modelKeyType = keyof typeof Model;
 
 export type toastItemType = {
     id?: string | number;

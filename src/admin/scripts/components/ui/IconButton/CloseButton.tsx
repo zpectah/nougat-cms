@@ -20,7 +20,7 @@ const CloseButton = (props: CloseButtonProps) => {
 
     return (
         <IconButton
-            title={t('btn.close')}
+            tooltip={t('btn.close')}
             {...rest}
         >
             <CloseIcon

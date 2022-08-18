@@ -1,19 +1,20 @@
-import React, {useMemo, useState} from 'react';
+import React, { useMemo } from 'react';
 import { merge } from 'lodash';
+import { isDesktop } from 'react-device-detect';
 import { useTranslation } from 'react-i18next';
 import { Box, Typography } from '@mui/material';
 
+import { modelKeyType, availableActionsProps } from '../../../types';
 import { Breadcrumbs } from '../../Breadcrumbs';
 import {
     Drawer,
     Button,
     DrawerProps,
-    ConfirmDialog,
     MenuItemProps,
 } from '../../ui';
 
 type DetailDrawerBaseProps = {
-    detailType?: any, // TODO #types
+    model: modelKeyType,
     detailId?: string,
     widthMd?: string | number,
     widthLg?: string | number,
@@ -21,22 +22,17 @@ type DetailDrawerBaseProps = {
     onSubmit?: () => void,
     submitText?: string,
     submitDisabled?: boolean,
-    onDelete?: (id: string) => void,
+    onDelete?: () => void,
     deleteText?: string,
     deleteDisabled?: boolean,
     formProps?: React.HTMLProps<HTMLFormElement> & React.HTMLAttributes<HTMLFormElement>,
-    availableActions?: {
-        toggle: boolean,
-        create: boolean,
-        update: boolean,
-        delete: boolean,
-    },
+    availableActions: availableActionsProps,
 }
 export type DetailDrawerProps = DrawerProps & DetailDrawerBaseProps
 
 const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
     const {
-        detailType = 'User', // TODO
+        model,
         detailId,
         widthMd = 'calc(100% - 100px)',
         widthLg = 1000,
@@ -48,21 +44,13 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
         deleteText,
         deleteDisabled,
         formProps,
-        availableActions = {
-            toggle: true,
-            create: true,
-            update: true,
-            delete: true,
-        },
+        availableActions,
         children,
         onClose,
         sx,
         title,
         ...rest
     } = props;
-
-    const [ confirmOpen, setConfirmOpen ] = useState(false);
-    const [ confirmData, setConfirmData ] = useState<any | null>(null); // TODO
 
     const { t } = useTranslation('common');
 
@@ -75,20 +63,8 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
     const submitButtonText = submitText ? submitText : t('btn.submit');
     const deleteButtonText = deleteText ? deleteText : t('btn.delete');
 
-    const openConfirmHandler = (id: string) => {
-        setConfirmOpen(true);
-        setConfirmData({ id });
-    };
-    const closeConfirmHandler = () => {
-        setConfirmOpen(false);
-        setTimeout(() => setConfirmData(null), 350);
-    };
     const deleteDetailHandler = () => {
-        if (detailId) openConfirmHandler(detailId);
-    };
-    const confirmDeleteDetailHandler = () => {
-        closeConfirmHandler();
-        if (detailId && onDelete) onDelete(detailId);
+        if (detailId && onDelete) onDelete();
     };
 
     const renderActions = () => (
@@ -152,7 +128,7 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
     return (
         <>
             <Drawer
-                id={`${detailType}-${confirmData?.id}-detailDrawer`}
+                id={`${model}-${detailId}-detailDrawer`}
                 anchor="right"
                 onClose={onClose}
                 actions={renderActions()}
@@ -164,18 +140,25 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
                 })}
                 scrollable
                 actionBarProps={{
-                    id: `${detailType}-${confirmData?.id}-detailDrawer-actionBar`,
+                    id: `${model}-${detailId}-detailDrawer-actionBar`,
                     menu: actionBarMenu
                 }}
                 headerNode={
                     <>
+                        {isDesktop && (
+                            <Breadcrumbs
+                                withDetailLink
+                                sx={{
+                                    mb: 2,
+                                }}
+                            />
+                        )}
                         <Typography
                             component="header"
-                            variant="h4"
+                            variant="h3"
                         >
                             {title}
                         </Typography>
-                        <Breadcrumbs withDetailLink />
                     </>
                 }
                 headerSx={{
@@ -188,17 +171,6 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
                     children={renderContent}
                 />
             </Drawer>
-            <ConfirmDialog
-                open={confirmOpen}
-                onClose={closeConfirmHandler}
-                onConfirm={confirmDeleteDetailHandler}
-                title="Delete item"
-                content={
-                    <>
-                        Do you want to delete this {confirmData?.id} {detailType}?
-                    </>
-                }
-            />
         </>
     );
 };

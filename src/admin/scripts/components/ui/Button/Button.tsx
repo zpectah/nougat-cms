@@ -25,6 +25,9 @@ const Button = (props: ButtonProps) => {
     const propsByType = useMemo(() => {
         let prop: MuiButtonProps = {
             type: 'button',
+            sx: {
+                whiteSpace: 'nowrap',
+            },
         };
         if (primary || submit) prop = {
             ...prop,

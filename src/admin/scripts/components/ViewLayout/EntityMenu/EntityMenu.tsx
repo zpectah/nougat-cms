@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material';
-import MenuItem from '@mui/material/MenuItem';
 import Avatar from '@mui/material/Avatar';
 
 import routes from '../../../routes';

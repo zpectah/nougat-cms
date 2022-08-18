@@ -21,6 +21,7 @@ const themeCommonProps = {
         },
         h3: {
             fontSize: '1.75rem',
+            fontWeight: 700,
         },
         h4: {
             fontSize: '1.5rem',

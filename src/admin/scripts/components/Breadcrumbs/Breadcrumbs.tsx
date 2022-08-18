@@ -1,7 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Breadcrumbs as MuiBreadcrumbs, Typography } from '@mui/material';
+import {
+    Breadcrumbs as MuiBreadcrumbs,
+    BreadcrumbsProps as MuiBreadcrumbsProps,
+    Typography,
+} from '@mui/material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 import { FEATURES } from '../../const';
@@ -17,12 +21,13 @@ type BreadcrumbsBaseProps = {
     withListLink?: boolean,
     withDetailLink?: boolean,
 }
-export type BreadcrumbsProps = BreadcrumbsBaseProps
+export type BreadcrumbsProps = MuiBreadcrumbsProps & BreadcrumbsBaseProps
 
 const Breadcrumbs = (props: BreadcrumbsProps) => {
     const {
         withListLink,
         withDetailLink,
+        ...rest
     } = props;
 
     const { t } = useTranslation([ 'common', 'views' ]);
@@ -67,12 +72,12 @@ const Breadcrumbs = (props: BreadcrumbsProps) => {
             aria-label="breadcrumbs"
         >
             <MuiBreadcrumbs
-                sx={{ fontSize: '.8rem' }}
                 separator={
                     <NavigateNextIcon
                         fontSize="inherit"
                     />
                 }
+                {...rest}
             >
                 {navItems.map((item) => {
                     if (item.active) return (
@@ -83,7 +88,7 @@ const Breadcrumbs = (props: BreadcrumbsProps) => {
                                     to={item.path}
                                     style={{
                                         color: 'inherit',
-                                        fontSize: 'inherit',
+                                        fontSize: '.8rem',
                                     }}
                                 >
                                     {item.label}
@@ -92,6 +97,10 @@ const Breadcrumbs = (props: BreadcrumbsProps) => {
                                 <Typography
                                     key={item.key}
                                     variant="caption"
+                                    sx={{
+                                        color: 'inherit',
+                                        fontSize: '.8rem',
+                                    }}
                                 >
                                     {item.label}
                                 </Typography>
