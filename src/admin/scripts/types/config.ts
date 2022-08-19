@@ -1,7 +1,3 @@
-import environmental from "../../../config/environmental.json";
-import constants from "../../../../constants.json";
-import {paths} from "../config";
-
 export type environmentalNameType = 'development' | 'test' | 'production';
 export type environmentalKeyType = 'dev' | 'test' | 'prod';
 

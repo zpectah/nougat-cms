@@ -1,5 +1,5 @@
 export interface UsersItemProps {
-    id: number,
+    id: number | 'new',
     type: 'default',
     email: string,
     password?: string,

@@ -49,7 +49,7 @@ const Breadcrumbs = (props: BreadcrumbsProps) => {
         },
         {
             key: 'page',
-            label: t(`views:${route?.i18n_key}.label`),
+            label: t(`views:${route?.name}.label`),
             active: !!route?.key,
             path: withListLink && route?.path,
         },

@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import {
-    Stack,
-    StackProps,
-    MenuItem,
-} from '@mui/material';
+import { Stack, StackProps } from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -15,6 +11,7 @@ import {
 } from '../IconButton';
 import {
     Menu,
+    MenuItem,
     MenuProps,
     MenuItemProps,
 } from '../Menu';

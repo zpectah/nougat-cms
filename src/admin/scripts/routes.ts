@@ -4,7 +4,7 @@ import { routesType } from './types';
 const routes: routesType = {
     Error404: {
         key: 'error-404',
-        i18n_key: 'Error404',
+        name: 'Error404',
         match: `${paths.root}/*`,
         path: null,
         auth: false,
@@ -12,7 +12,7 @@ const routes: routesType = {
     },
     Login: {
         key: 'login',
-        i18n_key: 'Login',
+        name: 'Login',
         match: `${paths.root}/login`,
         path: `${paths.root}/login`,
         auth: false,
@@ -20,7 +20,7 @@ const routes: routesType = {
     },
     LostPassword: {
         key: 'lost-password',
-        i18n_key: 'LostPassword',
+        name: 'LostPassword',
         match: `${paths.root}/lost-password/*`,
         path: `${paths.root}/lost-password`,
         auth: false,
@@ -28,7 +28,7 @@ const routes: routesType = {
     },
     Dashboard: {
         key: 'dashboard',
-        i18n_key: 'Dashboard',
+        name: 'Dashboard',
         match: `${paths.root}/`,
         path: `${paths.root}/`,
         auth: true,
@@ -36,7 +36,7 @@ const routes: routesType = {
     },
     Settings: {
         key: 'settings',
-        i18n_key: 'Settings',
+        name: 'Settings',
         match: `${paths.root}/settings/*`,
         path: `${paths.root}/settings`,
         auth: true,
@@ -44,7 +44,7 @@ const routes: routesType = {
     },
     Profile: {
         key: 'profile',
-        i18n_key: 'Profile',
+        name: 'Profile',
         match: `${paths.root}/profile`,
         path: `${paths.root}/profile`,
         auth: true,
@@ -52,11 +52,21 @@ const routes: routesType = {
     },
     Users: {
         key: 'users',
-        i18n_key: 'Users',
+        name: 'Users',
         match: `${paths.root}/users/*`,
         path: `${paths.root}/users`,
         auth: true,
+        detail: true,
         level: 7,
+    },
+    Posts: {
+        key: 'posts',
+        name: 'Posts',
+        match: `${paths.root}/posts/*`,
+        path: `${paths.root}/posts`,
+        auth: true,
+        detail: true,
+        level: 3,
     },
 };
 

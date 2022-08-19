@@ -33,12 +33,12 @@ const demoEntity: entityItemProps = {
     user_level: 7,
     active: true,
     availableActions: {
-        common: {
-            toggle: true,
-            create: true,
-            update: true,
-            delete: true,
-        },
+        // common: {
+        //     toggle: true,
+        //     create: true,
+        //     update: true,
+        //     delete: true,
+        // },
         Users: {
             toggle: true,
             create: true,

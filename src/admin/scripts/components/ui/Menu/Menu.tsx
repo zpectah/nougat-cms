@@ -1,16 +1,10 @@
 import React from 'react';
 import {
     Menu as MuiMenu,
-    MenuItem as MuiMenuItem,
     MenuProps as MuiMenuProps,
-    MenuItemProps as MuiMenuItemProps,
 } from '@mui/material';
 
-export type MenuItemProps = MuiMenuItemProps & {
-    key?: string | number,
-    open?: boolean | undefined,
-}
-
+import MenuItem, { MenuItemProps } from './MenuItem';
 type MenuBaseProps = {
     items?: MenuItemProps[] | null,
 }
@@ -29,7 +23,7 @@ const Menu = (props: MenuProps) => {
         >
             {children && children}
             {items && items.map((item) => (
-                <MuiMenuItem
+                <MenuItem
                     {...item}
                 />
             ))}

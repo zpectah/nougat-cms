@@ -9,18 +9,18 @@ import {
     CreateButton,
 } from '../../components';
 
-const Users = () => {
+const Posts = () => {
     const { t } = useTranslation([ 'views' ]);
     const { entity } = useEntity();
 
-    const model = Model['Users'];
+    const model = Model['Posts'];
     const actions = entity.availableActions[model];
 
     return (
         <>
             <ViewHeading
-                title={t('views:Users.title')}
-                subtitle={t('views:Users.subtitle')}
+                title={t('views:Posts.title')}
+                subtitle={t('views:Posts.subtitle')}
                 withBreadcrumbs
                 actions={(
                     <CreateButton
@@ -38,4 +38,4 @@ const Users = () => {
     );
 };
 
-export default Users;
+export default Posts;

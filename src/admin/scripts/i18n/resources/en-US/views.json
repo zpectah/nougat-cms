@@ -53,5 +53,13 @@
     "title": "Users",
     "subtitle": "Users page view",
     "label": "Users"
+  },
+  "Posts": {
+    "meta": {
+      "title": "Posts"
+    },
+    "title": "Posts",
+    "subtitle": "Posts page view",
+    "label": "Posts"
   }
 }

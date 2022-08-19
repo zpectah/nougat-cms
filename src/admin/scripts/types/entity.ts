@@ -8,7 +8,7 @@ export type availableActionsProps = {
 }
 
 export type entityAvailableActionsProps = {
-    common: availableActionsProps,
+    // common: availableActionsProps,
     Users: availableActionsProps,
     Posts: availableActionsProps,
 }

@@ -71,6 +71,14 @@ const Navbar = () => {
             active: true,
             icon: <GroupIcon {...iconProps} />,
         },
+        {
+            key: routes.Posts.key,
+            label: t('Posts.label'),
+            path: routes.Posts.path,
+            disabled: false,
+            active: true,
+            icon: <GroupIcon {...iconProps} />,
+        },
 
         {
             key: routes.Profile.key,
@@ -122,10 +130,7 @@ const Navbar = () => {
 
     return (
         <Box
-            sx={{
-                py: 1,
-                px: 1,
-            }}
+            sx={{ p: 1 }}
         >
             <nav aria-label="main navigation">
                 <List>

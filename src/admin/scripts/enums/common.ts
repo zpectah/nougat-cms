@@ -1,3 +1,7 @@
+export enum Common {
+    new = 'new',
+}
+
 export enum Themes {
     light = 'light',
     dark = 'dark',

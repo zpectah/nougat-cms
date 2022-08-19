@@ -10,6 +10,7 @@ import {
 import { ConfirmDialog, ConfirmDialogProps } from '../ui';
 import { DetailDrawer, DetailDrawerProps } from './DetailDrawer';
 import { UsersDetailForm } from '../../modules/Users';
+import { PostsDetailForm } from '../../modules/Posts';
 
 type DataTableBaseProps = {
     model: modelKeyType,
@@ -52,8 +53,8 @@ const DataTable = (props: DataTableProps) => {
     };
     const closeDetailHandler = () => {
         setDetailOpen(false);
-        navigate(routes.Users.path as string);
-        setTimeout(() => setDetailData(null), 350);
+        navigate(routes[model].path as string);
+        setTimeout(() => setDetailData(null), 300);
     };
     const submitDetailHandler = () => {
         closeDetailHandler();
@@ -88,7 +89,7 @@ const DataTable = (props: DataTableProps) => {
 
             case 'Posts':
                 return (
-                    <> ... Posts detail form ... </>
+                    <PostsDetailForm />
                 );
 
             default:
@@ -126,7 +127,7 @@ const DataTable = (props: DataTableProps) => {
                         }}
                     >
                         <button
-                            onClick={() => navigate(`${routes.Users.path}/${RouteParamKeys['detail']}/3`)}
+                            onClick={() => navigate(`${routes[model].path}/${RouteParamKeys['detail']}/3`)}
                         >
                             go to detail #3
                         </button>
@@ -138,13 +139,13 @@ const DataTable = (props: DataTableProps) => {
                     </Box>
                     <br />
                     <button
-                        onClick={() => navigate(`${routes.Users.path}/${RouteParamKeys['detail']}/77`)}
+                        onClick={() => navigate(`${routes[model].path}/${RouteParamKeys['detail']}/77`)}
                     >
                         go to detail #77
                     </button>
                     <br />
                     <button
-                        onClick={() => navigate(`${routes.Users.path}/${RouteParamKeys['detail']}/100`)}
+                        onClick={() => navigate(`${routes[model].path}/${RouteParamKeys['detail']}/100`)}
                     >
                         go to detail #100
                     </button>

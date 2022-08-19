@@ -2,13 +2,11 @@ import {
     Themes,
     ViewTypes,
     RouteParamKeys,
-    Model,
 } from '../enums';
 
 export type themeKeyType = keyof typeof Themes;
 export type viewLayoutKeyType = keyof typeof ViewTypes;
 export type routeParamKeyType = keyof typeof RouteParamKeys;
-export type modelKeyType = keyof typeof Model;
 
 export type toastItemType = {
     id?: string | number;
@@ -21,11 +19,12 @@ export type toastItemType = {
 
 export type routeItemType = {
     key: string,
-    i18n_key?: string,
+    name?: string,
     match: string,
     path: string | null,
     auth: boolean,
     level?: number,
+    detail?: boolean,
 };
 
 export type routesType = { [k: string]: routeItemType };

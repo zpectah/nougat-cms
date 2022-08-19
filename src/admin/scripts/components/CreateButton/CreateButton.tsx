@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
-import { Model } from '../../enums';
-import { modelKeyType } from '../../types';
+import { Common, RouteParamKeys } from '../../enums';
+import { modelKeyType, availableActionsProps } from '../../types';
 import { SplitButton, SplitButtonProps, MenuProps } from '../ui';
+import { useRoutes  } from '../../hooks';
 
 type CreateButtonBaseProps = {
     model?: modelKeyType,
     disabled?: boolean,
     menuProps?: MenuProps,
+    availableActions: availableActionsProps,
 }
 export type CreateButtonProps = SplitButtonProps & CreateButtonBaseProps
 
@@ -16,31 +18,52 @@ const CreateButton = (props: CreateButtonProps) => {
         model,
         disabled,
         menuProps,
+        availableActions,
         ...rest
     } = props;
 
-    const menu = [
-        {
-            key: 'a',
-            children: 'New Users',
-            disabled: model === Model['Users'],
-        },
-        {
-            key: 'b',
-            children: 'New Posts',
-            disabled: model === Model['Posts'],
-        },
-    ];
+    const { routes, route, navigate } = useRoutes();
+
+    const clickHandler = (prefix: string) => navigate(`${prefix}/${RouteParamKeys['detail']}/${Common['new']}`);
+
+    const button = useMemo(() => {
+        return {
+            children: `New ${route?.name}`,
+            onClick: () => clickHandler(`${route?.path}`),
+            disabled: !availableActions.create,
+        };
+    }, [ route, availableActions ]);
+    const menu = useMemo(() => {
+        let list = [];
+        for (const k in routes) {
+            const r = routes[k];
+            if (r.detail && (route?.name !== r.name)) {
+                list.push({
+                    key: r.key,
+                    children: `New ${r.name}`,
+                    onClick: () => clickHandler(`${r.path}`),
+                    disabled: !availableActions.create,
+                });
+            }
+        }
+
+        return list;
+    }, [ routes, route, model, availableActions ]);
 
     return (
         <SplitButton
             id={`CreateButton_${model}`}
-            label={`New ${model}`}
+            label={button.children}
             variant="contained"
             color="success"
             menu={menu}
             disabled={disabled}
             menuProps={menuProps}
+            closableMenuItemClick
+            mainButtonProps={{
+                onClick: button.onClick,
+                disabled: button.disabled,
+            }}
             {...rest}
         />
     );
