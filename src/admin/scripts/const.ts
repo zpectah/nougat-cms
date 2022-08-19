@@ -9,6 +9,9 @@ export const TRANSITION_DURATION = '.225s';
 export const TRANSITION_TRANSITION = 'cubic-bezier(0.4, 0, 0.2, 1)';
 export const TRANSITION_DEFAULT_SUFFIX = `${TRANSITION_DURATION} ${TRANSITION_TRANSITION} 0s`;
 
+export const FONT_FAMILY_ROOT = '"Roboto", "Helvetica", "Arial", sans-serif';
+// export const FONT_FAMILY_CONSOLE = '';
+
 export const HEADER_HEIGHT = '60px';
 export const HEADER_ZINDEX = 1100;
 export const SIDEBAR_WIDTH = '250px';

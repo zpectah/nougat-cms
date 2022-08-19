@@ -1,5 +1,6 @@
 import { createTheme } from '@mui/material';
 
+import { FONT_FAMILY_ROOT } from '../const';
 import palette from './palette';
 
 declare module '@mui/material/styles' {
@@ -12,6 +13,7 @@ const themeCommonProps = {
         borderRadius: 3,
     },
     typography: {
+        fontFamily: FONT_FAMILY_ROOT,
         h1: {
             fontSize: '2.25rem',
             fontWeight: 700,
