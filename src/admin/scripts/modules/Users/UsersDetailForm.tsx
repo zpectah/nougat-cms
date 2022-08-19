@@ -1,23 +1,22 @@
 import React from 'react';
 import { TextField } from '@mui/material';
 
-import { commonItemModelProps } from '../../types';
+import { DetailFormProps } from '../../types';
 import {
     ControlledFormRow,
     ControlledFormRowProps,
 } from '../../components';
 
-type UsersDetailFormBaseProps = {
-    control: ControlledFormRowProps['control'],
-    formValues: commonItemModelProps,
-}
-export type UsersDetailFormProps = UsersDetailFormBaseProps
+type UsersDetailFormBaseProps = {}
+export type UsersDetailFormProps = DetailFormProps & UsersDetailFormBaseProps
 
 const UsersDetailForm = (props: UsersDetailFormProps) => {
     const {
-        control,
-        formValues,
+        form,
     } = props;
+
+    const formValues = form.watch();
+    const control = form.control;
 
     return (
         <>

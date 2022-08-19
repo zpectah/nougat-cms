@@ -3,14 +3,14 @@ import React, {
     useMemo,
     useState,
 } from 'react';
-import { useForm, UseFormProps } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { Box } from '@mui/material';
 
-// import { RouteParamKeys } from '../../enums';
 import {
     modelKeyType,
     availableActionsProps,
     commonItemModelProps,
+    formProps,
 } from '../../types';
 import {
     useBreadcrumbs,
@@ -29,7 +29,7 @@ type ModelWrapperBaseProps = {
     detailDrawerProps?: DetailDrawerProps,
     confirmDialogProps?: ConfirmDialogProps,
     defaultValues?: commonItemModelProps,
-    formProps?: UseFormProps,
+    formProps?: formProps,
     dataTableProps?: DataTableProps,
 }
 export type ModelWrapperProps = ModelWrapperBaseProps
@@ -51,13 +51,16 @@ const ModelWrapper = (props: ModelWrapperProps) => {
         dataTableProps,
     } = props;
 
-    const { control, watch } = useForm({
+    const form = useForm({
         mode: 'all',
         defaultValues,
         ...formProps,
     });
     const { detail } = useBreadcrumbs();
     const { routes, navigate } = useRoutes();
+
+    const formValues = form.watch();
+    const control = form.control;
 
     const [ detailOpen, setDetailOpen ] = useState(false);
     const [ detailData, setDetailData ] = useState<commonItemModelProps | null>(null);
@@ -106,23 +109,19 @@ const ModelWrapper = (props: ModelWrapperProps) => {
     };
 
     const renderDetailForm = useMemo(() => {
-        const formValues = watch();
-
         switch (modelKey) {
 
             case 'Users':
                 return (
                     <UsersDetailForm
-                        control={control}
-                        formValues={formValues}
+                        form={form}
                     />
                 );
 
             case 'Posts':
                 return (
                     <PostsDetailForm
-                        control={control}
-                        formValues={formValues}
+                        form={form}
                     />
                 );
 
@@ -131,7 +130,7 @@ const ModelWrapper = (props: ModelWrapperProps) => {
                     <>no model selected</>
                 );
         }
-    }, [ modelKey, control, watch ]);
+    }, [ modelKey, control, formValues ]);
 
     useEffect(() => {
         if (detail) openDetailHandler(detail);

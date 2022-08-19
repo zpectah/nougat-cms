@@ -1,19 +1,16 @@
 import React, {useMemo} from 'react';
-import {
-    useController,
-    UseControllerProps,
-    UseControllerReturn,
-} from 'react-hook-form';
+import { useController } from 'react-hook-form';
 
+import { rowControllerProps, rowControllerReturnProps } from '../../../types';
 import FormRow, { FormRowProps } from './FormRow';
 
 type ControlledFormRowBaseProps = {
     name: string,
-    control: UseControllerProps['control'],
-    rules?: UseControllerProps['rules'],
-    defaultValue?: UseControllerProps['defaultValue'],
-    render?: (row: UseControllerReturn) => React.ReactNode,
-    controllerProps?: UseControllerProps,
+    control: rowControllerProps['control'],
+    rules?: rowControllerProps['rules'],
+    defaultValue?: rowControllerProps['defaultValue'],
+    render?: (row: rowControllerReturnProps) => React.ReactNode,
+    controllerProps?: rowControllerProps,
 }
 export type ControlledFormRowProps = FormRowProps & ControlledFormRowBaseProps
 
