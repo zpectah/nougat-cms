@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { commonItemModelProps } from '../../types';
 import {
     ControlledFormRow,
     ControlledFormRowProps,
@@ -7,15 +8,21 @@ import {
 
 type PostsDetailFormBaseProps = {
     control: ControlledFormRowProps['control'],
+    formValues: commonItemModelProps,
 }
 export type PostsDetailFormProps = PostsDetailFormBaseProps
 
 const PostsDetailForm = (props: PostsDetailFormProps) => {
-    const { control } = props;
+    const {
+        control,
+        formValues,
+    } = props;
 
     return (
         <>
             PostsDetailForm: form parts
+            <br />
+            {JSON.stringify(formValues, null, 2)}
             <br />
             <p>
                 Odio leo rhoncus, ligula urna mauris nunc ut enim et tincidunt rhoncus at sem, dolor ut tellus sed porttitor dui vel. Ullamcorper varius, consectetur ornare id consequat id dolor id lacinia, venenatis a dui vel dolor auctor. Mauris ipsum, nibh maximus egestas consequat congue nulla cras dictum nec placerat, ut venenatis elit posuere nibh maximus. Ut venenatis placerat, sit amet elit libero sed suspendisse libero dui duis id, quis ut hendrerit donec dolor quis. Curabitur sem, metus vestibulum interdum commodo hendrerit in donec cursus, luctus mauris eu elementum luctus maximus. Dolor quis a lacinia, adipiscing et nullam fermentum imperdiet convallis nam, et condimentum pellentesque neque.

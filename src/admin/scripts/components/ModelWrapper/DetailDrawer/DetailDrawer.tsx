@@ -16,7 +16,7 @@ import {
 } from '../../ui';
 
 type DetailDrawerBaseProps = {
-    model: modelKeyType,
+    modelKey: modelKeyType,
     detailId?: string,
     widthMd?: string | number,
     widthLg?: string | number,
@@ -34,7 +34,7 @@ export type DetailDrawerProps = DrawerProps & DetailDrawerBaseProps
 
 const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
     const {
-        model,
+        modelKey,
         detailId,
         widthMd = 'calc(100% - 100px)',
         widthLg = 1000,
@@ -128,7 +128,7 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
     return (
         <>
             <Drawer
-                id={`${model}-${detailId}-detailDrawer`}
+                id={`${modelKey}-${detailId}-detailDrawer`}
                 anchor="right"
                 onClose={onClose}
                 actions={renderActions()}
@@ -140,7 +140,7 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
                 })}
                 scrollable
                 actionBarProps={{
-                    id: `${model}-${detailId}-detailDrawer-actionBar`,
+                    id: `${modelKey}-${detailId}-detailDrawer-actionBar`,
                     menu: actionBarMenu
                 }}
                 headerNode={

@@ -1,6 +1,7 @@
 import React from 'react';
 import { TextField } from '@mui/material';
 
+import { commonItemModelProps } from '../../types';
 import {
     ControlledFormRow,
     ControlledFormRowProps,
@@ -8,15 +9,21 @@ import {
 
 type UsersDetailFormBaseProps = {
     control: ControlledFormRowProps['control'],
+    formValues: commonItemModelProps,
 }
 export type UsersDetailFormProps = UsersDetailFormBaseProps
 
 const UsersDetailForm = (props: UsersDetailFormProps) => {
-    const { control } = props;
+    const {
+        control,
+        formValues,
+    } = props;
 
     return (
         <>
             UsersDetailForm: form parts
+            <br />
+            {JSON.stringify(formValues, null, 2)}
             <br />
             <div>
                 <ControlledFormRow

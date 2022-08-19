@@ -5,7 +5,7 @@ import { Model } from '../../enums';
 import { useEntity } from '../../hooks';
 import {
     ViewHeading,
-    DataTable,
+    ModelWrapper,
     CreateButton,
 } from '../../components';
 
@@ -30,8 +30,8 @@ const Users = () => {
                     />
                 )}
             />
-            <DataTable
-                model={model}
+            <ModelWrapper
+                modelKey={model}
                 availableActions={actions}
             />
         </>

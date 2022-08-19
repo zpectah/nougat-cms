@@ -1,5 +1,5 @@
 export * from './ui';
 export * from './ViewLayout';
 export * from './ViewHeading';
-export * from './DataTable';
+export * from './ModelWrapper';
 export * from './CreateButton';

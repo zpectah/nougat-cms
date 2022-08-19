@@ -5,11 +5,12 @@ import {
     UseFormReturn,
 } from 'react-hook-form';
 
+import { commonItemModelProps } from '../../../types';
 import Form, { FormProps } from './Form';
 
 type ControlledFormBaseProps = {
     mode?: UseFormProps['mode'],
-    defaultValues?: UseFormProps['defaultValues'],
+    defaultValues?: commonItemModelProps,
     formProps?: UseFormProps,
     render?: (form: UseFormReturn) => React.ReactNode,
 }
