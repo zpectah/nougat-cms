@@ -1,4 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
+import {
+    useForm,
+    UseFormProps,
+    UseFormReturn,
+} from 'react-hook-form';
 import { Box } from '@mui/material';
 
 import { RouteParamKeys } from '../../enums';
@@ -12,11 +21,14 @@ import { DetailDrawer, DetailDrawerProps } from './DetailDrawer';
 import { UsersDetailForm } from '../../modules/Users';
 import { PostsDetailForm } from '../../modules/Posts';
 
+type dataTableItemProps = UseFormProps['defaultValues']
 type DataTableBaseProps = {
     model: modelKeyType,
     availableActions?: availableActionsProps,
     detailDrawerProps?: DetailDrawerProps,
     confirmDialogProps?: ConfirmDialogProps,
+    defaultValues?: UseFormProps['defaultValues'],
+    formProps?: UseFormProps,
 }
 export type DataTableProps = DataTableBaseProps
 
@@ -31,15 +43,22 @@ const DataTable = (props: DataTableProps) => {
         },
         detailDrawerProps,
         confirmDialogProps,
+        defaultValues,
+        formProps,
     } = props;
 
-    const [ detailOpen, setDetailOpen ] = useState(false);
-    const [ detailData, setDetailData ] = useState<any | null>(null); // TODO
-    const [ confirmOpen, setConfirmOpen ] = useState(false);
-    const [ confirmData, setConfirmData ] = useState<any[] | null>(null); // TODO
-
+    const { control } = useForm({
+        mode: 'all',
+        defaultValues,
+        ...formProps,
+    });
     const { detail } = useBreadcrumbs();
     const { routes, navigate } = useRoutes();
+
+    const [ detailOpen, setDetailOpen ] = useState(false);
+    const [ detailData, setDetailData ] = useState<dataTableItemProps | null>(null);
+    const [ confirmOpen, setConfirmOpen ] = useState(false);
+    const [ confirmData, setConfirmData ] = useState<number[] | null>(null);
 
     const openDetailHandler = (id: string) => {
 
@@ -84,12 +103,12 @@ const DataTable = (props: DataTableProps) => {
 
             case 'Users':
                 return (
-                    <UsersDetailForm />
+                    <UsersDetailForm control={control} />
                 );
 
             case 'Posts':
                 return (
-                    <PostsDetailForm />
+                    <PostsDetailForm control={control} />
                 );
 
             default:
@@ -97,7 +116,7 @@ const DataTable = (props: DataTableProps) => {
                     <>no model selected</>
                 );
         }
-    }, []);
+    }, [ model, control ]);
 
     useEffect(() => {
         if (detail) openDetailHandler(detail);
@@ -166,16 +185,10 @@ const DataTable = (props: DataTableProps) => {
                 availableActions={availableActions}
                 {...detailDrawerProps}
             >
-                {detailData && (
-                    <>
-                        {/* render form by data model type */}
-                        <pre>
-                            <code>
-                            {JSON.stringify(detailData, null, 2)}
-                            </code>
-                        </pre>
-                        {renderDetailForm}
-                    </>
+                {detailData ? (
+                    <>{renderDetailForm}</>
+                ) : (
+                    <>error message (no data)</>
                 )}
             </DetailDrawer>
             <ConfirmDialog

@@ -11,3 +11,4 @@ export * from './ConfirmDialog';
 export * from './Drawer';
 export * from './ActionBar';
 export * from './Menu';
+export * from './Form';

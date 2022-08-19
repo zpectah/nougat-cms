@@ -9,8 +9,10 @@ import { Breadcrumbs } from '../../Breadcrumbs';
 import {
     Drawer,
     Button,
+    Form,
     DrawerProps,
     MenuItemProps,
+    FormProps,
 } from '../../ui';
 
 type DetailDrawerBaseProps = {
@@ -25,7 +27,7 @@ type DetailDrawerBaseProps = {
     onDelete?: () => void,
     deleteText?: string,
     deleteDisabled?: boolean,
-    formProps?: React.HTMLProps<HTMLFormElement> & React.HTMLAttributes<HTMLFormElement>,
+    formProps?: FormProps,
     availableActions: availableActionsProps,
 }
 export type DetailDrawerProps = DrawerProps & DetailDrawerBaseProps
@@ -108,17 +110,15 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
 
         return menu;
     }, [ onDelete, deleteButtonText, deleteDisabled, availableActions ]);
-
     const renderContent = useMemo(() => {
         const node = <>{children}</>;
-
         if (formProps) {
             return (
-                <form
+                <Form
                     {...formProps}
                 >
                     {node}
-                </form>
+                </Form>
             );
         }
 

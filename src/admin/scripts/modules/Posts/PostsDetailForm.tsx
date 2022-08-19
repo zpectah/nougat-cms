@@ -1,10 +1,17 @@
 import React from 'react';
 
-type PostsDetailFormBaseProps = {}
+import {
+    ControlledFormRow,
+    ControlledFormRowProps,
+} from '../../components';
+
+type PostsDetailFormBaseProps = {
+    control: ControlledFormRowProps['control'],
+}
 export type PostsDetailFormProps = PostsDetailFormBaseProps
 
 const PostsDetailForm = (props: PostsDetailFormProps) => {
-    const {} = props;
+    const { control } = props;
 
     return (
         <>
