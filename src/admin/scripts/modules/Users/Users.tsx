@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Model } from '../../enums';
-import { useEntity } from '../../hooks';
+import { commonItemModelProps } from '../../types';
+import { useEntity, useUsers } from '../../hooks';
 import {
     ViewHeading,
     ModelWrapper,
@@ -12,9 +13,42 @@ import {
 const Users = () => {
     const { t } = useTranslation([ 'views' ]);
     const { entity } = useEntity();
+    const {
+        Users,
+        loadUsers,
+        createUsers,
+        updateUsers,
+        toggleUsers,
+        deleteUsers,
+    } = useUsers();
 
-    const model = Model['Users'];
-    const actions = entity.availableActions[model];
+    const modelKey = Model['Users'];
+    const actions = entity.availableActions[modelKey];
+
+    const loadItemsHandler = () => {
+        console.log('loadItemsHandler');
+        loadUsers();
+    };
+    const createDetailHandler = (payload: commonItemModelProps) => {
+        console.log('createDetailHandler', payload);
+        createUsers();
+    };
+    const updateDetailHandler = (payload: commonItemModelProps) => {
+        console.log('updateDetailHandler', payload);
+        updateUsers();
+    };
+    const toggleDetailHandler = (payload: number[]) => {
+        console.log('toggleDetailHandler', payload);
+        toggleUsers();
+    };
+    const deleteDetailHandler = (payload: number[]) => {
+        console.log('deleteDetailHandler', payload);
+        deleteUsers();
+    };
+
+    useEffect(() => {
+        loadItemsHandler();
+    }, []);
 
     return (
         <>
@@ -24,15 +58,21 @@ const Users = () => {
                 withBreadcrumbs
                 actions={(
                     <CreateButton
-                        model={model}
+                        modelKey={modelKey}
                         availableActions={actions}
                         disabled={!actions.create}
                     />
                 )}
             />
             <ModelWrapper
-                modelKey={model}
+                modelKey={modelKey}
                 availableActions={actions}
+                items={Users}
+                onReload={loadItemsHandler}
+                onCreate={createDetailHandler}
+                onUpdate={updateDetailHandler}
+                onToggle={toggleDetailHandler}
+                onDelete={deleteDetailHandler}
             />
         </>
     );

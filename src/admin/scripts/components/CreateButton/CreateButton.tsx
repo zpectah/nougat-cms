@@ -6,7 +6,7 @@ import { SplitButton, SplitButtonProps, MenuProps } from '../ui';
 import { useRoutes  } from '../../hooks';
 
 type CreateButtonBaseProps = {
-    model?: modelKeyType,
+    modelKey?: modelKeyType,
     disabled?: boolean,
     menuProps?: MenuProps,
     availableActions: availableActionsProps,
@@ -15,7 +15,7 @@ export type CreateButtonProps = SplitButtonProps & CreateButtonBaseProps
 
 const CreateButton = (props: CreateButtonProps) => {
     const {
-        model,
+        modelKey,
         disabled,
         menuProps,
         availableActions,
@@ -48,11 +48,11 @@ const CreateButton = (props: CreateButtonProps) => {
         }
 
         return list;
-    }, [ routes, route, model, availableActions ]);
+    }, [ routes, route, modelKey, availableActions ]);
 
     return (
         <SplitButton
-            id={`CreateButton_${model}`}
+            id={`CreateButton_${modelKey}`}
             label={button.children}
             variant="contained"
             color="success"

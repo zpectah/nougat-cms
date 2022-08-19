@@ -24,6 +24,7 @@ type DetailDrawerBaseProps = {
     onSubmit?: () => void,
     submitText?: string,
     submitDisabled?: boolean,
+    onToggle?: () => void,
     onDelete?: () => void,
     deleteText?: string,
     deleteDisabled?: boolean,
@@ -42,6 +43,7 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
         onSubmit,
         submitText,
         submitDisabled,
+        onToggle,
         onDelete,
         deleteText,
         deleteDisabled,
@@ -65,6 +67,9 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
     const submitButtonText = submitText ? submitText : t('btn.submit');
     const deleteButtonText = deleteText ? deleteText : t('btn.delete');
 
+    const toggleDetailHandler = () => {
+        if (detailId && onToggle) onToggle();
+    };
     const deleteDetailHandler = () => {
         if (detailId && onDelete) onDelete();
     };
@@ -97,6 +102,7 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
                 key: 'toggle',
                 children: t('btn.disable'),
                 disabled: !availableActions.toggle,
+                onClick: toggleDetailHandler,
             },
         ];
         if (onDelete && deleteButtonText && (availableActions.update && availableActions.delete)) {

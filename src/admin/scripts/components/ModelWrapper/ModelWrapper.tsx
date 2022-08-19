@@ -3,6 +3,7 @@ import React, {
     useMemo,
     useState,
 } from 'react';
+import { cloneDeep } from 'lodash';
 import { useForm } from 'react-hook-form';
 import { Box } from '@mui/material';
 
@@ -31,6 +32,11 @@ type ModelWrapperBaseProps = {
     defaultValues?: commonItemModelProps,
     formProps?: formProps,
     dataTableProps?: DataTableProps,
+    onReload: () => void,
+    onCreate: (payload: commonItemModelProps) => void,
+    onUpdate: (payload: commonItemModelProps) => void,
+    onToggle: (payload: number[]) => void,
+    onDelete: (payload: number[]) => void,
 }
 export type ModelWrapperProps = ModelWrapperBaseProps
 
@@ -49,6 +55,11 @@ const ModelWrapper = (props: ModelWrapperProps) => {
         defaultValues,
         formProps,
         dataTableProps,
+        onReload,
+        onCreate,
+        onUpdate,
+        onToggle,
+        onDelete,
     } = props;
 
     const form = useForm({
@@ -84,7 +95,21 @@ const ModelWrapper = (props: ModelWrapperProps) => {
         setTimeout(() => setDetailData(null), 300);
     };
     const submitDetailHandler = () => {
+        const master = cloneDeep(formValues);
+        if (detailData?.id === 'new') {
+            onCreate(master);
+            // TODO: toast: success: create
+        } else if (detailData?.id) {
+            onUpdate(master);
+            // TODO: toast: success: update
+        }
         closeDetailHandler();
+    };
+
+    const toggleDetailHandler = (payload: number[]) => {
+        const master = cloneDeep(payload);
+        onToggle(master);
+        // TODO: toast: success: delete
     };
 
     /* Confirm delete handler */
@@ -101,11 +126,10 @@ const ModelWrapper = (props: ModelWrapperProps) => {
         setConfirmData(null);
     };
     const confirmDeleteDetailHandler = () => {
-
+        const master = cloneDeep(confirmData);
+        onDelete(master as number[]);
+        // TODO: toast: success: delete
         closeConfirmHandler();
-        // ... confirmed action from drawer
-        // TODO ... proceed delete request
-
     };
 
     const renderDetailForm = useMemo(() => {
@@ -138,6 +162,11 @@ const ModelWrapper = (props: ModelWrapperProps) => {
 
     return (
         <Box>
+            <button
+                onClick={() => onReload && onReload()}
+            >
+                reload
+            </button>
             <DataTable
                 modelKey={modelKey}
                 pathPrefix={`${routes[modelKey].path}/`}
@@ -152,6 +181,7 @@ const ModelWrapper = (props: ModelWrapperProps) => {
                 onClose={closeDetailHandler}
                 onSubmit={submitDetailHandler}
                 onDelete={openConfirmHandler}
+                onToggle={() => toggleDetailHandler([ detailData?.id ])}
                 title="Some detail title"
                 formProps={{
                     id: 'FormDetailName',
