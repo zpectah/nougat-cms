@@ -1,5 +1,13 @@
 <?php
-
+const APP_ENUMS = [
+    'Users' => [
+        'level' => [
+            'redactor' => 3,
+            'manager' => 5,
+            'admin' => 7,
+        ],
+    ],
+];
 const WEB_VIEWS_ROOT = ROOT_PATH . __CONSTANTS['APP']['web']['folder'] . '/' . __CONSTANTS['APP']['web']['views'];
 const WEB_VIEWS_COMPILED = __CONSTANTS['APP']['web']['views_compiled'];
 const ROUTES = [

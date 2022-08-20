@@ -6,4 +6,5 @@ export type PostsTypesProps = keyof typeof PostsTypeKeys;
 export interface PostsItemProps {
     id: modelIdType,
     type: PostsTypesProps,
+    name: string,
 }

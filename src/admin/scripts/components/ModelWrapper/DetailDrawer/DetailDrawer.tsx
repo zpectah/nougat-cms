@@ -193,38 +193,36 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
     ]);
 
     return (
-        <>
-            <Drawer
-                id={`${uid}-detailDrawer`}
-                anchor="right"
-                onClose={onClose}
-                actions={renderActions}
-                headerNode={renderHeading}
-                actionBarProps={{
-                    id: `${modelKey}-${detailId}-detailDrawer-actionBar`,
-                    menu: actionBarMenu
-                }}
-                sx={merge(sx, {
+        <Drawer
+            id={`${uid}-detailDrawer`}
+            anchor="right"
+            onClose={onClose}
+            actions={renderActions}
+            headerNode={renderHeading}
+            actionBarProps={{
+                id: `${modelKey}-${detailId}-detailDrawer-actionBar`,
+                menu: actionBarMenu
+            }}
+            sx={merge(sx, {
+                width,
+                '& .MuiDrawer-paper': {
                     width,
-                    '& .MuiDrawer-paper': {
-                        width,
-                    },
-                })}
-                actionsSx={{
-                    py: {
-                        xs: 2,
-                        md: 3,
-                    },
-                }}
-                headerSx={{
-                    flexDirection: 'column',
-                }}
-                scrollable
-                {...rest}
-            >
-                {renderContent}
-            </Drawer>
-        </>
+                },
+            })}
+            actionsSx={{
+                py: {
+                    xs: 2,
+                    md: 3,
+                },
+            }}
+            headerSx={{
+                flexDirection: 'column',
+            }}
+            scrollable
+            {...rest}
+        >
+            {renderContent}
+        </Drawer>
     );
 };
 

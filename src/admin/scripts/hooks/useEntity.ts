@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import routes from '../routes';
+import { UsersTypeKeys } from '../enums';
 import { entityItemProps, storeProps } from '../types';
 import actions from '../store/actions';
 
@@ -13,7 +14,7 @@ const demoEntity: entityItemProps = {
     lastname: 'Doe',
     nickname: 'johnny',
     fullname: 'John Doe',
-    user_group: 'public',
+    user_group: UsersTypeKeys['default'],
     user_meta: {
         avataaar: {
             avatarStyle: 'Circle',

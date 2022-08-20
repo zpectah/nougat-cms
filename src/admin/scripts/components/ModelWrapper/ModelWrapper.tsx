@@ -6,7 +6,6 @@ import React, {
 import { cloneDeep } from 'lodash';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
 
 import {
     modelKeyType,
@@ -25,10 +24,12 @@ import { DetailDrawer, DetailDrawerProps } from './DetailDrawer';
 import { DataTable, DataTableProps } from './DataTable';
 import { UsersDetail } from '../../modules/Users';
 import { PostsDetail } from '../../modules/Posts';
+import { getEmptyModel } from './utils';
 
 type ModelWrapperBaseProps = {
     modelKey: modelKeyType,
     id?: string,
+    name?: string,
     items?: commonItemModelProps[],
     availableActions?: availableActionsProps,
     detailDrawerProps?: DetailDrawerProps,
@@ -41,6 +42,7 @@ type ModelWrapperBaseProps = {
     onUpdate: (payload: commonItemModelProps) => void,
     onToggle: (payload: number[]) => void,
     onDelete: (payload: number[]) => void,
+    mode?: formProps['mode'],
 }
 export type ModelWrapperProps = ModelWrapperBaseProps
 
@@ -48,6 +50,7 @@ const ModelWrapper = (props: ModelWrapperProps) => {
     const {
         modelKey,
         id = 'ModelWrapper',
+        name = id,
         items = [],
         availableActions = {
             toggle: false,
@@ -65,13 +68,9 @@ const ModelWrapper = (props: ModelWrapperProps) => {
         onUpdate,
         onToggle,
         onDelete,
+        mode = 'all',
     } = props;
 
-    const form = useForm({
-        mode: 'all',
-        defaultValues,
-        ...formProps,
-    });
     const { t } = useTranslation([ 'common', 'messages', 'components' ]);
     const { detail } = useBreadcrumbs();
     const { routes, navigate } = useRoutes();
@@ -79,35 +78,38 @@ const ModelWrapper = (props: ModelWrapperProps) => {
         createSuccessToast,
         createErrorToast,
     } = useToasts();
-
-    const formValues = form.watch();
-    const control = form.control;
-    const handleSubmit = form.handleSubmit;
-
     const [ detailOpen, setDetailOpen ] = useState(false);
     const [ detailData, setDetailData ] = useState<commonItemModelProps | null>(null);
     const [ confirmOpen, setConfirmOpen ] = useState(false);
     const [ confirmData, setConfirmData ] = useState<number[] | null>(null);
 
-    /* Detail handler */
+    const form = useForm({
+        mode,
+        defaultValues,
+        ...formProps,
+    });
+    const formValues = form.watch();
+    const control = form.control;
+    const handleSubmit = form.handleSubmit;
+    const reset = form.reset;
+
     const openDetailHandler = (id: modelIdType) => {
-        // const master = cloneDeep({});
-        let detail = null;
+        let detail;
         if (id === 'new') {
-
+            detail = getEmptyModel(modelKey);
         } else {
-            // TODO: find
-            items.map((item) => {});
+            detail = items.find((item) => Number(item?.id) === Number(id));
         }
-
-        // TODO ... check if detail exist in array, else show error toast and return to list ...
-        setDetailData({
-            id,
-            name: 'detail-item-name',
-        });
-
-        setDetailOpen(true);
-
+        if (detail) {
+            reset(detail);
+            setDetailData(detail);
+            setDetailOpen(true);
+        } else {
+            navigate(routes[modelKey].path as string);
+            createErrorToast({
+                title: t('messages:noItemDataError'),
+            });
+        }
     };
     const closeDetailHandler = () => {
         setDetailOpen(false);
@@ -116,29 +118,37 @@ const ModelWrapper = (props: ModelWrapperProps) => {
     };
     const submitDetailHandler = (formData: commonItemModelProps) => {
         const master = cloneDeep(formData);
-        if (detailData?.id === 'new') {
-            onCreate(master);
-            createSuccessToast({
-                title: t('messages:createItemSuccess', { item: t(`plurals.${modelKey}`, { count: 1 }) }),
-            });
-        } else if (detailData?.id) {
-            onUpdate(master);
-            createSuccessToast({
-                title: t('messages:updateItemSuccess', { item: t(`plurals.${modelKey}`, { count: 1 }) }),
-            });
+        if (master && detailData?.id) {
+            if (detailData?.id === 'new') {
+                onCreate(master);
+                createSuccessToast({
+                    title: t('messages:createItemSuccess', { item: t(`plurals.${modelKey}`, { count: 1 }) }),
+                });
+            } else {
+                onUpdate(master);
+                createSuccessToast({
+                    title: t('messages:updateItemSuccess', { item: t(`plurals.${modelKey}`, { count: 1 }) }),
+                });
+            }
+            closeDetailHandler();
         } else {
             createErrorToast({
-                title: t('messages:submitDetailError'),
+                title: t('messages:submitDataError'),
             });
         }
-        closeDetailHandler();
     };
     const toggleDetailHandler = (payload: number[]) => {
         const master = cloneDeep(payload);
-        onToggle(master);
-        createSuccessToast({
-            title: t('messages:updateItemSuccess', { item: t(`plurals.${modelKey}`, { count: master.length }) }),
-        });
+        if (master) {
+            onToggle(master);
+            createSuccessToast({
+                title: t('messages:updateItemSuccess', { item: t(`plurals.${modelKey}`, { count: master.length }) }),
+            });
+        } else {
+            createErrorToast({
+                title: t('messages:submitDataError'),
+            });
+        }
     };
     const openConfirmHandler = (payload?: any[]) => {
         if (payload) {
@@ -154,12 +164,18 @@ const ModelWrapper = (props: ModelWrapperProps) => {
     };
     const confirmDeleteDetailHandler = () => {
         const master = cloneDeep(confirmData) as number[];
-        onDelete(master);
-        createSuccessToast({
-            title: t('messages:deleteItemSuccess', { item: t(`plurals.${modelKey}`, { count: master.length }) }),
-        });
-        closeConfirmHandler();
-        if (confirmOpen) closeDetailHandler();
+        if (master) {
+            onDelete(master);
+            createSuccessToast({
+                title: t('messages:deleteItemSuccess', { item: t(`plurals.${modelKey}`, { count: master.length }) }),
+            });
+            closeConfirmHandler();
+            if (confirmOpen) closeDetailHandler();
+        } else {
+            createErrorToast({
+                title: t('messages:submitDataError'),
+            });
+        }
     };
 
     const detailMeta = useMemo(() => {
@@ -212,18 +228,18 @@ const ModelWrapper = (props: ModelWrapperProps) => {
         );
     }, []);
 
+    useEffect(() => {
+        detail && openDetailHandler(detail);
+    }, [ detail ]);
+
     const formInitialProps = {
         id,
-        name: id,
+        name,
         onSubmit: handleSubmit(submitDetailHandler),
     };
 
-    useEffect(() => {
-        if (detail) openDetailHandler(detail);
-    }, [ detail ]);
-
     return (
-        <Box>
+        <>
             <DataTable
                 modelKey={modelKey}
                 pathPrefix={`${routes[modelKey].path}/`}
@@ -256,7 +272,7 @@ const ModelWrapper = (props: ModelWrapperProps) => {
                 content={confirmMeta.content}
                 {...confirmDialogProps}
             />
-        </Box>
+        </>
     );
 };
 

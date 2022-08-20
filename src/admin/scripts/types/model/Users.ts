@@ -1,7 +1,11 @@
-import { UsersTypeKeys } from '../../enums';
+import {
+    UsersTypeKeys,
+    UsersGroupKeys,
+} from '../../enums';
 import { modelIdType } from './common';
 
 export type UsersTypesProps = keyof typeof UsersTypeKeys;
+export type UsersGroupProps = keyof typeof UsersGroupKeys;
 
 export interface UsersItemProps {
     id: modelIdType,
@@ -11,7 +15,7 @@ export interface UsersItemProps {
     firstname: string,
     lastname: string,
     nickname: string,
-    user_group: string,
+    user_group: UsersGroupProps,
     user_meta: string,
     user_level: number,
     active: boolean,

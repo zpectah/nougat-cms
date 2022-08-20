@@ -1,6 +1,13 @@
 {
-  "model": {},
-  "type": {},
+  "model": {
+    "Users": {
+      "type": [ "default", "test" ],
+      "group": [ "default" ]
+    },
+    "Posts": {
+      "type": [ "default" ]
+    }
+  },
   "plugin": {
     "avataaars": {
       "avatarStyle": [ "Transparent", "Circle" ],
