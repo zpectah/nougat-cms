@@ -13,3 +13,5 @@ export * from './ActionBar';
 export * from './Menu';
 export * from './Field';
 export * from './Form';
+export * from './Media';
+export * from './HelperText';

@@ -3,12 +3,13 @@ import {
     Box,
     Grid,
     FormLabel,
-    FormHelperText,
     GridProps,
     FormLabelProps,
-    FormHelperTextProps,
-    SxProps,
 } from '@mui/material';
+
+import { HelperText, HelperTextProps } from '../HelperText';
+import { FormRowVariantKeys } from './enums';
+import { FormRowVariantTypes } from './types';
 
 type gridLayoutProps = {
     label: GridProps,
@@ -18,13 +19,13 @@ type FormRowBaseProps = {
     children?: React.ReactNode,
     label?: string,
     labelProps?: FormLabelProps,
-    variant?: 'column' | 'row' | 'responsive',
+    variant?: FormRowVariantTypes,
     id?: string,
     required?: boolean,
     helpers?: string[],
     errors?: string[],
-    helperTextProps?: FormHelperTextProps,
-    errorTextProps?: FormHelperTextProps,
+    helperTextProps?: HelperTextProps,
+    errorTextProps?: HelperTextProps,
     gridContainerProps?: GridProps,
     gridLabelProps?: GridProps,
     gridFieldProps?: GridProps,
@@ -36,7 +37,7 @@ const FormRow: React.FC<FormRowProps> = (props) => {
         children,
         label,
         labelProps,
-        variant = 'responsive',
+        variant = FormRowVariantKeys['responsive'],
         id,
         required,
         helpers = [],
@@ -49,35 +50,64 @@ const FormRow: React.FC<FormRowProps> = (props) => {
     } = props;
 
     const gridLayout: gridLayoutProps = useMemo(() => {
+        const gridLabelBaseSx = {
+            display: 'flex',
+        };
+        const gridFieldBaseSx = {
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'flex-start',
+            flexDirection: 'column',
+        };
         switch (variant) {
 
-            case 'column':
+            case FormRowVariantKeys['column']:
                 return {
                     label: {
                         xs: 12,
+                        sx: {
+                            alignItems: 'center',
+                            justifyContent: {
+                                xs: 'flex-start',
+                            },
+                            ...gridLabelBaseSx,
+                        },
                     },
                     field: {
                         xs: 12,
+                        sx: {
+                            ...gridFieldBaseSx,
+                        },
                     },
                 };
 
-            case 'row':
+            case FormRowVariantKeys['row']:
                 return {
                     label: {
                         xs: 6,
                         md: 5,
                         lg: 4,
                         xl: 3,
+                        sx: {
+                            alignItems: 'flex-start',
+                            justifyContent: {
+                                xs: 'flex-end',
+                            },
+                            ...gridLabelBaseSx,
+                        },
                     },
                     field: {
                         xs: 6,
                         md: 7,
                         lg: 8,
                         xl: 9,
+                        sx: {
+                            ...gridFieldBaseSx,
+                        },
                     },
                 };
 
-            case 'responsive':
+            case FormRowVariantKeys['responsive']:
             default:
                 return {
                     label: {
@@ -85,12 +115,26 @@ const FormRow: React.FC<FormRowProps> = (props) => {
                         md: 5,
                         lg: 4,
                         xl: 3,
+                        sx: {
+                            alignItems: {
+                                xs: 'center',
+                                md: 'flex-start',
+                            },
+                            justifyContent: {
+                                xs: 'flex-start',
+                                md: 'flex-end',
+                            },
+                            ...gridLabelBaseSx,
+                        },
                     },
                     field: {
                         xs: 12,
                         md: 7,
                         lg: 8,
                         xl: 9,
+                        sx: {
+                            ...gridFieldBaseSx,
+                        },
                     },
                 };
 
@@ -106,6 +150,9 @@ const FormRow: React.FC<FormRowProps> = (props) => {
                 <FormLabel
                     htmlFor={id}
                     required={required}
+                    sx={{
+                        pt: 1.45,
+                    }}
                     {...labelProps}
                 >
                     {label}
@@ -126,25 +173,25 @@ const FormRow: React.FC<FormRowProps> = (props) => {
             <Box
                 sx={{
                     width: '100%',
-                    py: 1,
+                    pb: 1.5,
                 }}
             >
                 {helpers.map((text) => (
-                    <FormHelperText
+                    <HelperText
                         key={text}
                         {...helperTextProps}
                     >
                         {text}
-                    </FormHelperText>
+                    </HelperText>
                 ))}
                 {errors.map((text) => (
-                    <FormHelperText
+                    <HelperText
                         key={text}
                         error
                         {...errorTextProps}
                     >
                         {text}
-                    </FormHelperText>
+                    </HelperText>
                 ))}
             </Box>
         );

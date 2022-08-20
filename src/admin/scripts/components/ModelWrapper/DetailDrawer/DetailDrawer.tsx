@@ -81,6 +81,12 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
             <Button
                 secondary
                 onClick={onClose}
+                sx={{
+                    width: {
+                        xs: '50%',
+                        md: '10rem',
+                    },
+                }}
             >
                 {t('btn.cancel')}
             </Button>
@@ -91,6 +97,12 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
                     onClick={onSubmit}
                     form={formProps?.name}
                     disabled={submitDisabled}
+                    sx={{
+                        width: {
+                            xs: '50%',
+                            md: '10rem',
+                        },
+                    }}
                 >
                     {submitButtonText}
                 </Button>
@@ -150,6 +162,12 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
                 anchor="right"
                 onClose={onClose}
                 actions={renderActions()}
+                actionsSx={{
+                    py: {
+                        xs: 2,
+                        md: 3,
+                    },
+                }}
                 sx={merge(sx, {
                     width,
                     '& .MuiDrawer-paper': {

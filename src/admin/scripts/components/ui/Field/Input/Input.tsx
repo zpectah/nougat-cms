@@ -1,6 +1,6 @@
 import React from 'react';
 
-import InputBase, { InputBaseProps } from './InputBase';
+import InputBase, { InputBaseProps } from './Input.base';
 
 type InputPublicProps = {}
 export type InputProps = InputBaseProps & InputPublicProps

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import OutlinedInputBase, { OutlinedInputBaseProps } from './OutlinedInputBase';
+import OutlinedInputBase, { OutlinedInputBaseProps } from './OutlinedInput.base';
 
 type OutlinedInputPublicProps = {}
 export type OutlinedInputProps = OutlinedInputBaseProps & OutlinedInputPublicProps
