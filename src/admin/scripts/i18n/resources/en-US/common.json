@@ -27,6 +27,16 @@
   "type": {
     "default": "Default"
   },
+  "plurals": {
+    "newItem_one": "New {{item}}",
+    "newItem_other": "New {{item}}",
+    "thisItem_one": "this item",
+    "thisItem_other": "these items",
+    "Users_one": "User",
+    "Users_other": "Users",
+    "Posts_one": "Post",
+    "Posts_other": "Posts"
+  },
   "page": "Page",
   "detail": "Detail",
   "panel": "Panel"

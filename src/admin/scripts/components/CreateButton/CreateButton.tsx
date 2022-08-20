@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Common, RouteParamKeys } from '../../enums';
 import { modelKeyType, availableActionsProps } from '../../types';
@@ -22,13 +23,15 @@ const CreateButton = (props: CreateButtonProps) => {
         ...rest
     } = props;
 
+    const { t } = useTranslation([ 'common' ]);
     const { routes, route, navigate } = useRoutes();
 
     const clickHandler = (prefix: string) => navigate(`${prefix}/${RouteParamKeys['detail']}/${Common['new']}`);
 
     const button = useMemo(() => {
+        const children = t(`plurals.newItem`, { item: t(`plurals.${route?.name}`, { count: 1 }).toLowerCase(), count: 1 });
         return {
-            children: `New ${route?.name}`,
+            children,
             onClick: () => clickHandler(`${route?.path}`),
             disabled: !availableActions.create,
         };
@@ -37,10 +40,11 @@ const CreateButton = (props: CreateButtonProps) => {
         let list = [];
         for (const k in routes) {
             const r = routes[k];
+            const children = t(`plurals.newItem`, { item: t(`plurals.${r.name}`, { count: 1 }).toLowerCase(), count: 1 });
             if (r.detail && (route?.name !== r.name)) {
                 list.push({
                     key: r.key,
-                    children: `New ${r.name}`,
+                    children,
                     onClick: () => clickHandler(`${r.path}`),
                     disabled: !availableActions.create,
                 });

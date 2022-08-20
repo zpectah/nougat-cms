@@ -7,10 +7,10 @@ import {
     Input,
 } from '../../components';
 
-type PostsDetailFormBaseProps = {}
-export type PostsDetailFormProps = DetailFormProps & PostsDetailFormBaseProps
+type UsersDetailBaseProps = {}
+export type UsersDetailProps = DetailFormProps & UsersDetailBaseProps
 
-const PostsDetailForm = (props: PostsDetailFormProps) => {
+const UsersDetail = (props: UsersDetailProps) => {
     const {
         form,
     } = props;
@@ -20,7 +20,7 @@ const PostsDetailForm = (props: PostsDetailFormProps) => {
 
     return (
         <>
-            PostsDetailForm: form parts
+            UsersDetailForm: form parts
             <br />
             {JSON.stringify(formValues, null, 2)}
             <br />
@@ -56,5 +56,4 @@ const PostsDetailForm = (props: PostsDetailFormProps) => {
     );
 };
 
-export default PostsDetailForm;
-
+export default UsersDetail;

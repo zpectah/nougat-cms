@@ -23,8 +23,8 @@ import {
 import { ConfirmDialog, ConfirmDialogProps } from '../ui';
 import { DetailDrawer, DetailDrawerProps } from './DetailDrawer';
 import { DataTable, DataTableProps } from './DataTable';
-import { UsersDetailForm } from '../../modules/Users';
-import { PostsDetailForm } from '../../modules/Posts';
+import { UsersDetail } from '../../modules/Users';
+import { PostsDetail } from '../../modules/Posts';
 
 type ModelWrapperBaseProps = {
     modelKey: modelKeyType,
@@ -72,7 +72,7 @@ const ModelWrapper = (props: ModelWrapperProps) => {
         defaultValues,
         ...formProps,
     });
-    const { t } = useTranslation([ 'common', 'messages' ]);
+    const { t } = useTranslation([ 'common', 'messages', 'components' ]);
     const { detail } = useBreadcrumbs();
     const { routes, navigate } = useRoutes();
     const {
@@ -119,12 +119,12 @@ const ModelWrapper = (props: ModelWrapperProps) => {
         if (detailData?.id === 'new') {
             onCreate(master);
             createSuccessToast({
-                title: t('messages:createItemSuccess', { item: modelKey }),
+                title: t('messages:createItemSuccess', { item: t(`plurals.${modelKey}`, { count: 1 }) }),
             });
         } else if (detailData?.id) {
             onUpdate(master);
             createSuccessToast({
-                title: t('messages:updateItemSuccess', { item: modelKey }),
+                title: t('messages:updateItemSuccess', { item: t(`plurals.${modelKey}`, { count: 1 }) }),
             });
         } else {
             createErrorToast({
@@ -133,16 +133,13 @@ const ModelWrapper = (props: ModelWrapperProps) => {
         }
         closeDetailHandler();
     };
-
     const toggleDetailHandler = (payload: number[]) => {
         const master = cloneDeep(payload);
         onToggle(master);
         createSuccessToast({
-            title: t('messages:updateItemSuccess', { item: modelKey }),
+            title: t('messages:updateItemSuccess', { item: t(`plurals.${modelKey}`, { count: master.length }) }),
         });
     };
-
-    /* Confirm delete handler */
     const openConfirmHandler = (payload?: any[]) => {
         if (payload) {
             setConfirmData(payload);
@@ -156,19 +153,21 @@ const ModelWrapper = (props: ModelWrapperProps) => {
         setConfirmData(null);
     };
     const confirmDeleteDetailHandler = () => {
-        const master = cloneDeep(confirmData);
-        onDelete(master as number[]);
+        const master = cloneDeep(confirmData) as number[];
+        onDelete(master);
         createSuccessToast({
-            title: t('messages:deleteItemSuccess', { item: modelKey }),
+            title: t('messages:deleteItemSuccess', { item: t(`plurals.${modelKey}`, { count: master.length }) }),
         });
         closeConfirmHandler();
         if (confirmOpen) closeDetailHandler();
     };
 
     const detailMeta = useMemo(() => {
-        let title = detailData?.name ? detailData?.name : `${modelKey} #${detailData?.id}`;
+        let title;
         if (detailData?.id === 'new') {
-            title = `New ${modelKey}`;
+            title = t(`plurals.newItem`, { item: t(`plurals.${modelKey}`, { count: 1 }).toLowerCase(), count: 1 });
+        } else {
+            title = detailData?.name ? detailData?.name : `${modelKey} #${detailData?.id}`;
         }
 
         return {
@@ -177,24 +176,27 @@ const ModelWrapper = (props: ModelWrapperProps) => {
     }, [ modelKey, detailData ]);
     const confirmMeta = useMemo(() => {
         return {
-            title: `Delete ${modelKey}`,
-            content: `Do you want to delete this ... ${JSON.stringify(confirmData, null, 2)}?`,
+            title: t('components:ModelWrapper.deleteConfirm.title', { item: t(`plurals.${modelKey}`, { count: 1 }).toLowerCase()}),
+            content: t('components:ModelWrapper.deleteConfirm.content', { item: t('plurals.thisItem', { count: confirmData?.length })}),
         };
     }, [ modelKey, confirmData ]);
     const renderDetailForm = useMemo(() => {
+        const commonDetailProps = {
+            form,
+        };
         switch (modelKey) {
 
             case 'Users':
                 return (
-                    <UsersDetailForm
-                        form={form}
+                    <UsersDetail
+                        {...commonDetailProps}
                     />
                 );
 
             case 'Posts':
                 return (
-                    <PostsDetailForm
-                        form={form}
+                    <PostsDetail
+                        {...commonDetailProps}
                     />
                 );
 

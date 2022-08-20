@@ -1,0 +1,19 @@
+{
+  "EntityMenu": {
+    "logoutConfirm": {
+      "title": "Logout from system",
+      "content": "Are you sure you want to logout from system?"
+    },
+    "dropdownMenu": {
+      "profile": "Profile",
+      "themeToggle": "Set theme to {{theme}}",
+      "logout": "Log out"
+    }
+  },
+  "ModelWrapper": {
+    "deleteConfirm": {
+      "title": "Delete {{item}}",
+      "content": "Are you sure you want to delete {{item}}"
+    }
+  }
+}

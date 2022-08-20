@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 
@@ -17,6 +18,7 @@ const EntityMenu = () => {
     const [ anchorEl, setAnchorEl ] = useState<null | HTMLElement>(null);
     const [ confirmOpen, setConfirmOpen ] = useState(false);
 
+    const { t } = useTranslation([ 'common', 'components' ]);
     const navigate = useNavigate();
     const { palette } = useTheme();
     const {
@@ -54,17 +56,17 @@ const EntityMenu = () => {
     const menuItems: MenuItemProps[] = [
         {
             key: 'profile',
-            children: 'Profile',
+            children: t('components:EntityMenu.dropdownMenu.profile'),
             onClick: profileHandler,
         },
         {
             key: 'theme',
-            children: `Set mode to ${theme === Themes['light'] ? Themes['dark'] : Themes['light']}`,
+            children: t('components:EntityMenu.dropdownMenu.themeToggle', { theme: theme === Themes['light'] ? Themes['dark'] : Themes['light'] }),
             onClick: switchThemeHandler,
         },
         {
             key: 'logout',
-            children: 'Log out',
+            children: t('components:EntityMenu.dropdownMenu.logout'),
             onClick: logoutHandler,
         },
     ];
@@ -133,15 +135,13 @@ const EntityMenu = () => {
                     <ConfirmDialog
                         open={confirmOpen}
                         onClose={closeConfirmHandler}
-                        title="Leave application"
-                        content={
-                            <>Are you sure you want to log out?</>
-                        }
+                        title={t('components:EntityMenu.logoutConfirm.title')}
+                        content={t('components:EntityMenu.logoutConfirm.content')}
                         onConfirm={logoutConfirmHandler}
                     />
                 </>
             ) : (
-                <>Entity loading ...</>
+                <>{t('status.loading')}</>
             )}
         </>
     );
