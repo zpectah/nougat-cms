@@ -30,6 +30,7 @@ type DialogBaseProps = {
     secondaryContentProps?: DialogContentProps,
     dividers?: boolean,
     actionBarProps?: ActionBarProps,
+    disableActionsClose?: boolean,
 }
 export type DialogProps = MuiDialogProps & DialogBaseProps
 
@@ -49,6 +50,7 @@ const Dialog: React.FC<DialogProps> = (props) => {
         secondaryContentProps,
         dividers,
         actionBarProps,
+        disableActionsClose,
         open,
         maxWidth = 'md',
         id,
@@ -120,12 +122,14 @@ const Dialog: React.FC<DialogProps> = (props) => {
                     {...actionsProps}
                 >
                     {actions && actions}
-                    <Button
-                        onClick={closeHandler}
-                        secondary
-                    >
-                        {t('btn.close')}
-                    </Button>
+                    {!disableActionsClose && (
+                        <Button
+                            onClick={closeHandler}
+                            secondary
+                        >
+                            {t('btn.close')}
+                        </Button>
+                    )}
                 </DialogActions>
             )}
             {actionsNode && actionsNode}

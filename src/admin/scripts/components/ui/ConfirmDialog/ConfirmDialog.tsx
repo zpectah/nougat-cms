@@ -43,11 +43,44 @@ const ConfirmDialog = (props: ConfirmDialogProps) => {
             open={isOpen}
             onClose={closeHandler}
             maxWidth="xs"
+            actions={
+                <Stack
+                    direction="row"
+                    spacing={1}
+                    justifyContent="space-between"
+                    sx={{ width: '100%' }}
+                >
+                    <Button
+                        onClick={closeHandler}
+                        secondary
+                        large
+                        sx={{
+                            width: '50%',
+                        }}
+                    >
+                        {t('btn.cancel')}
+                    </Button>
+                    {onConfirm && (
+                        <Button
+                            onClick={() => onConfirm()}
+                            primary
+                            large
+                            sx={{
+                                width: '50%',
+                            }}
+                        >
+                            {confirmText ? confirmText : t('btn.confirm')}
+                        </Button>
+                    )}
+                </Stack>
+            }
+            disableActionsClose
             {...rest}
         >
             <Box
                 sx={{
                     p: 2,
+                    pt: 3,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -66,31 +99,6 @@ const ConfirmDialog = (props: ConfirmDialogProps) => {
                 <Typography>
                     {content}
                 </Typography>
-                <Stack
-                    direction="row"
-                    spacing={2}
-                    justifyContent="space-evenly"
-                    sx={{
-                        pt: 3,
-                    }}
-                >
-                    <Button
-                        onClick={closeHandler}
-                        secondary
-                        large
-                    >
-                        {t('btn.close')}
-                    </Button>
-                    {onConfirm && (
-                        <Button
-                            onClick={() => onConfirm()}
-                            primary
-                            large
-                        >
-                            {confirmText ? confirmText : t('btn.confirm')}
-                        </Button>
-                    )}
-                </Stack>
             </Box>
         </Dialog>
     );

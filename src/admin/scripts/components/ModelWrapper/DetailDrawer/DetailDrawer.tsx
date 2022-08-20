@@ -16,11 +16,12 @@ import {
 } from '../../ui';
 
 type DetailDrawerBaseProps = {
+    uid: string,
     modelKey: modelKeyType,
-    detailId?: string,
-    widthMd?: string | number,
-    widthLg?: string | number,
-    widthXl?: string | number,
+    detailId?: number | 'new',
+    wmd?: string | number,
+    wlg?: string | number,
+    wxl?: string | number,
     onSubmit?: () => void,
     submitText?: string,
     submitDisabled?: boolean,
@@ -35,11 +36,12 @@ export type DetailDrawerProps = DrawerProps & DetailDrawerBaseProps
 
 const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
     const {
+        uid,
         modelKey,
         detailId,
-        widthMd = 'calc(100% - 100px)',
-        widthLg = 1000,
-        widthXl = 1200,
+        wmd = 'calc(100% - 100px)',
+        wlg = 1000,
+        wxl = 1200,
         onSubmit,
         submitText,
         submitDisabled,
@@ -60,9 +62,9 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
 
     const width = {
         xs: '100%',
-        md: widthMd,
-        lg: widthLg,
-        xl: widthXl,
+        md: wmd,
+        lg: wlg,
+        xl: wxl,
     };
     const submitButtonText = submitText ? submitText : t('btn.submit');
     const deleteButtonText = deleteText ? deleteText : t('btn.delete');
@@ -101,7 +103,7 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
             {
                 key: 'toggle',
                 children: t('btn.disable'),
-                disabled: !availableActions.toggle,
+                disabled: !availableActions.toggle || detailId === 'new',
                 onClick: toggleDetailHandler,
             },
         ];
@@ -109,18 +111,24 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
             menu.push({
                 key: 'delete',
                 children: deleteButtonText,
-                disabled: deleteDisabled,
+                disabled: deleteDisabled || detailId === 'new',
                 onClick: deleteDetailHandler,
             });
         }
 
         return menu;
-    }, [ onDelete, deleteButtonText, deleteDisabled, availableActions ]);
+    }, [
+        onDelete,
+        deleteButtonText,
+        deleteDisabled,
+        availableActions,
+    ]);
     const renderContent = useMemo(() => {
-        const node = <>{children}</>;
+        const node = detailId && <>{children}</>;
         if (formProps) {
             return (
                 <Form
+                    key={`${uid}_form`}
                     {...formProps}
                 >
                     {node}
@@ -129,7 +137,11 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
         }
 
         return node;
-    }, [ children, formProps ]);
+    }, [
+        detailId,
+        children,
+        formProps,
+    ]);
 
     return (
         <>

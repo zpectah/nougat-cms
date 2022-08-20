@@ -16,6 +16,7 @@ import {
 import {
     useBreadcrumbs,
     useRoutes,
+    useToasts,
 } from '../../hooks';
 import { ConfirmDialog, ConfirmDialogProps } from '../ui';
 import { DetailDrawer, DetailDrawerProps } from './DetailDrawer';
@@ -69,6 +70,10 @@ const ModelWrapper = (props: ModelWrapperProps) => {
     });
     const { detail } = useBreadcrumbs();
     const { routes, navigate } = useRoutes();
+    const {
+        createSuccessToast,
+        createErrorToast,
+    } = useToasts();
 
     const formValues = form.watch();
     const control = form.control;
@@ -84,6 +89,7 @@ const ModelWrapper = (props: ModelWrapperProps) => {
         // TODO ... check if detail exist in array, else show error toast and return to list ...
         setDetailData({
             id,
+            name: 'detail-item-name',
         });
 
         setDetailOpen(true);
@@ -92,16 +98,24 @@ const ModelWrapper = (props: ModelWrapperProps) => {
     const closeDetailHandler = () => {
         setDetailOpen(false);
         navigate(routes[modelKey].path as string);
-        setTimeout(() => setDetailData(null), 300);
+        setTimeout(() => setDetailData(null), 250);
     };
     const submitDetailHandler = () => {
         const master = cloneDeep(formValues);
         if (detailData?.id === 'new') {
             onCreate(master);
-            // TODO: toast: success: create
+            createSuccessToast({
+                title: `New ${modelKey} was successfully created`,
+            });
         } else if (detailData?.id) {
             onUpdate(master);
-            // TODO: toast: success: update
+            createSuccessToast({
+                title: `New ${modelKey} was successfully updated`,
+            });
+        } else {
+            createErrorToast({
+                title: 'Error during submit, please try again',
+            });
         }
         closeDetailHandler();
     };
@@ -109,7 +123,9 @@ const ModelWrapper = (props: ModelWrapperProps) => {
     const toggleDetailHandler = (payload: number[]) => {
         const master = cloneDeep(payload);
         onToggle(master);
-        // TODO: toast: success: delete
+        createSuccessToast({
+            title: `${modelKey} was successfully updated`,
+        });
     };
 
     /* Confirm delete handler */
@@ -128,10 +144,23 @@ const ModelWrapper = (props: ModelWrapperProps) => {
     const confirmDeleteDetailHandler = () => {
         const master = cloneDeep(confirmData);
         onDelete(master as number[]);
-        // TODO: toast: success: delete
+        createSuccessToast({
+            title: `${modelKey} was successfully deleted`,
+        });
         closeConfirmHandler();
+        if (confirmOpen) closeDetailHandler();
     };
 
+    const detailMeta = useMemo(() => {
+        let title = detailData?.name ? detailData?.name : `${modelKey} #${detailData?.id}`;
+        if (detailData?.id === 'new') {
+            title = `New ${modelKey}`;
+        }
+
+        return {
+            title,
+        };
+    }, [ modelKey, detailData ]);
     const renderDetailForm = useMemo(() => {
         switch (modelKey) {
 
@@ -175,6 +204,7 @@ const ModelWrapper = (props: ModelWrapperProps) => {
                 {...dataTableProps}
             />
             <DetailDrawer
+                uid={`${modelKey}-${detailData?.id}`}
                 modelKey={modelKey}
                 open={detailOpen}
                 detailId={detailData?.id}
@@ -182,7 +212,7 @@ const ModelWrapper = (props: ModelWrapperProps) => {
                 onSubmit={submitDetailHandler}
                 onDelete={openConfirmHandler}
                 onToggle={() => toggleDetailHandler([ detailData?.id ])}
-                title="Some detail title"
+                title={detailMeta.title}
                 formProps={{
                     id: 'FormDetailName',
                     name: 'FormDetailName',

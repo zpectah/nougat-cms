@@ -1,10 +1,10 @@
 import React from 'react';
-import { TextField } from '@mui/material';
 
 import { DetailFormProps } from '../../types';
 import {
     ControlledFormRow,
     ControlledFormRowProps,
+    Input,
 } from '../../components';
 
 type PostsDetailFormBaseProps = {}
@@ -30,7 +30,7 @@ const PostsDetailForm = (props: PostsDetailFormProps) => {
                     control={control}
                     label="Label field A"
                     render={({ field: { onChange, onBlur, value, name, ref }}) => (
-                        <TextField
+                        <Input
                             onChange={onChange}
                             onBlur={onBlur}
                             value={value}
