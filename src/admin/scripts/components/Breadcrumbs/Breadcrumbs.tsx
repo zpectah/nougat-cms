@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { isDesktop } from 'react-device-detect';
 import {
     Breadcrumbs as MuiBreadcrumbs,
     BreadcrumbsProps as MuiBreadcrumbsProps,
@@ -20,6 +21,7 @@ import {
 type BreadcrumbsBaseProps = {
     withListLink?: boolean,
     withDetailLink?: boolean,
+    onlyDesktop?: boolean,
 }
 export type BreadcrumbsProps = MuiBreadcrumbsProps & BreadcrumbsBaseProps
 
@@ -27,8 +29,11 @@ const Breadcrumbs = (props: BreadcrumbsProps) => {
     const {
         withListLink,
         withDetailLink,
+        onlyDesktop,
         ...rest
     } = props;
+
+    const visible = onlyDesktop ? isDesktop : true;
 
     const { t } = useTranslation([ 'common', 'views' ]);
     const { cms, detail, panel } = useBreadcrumbs();
@@ -67,49 +72,53 @@ const Breadcrumbs = (props: BreadcrumbsProps) => {
     ];
 
     return (
-        <nav
-            role="presentation"
-            aria-label="breadcrumbs"
-        >
-            <MuiBreadcrumbs
-                separator={
-                    <NavigateNextIcon
-                        fontSize="inherit"
-                    />
-                }
-                {...rest}
-            >
-                {navItems.map((item) => {
-                    if (item.active) return (
-                        <>
-                            {item.path ? (
-                                <Link
-                                    key={item.key}
-                                    to={item.path}
-                                    style={{
-                                        color: 'inherit',
-                                        fontSize: '.8rem',
-                                    }}
-                                >
-                                    {item.label}
-                                </Link>
-                            ) : (
-                                <Typography
-                                    key={item.key}
-                                    variant="caption"
-                                    sx={{
-                                        color: 'inherit',
-                                        fontSize: '.8rem',
-                                    }}
-                                >
-                                    {item.label}
-                                </Typography>
-                            )}
-                        </>
-                    );
-                })}
-            </MuiBreadcrumbs>
-        </nav>
+        <>
+            {visible && (
+                <nav
+                    role="presentation"
+                    aria-label="breadcrumbs"
+                >
+                    <MuiBreadcrumbs
+                        separator={
+                            <NavigateNextIcon
+                                fontSize="inherit"
+                            />
+                        }
+                        {...rest}
+                    >
+                        {navItems.map((item) => {
+                            if (item.active) return (
+                                <>
+                                    {item.path ? (
+                                        <Link
+                                            key={item.key}
+                                            to={item.path}
+                                            style={{
+                                                color: 'inherit',
+                                                fontSize: '.8rem',
+                                            }}
+                                        >
+                                            {item.label}
+                                        </Link>
+                                    ) : (
+                                        <Typography
+                                            key={item.key}
+                                            variant="caption"
+                                            sx={{
+                                                color: 'inherit',
+                                                fontSize: '.8rem',
+                                            }}
+                                        >
+                                            {item.label}
+                                        </Typography>
+                                    )}
+                                </>
+                            );
+                        })}
+                    </MuiBreadcrumbs>
+                </nav>
+            )}
+        </>
     );
 };
 

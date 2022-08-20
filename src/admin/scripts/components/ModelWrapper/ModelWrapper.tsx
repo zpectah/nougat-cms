@@ -28,6 +28,7 @@ import { PostsDetailForm } from '../../modules/Posts';
 
 type ModelWrapperBaseProps = {
     modelKey: modelKeyType,
+    id?: string,
     items?: commonItemModelProps[],
     availableActions?: availableActionsProps,
     detailDrawerProps?: DetailDrawerProps,
@@ -46,6 +47,7 @@ export type ModelWrapperProps = ModelWrapperBaseProps
 const ModelWrapper = (props: ModelWrapperProps) => {
     const {
         modelKey,
+        id = 'ModelWrapper',
         items = [],
         availableActions = {
             toggle: false,
@@ -80,6 +82,7 @@ const ModelWrapper = (props: ModelWrapperProps) => {
 
     const formValues = form.watch();
     const control = form.control;
+    const handleSubmit = form.handleSubmit;
 
     const [ detailOpen, setDetailOpen ] = useState(false);
     const [ detailData, setDetailData ] = useState<commonItemModelProps | null>(null);
@@ -111,21 +114,21 @@ const ModelWrapper = (props: ModelWrapperProps) => {
         navigate(routes[modelKey].path as string);
         setTimeout(() => setDetailData(null), 250);
     };
-    const submitDetailHandler = () => {
-        const master = cloneDeep(formValues);
+    const submitDetailHandler = (formData: commonItemModelProps) => {
+        const master = cloneDeep(formData);
         if (detailData?.id === 'new') {
             onCreate(master);
             createSuccessToast({
-                title: `New ${modelKey} was successfully created`,
+                title: t('messages:createItemSuccess', { item: modelKey }),
             });
         } else if (detailData?.id) {
             onUpdate(master);
             createSuccessToast({
-                title: `New ${modelKey} was successfully updated`,
+                title: t('messages:updateItemSuccess', { item: modelKey }),
             });
         } else {
             createErrorToast({
-                title: 'Error during submit, please try again',
+                title: t('messages:submitDetailError'),
             });
         }
         closeDetailHandler();
@@ -135,7 +138,7 @@ const ModelWrapper = (props: ModelWrapperProps) => {
         const master = cloneDeep(payload);
         onToggle(master);
         createSuccessToast({
-            title: `${modelKey} was successfully updated`,
+            title: t('messages:updateItemSuccess', { item: modelKey }),
         });
     };
 
@@ -156,7 +159,7 @@ const ModelWrapper = (props: ModelWrapperProps) => {
         const master = cloneDeep(confirmData);
         onDelete(master as number[]);
         createSuccessToast({
-            title: `${modelKey} was successfully deleted`,
+            title: t('messages:deleteItemSuccess', { item: modelKey }),
         });
         closeConfirmHandler();
         if (confirmOpen) closeDetailHandler();
@@ -172,6 +175,12 @@ const ModelWrapper = (props: ModelWrapperProps) => {
             title,
         };
     }, [ modelKey, detailData ]);
+    const confirmMeta = useMemo(() => {
+        return {
+            title: `Delete ${modelKey}`,
+            content: `Do you want to delete this ... ${JSON.stringify(confirmData, null, 2)}?`,
+        };
+    }, [ modelKey, confirmData ]);
     const renderDetailForm = useMemo(() => {
         switch (modelKey) {
 
@@ -195,6 +204,17 @@ const ModelWrapper = (props: ModelWrapperProps) => {
                 );
         }
     }, [ modelKey, control, formValues ]);
+    const renderFormError = useMemo(() => {
+        return (
+            <>{t('messages:noDataError')}</>
+        );
+    }, []);
+
+    const formInitialProps = {
+        id,
+        name: id,
+        onSubmit: handleSubmit(submitDetailHandler),
+    };
 
     useEffect(() => {
         if (detail) openDetailHandler(detail);
@@ -202,16 +222,12 @@ const ModelWrapper = (props: ModelWrapperProps) => {
 
     return (
         <Box>
-            <button
-                onClick={() => onReload && onReload()}
-            >
-                {t('btn.reload')}
-            </button>
             <DataTable
                 modelKey={modelKey}
                 pathPrefix={`${routes[modelKey].path}/`}
                 items={items}
                 onRowDelete={(id) => openConfirmHandler([ id ])}
+                onReload={onReload}
                 {...dataTableProps}
             />
             <DetailDrawer
@@ -219,34 +235,23 @@ const ModelWrapper = (props: ModelWrapperProps) => {
                 modelKey={modelKey}
                 open={detailOpen}
                 detailId={detailData?.id}
+                detailActive={detailData?.active}
                 onClose={closeDetailHandler}
-                onSubmit={submitDetailHandler}
                 onDelete={openConfirmHandler}
                 onToggle={() => toggleDetailHandler([ detailData?.id ])}
                 title={detailMeta.title}
-                formProps={{
-                    id: 'FormDetailName',
-                    name: 'FormDetailName',
-                }}
+                formProps={formInitialProps}
                 availableActions={availableActions}
                 {...detailDrawerProps}
             >
-                {detailData ? (
-                    <>{renderDetailForm}</>
-                ) : (
-                    <>error message (no data)</>
-                )}
+                {detailData ? renderDetailForm : renderFormError}
             </DetailDrawer>
             <ConfirmDialog
                 open={confirmOpen}
                 onClose={closeConfirmHandler}
                 onConfirm={confirmDeleteDetailHandler}
-                title={`Delete ${modelKey}`}
-                content={
-                    <>
-                        Do you want to delete this {JSON.stringify(confirmData, null, 2)}?
-                    </>
-                }
+                title={confirmMeta.title}
+                content={confirmMeta.content}
                 {...confirmDialogProps}
             />
         </Box>

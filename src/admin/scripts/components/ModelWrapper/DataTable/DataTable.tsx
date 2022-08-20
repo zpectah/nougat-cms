@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import { RouteParamKeys } from '../../../enums';
@@ -11,6 +12,7 @@ type DataTableBaseProps = {
     onRowDelete?: (payload: number) => void,
     rowActions?: any,
     items?: commonItemModelProps[],
+    onReload: () => void,
 }
 export type DataTableProps = DataTableBaseProps
 
@@ -21,19 +23,24 @@ const DataTable = (props: DataTableProps) => {
         onRowDelete,
         rowActions,
         items = [],
+        onReload,
     } = props;
 
+    const { t } = useTranslation([ 'common' ]);
     const { navigate } = useRoutes();
 
-    const openDetailHandler = (id: number) => {
-        navigate(`${pathPrefix}/${RouteParamKeys['detail']}/${id}`);
-    };
+    const openDetailHandler = (id: number) => navigate(`${pathPrefix}${RouteParamKeys['detail']}/${id}`);
     const deleteRowHandler = (id: number) => {
         if (onRowDelete && id) onRowDelete(id);
     };
     
     return (
         <>
+            <button
+                onClick={() => onReload && onReload()}
+            >
+                {t('btn.reload')}
+            </button>
             <div>
                 DataTable with routing to detail as drawer ... {modelKey}
                 <br />

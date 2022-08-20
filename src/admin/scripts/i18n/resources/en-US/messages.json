@@ -1,3 +1,8 @@
 {
-  "noModelSelected": "No model selected"
+  "noModelSelected": "No model selected",
+  "noDataError": "Sorry, but some data is missing :/",
+  "submitDetailError": "Sorry, error during submit, please try again",
+  "createItemSuccess": "{{item}} successfully created",
+  "updateItemSuccess": "{{item}} successfully updated",
+  "deleteItemSuccess": "{{item}} successfully deleted"
 }

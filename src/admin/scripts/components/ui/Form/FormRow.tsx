@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
+import { merge } from 'lodash';
 import {
     Box,
     Grid,
-    FormLabel,
     GridProps,
-    FormLabelProps,
 } from '@mui/material';
 
 import { HelperText, HelperTextProps } from '../HelperText';
+import FormLabel, { FormLabelProps } from './FormLabel';
 import { FormRowVariantKeys } from './enums';
 import { FormRowVariantTypes } from './types';
 
@@ -65,13 +65,12 @@ const FormRow: React.FC<FormRowProps> = (props) => {
                 return {
                     label: {
                         xs: 12,
-                        sx: {
+                        sx: merge({
                             alignItems: 'center',
                             justifyContent: {
                                 xs: 'flex-start',
                             },
-                            ...gridLabelBaseSx,
-                        },
+                        }, gridLabelBaseSx),
                     },
                     field: {
                         xs: 12,
@@ -88,13 +87,12 @@ const FormRow: React.FC<FormRowProps> = (props) => {
                         md: 5,
                         lg: 4,
                         xl: 3,
-                        sx: {
+                        sx: merge({
                             alignItems: 'flex-start',
                             justifyContent: {
                                 xs: 'flex-end',
                             },
-                            ...gridLabelBaseSx,
-                        },
+                        }, gridLabelBaseSx),
                     },
                     field: {
                         xs: 6,
@@ -115,7 +113,7 @@ const FormRow: React.FC<FormRowProps> = (props) => {
                         md: 5,
                         lg: 4,
                         xl: 3,
-                        sx: {
+                        sx: merge({
                             alignItems: {
                                 xs: 'center',
                                 md: 'flex-start',
@@ -124,8 +122,7 @@ const FormRow: React.FC<FormRowProps> = (props) => {
                                 xs: 'flex-start',
                                 md: 'flex-end',
                             },
-                            ...gridLabelBaseSx,
-                        },
+                        }, gridLabelBaseSx),
                     },
                     field: {
                         xs: 12,
@@ -141,18 +138,18 @@ const FormRow: React.FC<FormRowProps> = (props) => {
         }
     }, [ variant ]);
     const renderLabel = useMemo(() => {
+        const elProps = merge(gridLayout.label, gridLabelProps);
         if (label) return (
             <Grid
                 item
-                {...gridLayout.label}
-                {...gridLabelProps}
+                {...elProps}
             >
                 <FormLabel
                     htmlFor={id}
                     required={required}
-                    sx={{
+                    sx={merge({
                         pt: 1.45,
-                    }}
+                    }, labelProps?.sx)}
                     {...labelProps}
                 >
                     {label}
@@ -202,11 +199,11 @@ const FormRow: React.FC<FormRowProps> = (props) => {
         errorTextProps,
     ]);
     const renderField = useMemo(() => {
+        const elProps = merge(gridLayout.field, gridFieldProps);
         return (
             <Grid
                 item
-                {...gridLayout.field}
-                {...gridFieldProps}
+                {...elProps}
             >
                 <Box
                     sx={{
@@ -229,7 +226,14 @@ const FormRow: React.FC<FormRowProps> = (props) => {
         <Grid
             container
             spacing={2}
-            {...gridContainerProps}
+            {...merge({
+                sx: {
+                    mb: {
+                        xs: 1,
+                        md: 2,
+                    },
+                },
+            }, gridContainerProps)}
         >
             {renderLabel}
             {renderField}

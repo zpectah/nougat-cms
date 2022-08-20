@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { merge } from 'lodash';
-import { isDesktop } from 'react-device-detect';
 import { useTranslation } from 'react-i18next';
 import { Box, Typography } from '@mui/material';
 
@@ -10,6 +9,7 @@ import {
     Drawer,
     Button,
     Form,
+    Chip,
     DrawerProps,
     MenuItemProps,
     FormProps,
@@ -19,6 +19,7 @@ type DetailDrawerBaseProps = {
     uid: string,
     modelKey: modelKeyType,
     detailId?: number | 'new',
+    detailActive?: boolean,
     wmd?: string | number,
     wlg?: string | number,
     wxl?: string | number,
@@ -39,6 +40,7 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
         uid,
         modelKey,
         detailId,
+        detailActive,
         wmd = 'calc(100% - 100px)',
         wlg = 1000,
         wxl = 1200,
@@ -76,45 +78,56 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
         if (detailId && onDelete) onDelete();
     };
 
-    const renderActions = () => (
-        <>
-            <Button
-                secondary
-                onClick={onClose}
-                sx={{
-                    width: {
-                        xs: '50%',
-                        md: '10rem',
-                    },
-                }}
-            >
-                {t('btn.cancel')}
-            </Button>
-            {(onSubmit && submitButtonText && (availableActions.create || availableActions.update)) && (
-                <Button
-                    submit={!!formProps?.name}
-                    primary={!(!!formProps?.name)}
-                    onClick={onSubmit}
-                    form={formProps?.name}
-                    disabled={submitDisabled}
+    const showSubmitButton = useMemo(() => (submitButtonText && (availableActions.create || availableActions.update)), [
+        submitButtonText,
+        availableActions,
+    ]);
+    const showDisabledChip = useMemo(() => (detailId !== 'new' && !detailActive), [ detailId, detailActive ]);
+    const renderHeading = useMemo(() => {
+        return (
+            <>
+                <Breadcrumbs
+                    withDetailLink
+                    onlyDesktop
                     sx={{
-                        width: {
-                            xs: '50%',
-                            md: '10rem',
-                        },
+                        mb: 2,
                     }}
+                />
+                <Typography
+                    component="header"
+                    variant="h3"
                 >
-                    {submitButtonText}
-                </Button>
-            )}
-        </>
-    );
-
+                    {title}
+                    {showDisabledChip && (
+                        <Chip
+                            label={t('status.disabled')}
+                            size="small"
+                            sx={{ ml: 2 }}
+                        />
+                    )}
+                </Typography>
+            </>
+        );
+    }, [ title, showDisabledChip ]);
+    const renderContent = useMemo(() => {
+        return (
+            <Box
+                sx={{ p: 2 }}
+            >
+                <Form
+                    key={`${uid}_form`}
+                    {...formProps}
+                >
+                    {children}
+                </Form>
+            </Box>
+        );
+    }, [ children, formProps, uid ]);
     const actionBarMenu = useMemo(() => {
         const menu: MenuItemProps[] = [
             {
                 key: 'toggle',
-                children: t('btn.disable'),
+                children: detailActive ? t('btn.disable') : t('btn.active'),
                 disabled: !availableActions.toggle || detailId === 'new',
                 onClick: toggleDetailHandler,
             },
@@ -134,39 +147,62 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
         deleteButtonText,
         deleteDisabled,
         availableActions,
+        detailActive,
     ]);
-    const renderContent = useMemo(() => {
-        const node = detailId && <>{children}</>;
-        if (formProps) {
-            return (
-                <Form
-                    key={`${uid}_form`}
-                    {...formProps}
+    const renderActions = useMemo(() => {
+        return (
+            <>
+                <Button
+                    secondary
+                    onClick={onClose}
+                    sx={{
+                        width: {
+                            xs: '50%',
+                            md: '10rem',
+                        },
+                    }}
                 >
-                    {node}
-                </Form>
-            );
-        }
-
-        return node;
+                    {t('btn.cancel')}
+                </Button>
+                {showSubmitButton && (
+                    <Button
+                        submit={!!formProps?.name}
+                        primary={!(!!formProps?.name)}
+                        onClick={onSubmit && onSubmit}
+                        form={formProps?.name}
+                        disabled={submitDisabled}
+                        sx={{
+                            width: {
+                                xs: '50%',
+                                md: '10rem',
+                            },
+                        }}
+                    >
+                        {submitButtonText}
+                    </Button>
+                )}
+            </>
+        );
     }, [
-        detailId,
-        children,
+        onClose,
+        showSubmitButton,
         formProps,
+        onSubmit,
+        submitDisabled,
+        submitButtonText,
     ]);
 
     return (
         <>
             <Drawer
-                id={`${modelKey}-${detailId}-detailDrawer`}
+                id={`${uid}-detailDrawer`}
                 anchor="right"
                 onClose={onClose}
-                actions={renderActions()}
-                actionsSx={{
-                    py: {
-                        xs: 2,
-                        md: 3,
-                    },
+                actions={renderActions}
+                headerNode={renderHeading}
+                actionBarProps={{
+                    id: `${modelKey}-${detailId}-detailDrawer-actionBar`,
+                    menu: actionBarMenu
                 }}
                 sx={merge(sx, {
                     width,
@@ -174,38 +210,19 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
                         width,
                     },
                 })}
-                scrollable
-                actionBarProps={{
-                    id: `${modelKey}-${detailId}-detailDrawer-actionBar`,
-                    menu: actionBarMenu
+                actionsSx={{
+                    py: {
+                        xs: 2,
+                        md: 3,
+                    },
                 }}
-                headerNode={
-                    <>
-                        {isDesktop && (
-                            <Breadcrumbs
-                                withDetailLink
-                                sx={{
-                                    mb: 2,
-                                }}
-                            />
-                        )}
-                        <Typography
-                            component="header"
-                            variant="h3"
-                        >
-                            {title}
-                        </Typography>
-                    </>
-                }
                 headerSx={{
                     flexDirection: 'column',
                 }}
+                scrollable
                 {...rest}
             >
-                <Box
-                    sx={{ p: 2 }}
-                    children={renderContent}
-                />
+                {renderContent}
             </Drawer>
         </>
     );

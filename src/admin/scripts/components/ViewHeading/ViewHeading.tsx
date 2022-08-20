@@ -41,7 +41,7 @@ const ViewHeading = (props: ViewHeadingProps) => {
                 ...sx,
             }}
         >
-            {withBreadcrumbs && <Breadcrumbs />}
+            {withBreadcrumbs && <Breadcrumbs onlyDesktop />}
             <Stack
                 direction="row"
                 alignItems={centered ? 'center' : 'flex-start'}
