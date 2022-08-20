@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { DetailFormProps } from '../../types';
+import { commonFormProps } from '../../types';
 import {
     ControlledFormRow,
     Input,
 } from '../../components';
 
 type PostsDetailBaseProps = {}
-export type PostsDetailProps = DetailFormProps & PostsDetailBaseProps
+export type PostsDetailProps = commonFormProps & PostsDetailBaseProps
 
 const PostsDetail = (props: PostsDetailProps) => {
     const {

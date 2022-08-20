@@ -29,5 +29,6 @@ export const EMAIL_REGEX = /^(?:(?!.*?[.]{2})[a-zA-Z0-9](?:[a-zA-Z0-9.+!%-]{1,64
 
 /* Feature toggles */
 export const FEATURES = {
+    breadcrumbsShowSystem: true,
     breadcrumbsShowLanguage: true,
 };

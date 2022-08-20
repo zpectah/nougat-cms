@@ -4,3 +4,4 @@ export * from './store';
 export * from './model';
 export * from './entity';
 export * from './form';
+export * from './settings';

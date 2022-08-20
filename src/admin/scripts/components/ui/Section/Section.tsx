@@ -18,6 +18,9 @@ type SectionBaseProps = {
     contentSx?: SxProps,
     id?: string,
     actionBarProps?: ActionBarProps,
+    withYOffset?: boolean,
+    withXOffset?: boolean,
+    disableDivider?: boolean,
 }
 export type SectionProps = SectionBaseProps
 
@@ -31,9 +34,13 @@ const Section: React.FC<SectionProps> = (props) => {
         contentSx,
         id,
         actionBarProps,
+        withYOffset,
+        withXOffset,
+        disableDivider,
     } = props;
 
     const showHeading = title || subtitle || actions;
+    const showDivider = disableDivider ? false : (showHeading && children);
 
     return (
         <Box
@@ -85,9 +92,13 @@ const Section: React.FC<SectionProps> = (props) => {
                     )}
                 </Stack>
             )}
-            {(showHeading && children) && <Divider />}
+            {showDivider && <Divider />}
             <Box
-                sx={{ ...contentSx }}
+                sx={{
+                    py: withYOffset ? 2 : 0,
+                    px: withXOffset ? 2 : 0,
+                    ...contentSx
+                }}
             >
                 {children}
             </Box>

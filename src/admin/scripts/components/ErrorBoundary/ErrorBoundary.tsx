@@ -38,7 +38,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 				<div
 					style={{
 						width: '100%',
-						height: '100%',
+						height: '100vh',
 						minHeight: '500px',
 						margin: 0,
 						padding: 0,
@@ -79,6 +79,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 							<a
 								href={routes.Dashboard.path as string}
 								style={{
+									margin: '1rem .5rem',
 									padding: '.5rem .75rem',
 									display: 'inline-flex',
 									alignItems: 'center',
@@ -87,9 +88,11 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 									textAlign: 'center',
 									whiteSpace: 'nowrap',
 									fontWeight: 700,
+									textDecoration: 'none',
 									backgroundColor: palette.primary,
 									color: palette.light,
 									borderRadius: '.125rem',
+									border: 0,
 								}}
 							>
 								Return to dashboard
@@ -98,7 +101,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 						{this.state.error && (
 							<div
 								style={{
-									flex: 'auto',
+									padding: '.75rem',
 									overflow: 'scroll',
 									fontSize: '.85rem',
 									backgroundColor: 'rgba(200,200,200,.5)',

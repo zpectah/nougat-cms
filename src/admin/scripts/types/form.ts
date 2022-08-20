@@ -11,6 +11,6 @@ export type rowControllerProps = UseControllerProps;
 export type rowControllerReturnProps = UseControllerReturn;
 export type commonItemModelProps = formProps['defaultValues'];
 
-export interface DetailFormProps {
+export interface commonFormProps {
     form: UseFormReturn,
 }

@@ -7,4 +7,5 @@ export { default as useSidebar } from './useSidebar';
 export { default as useBreadcrumbs } from './useBreadcrumbs';
 export { default as useRoutes } from './useRoutes';
 export { default as useEntity } from './useEntity';
+export { default as useSettings } from './useSettings';
 export * from './model';

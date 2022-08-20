@@ -15,11 +15,11 @@ const themeCommonProps = {
     typography: {
         fontFamily: FONT_FAMILY_ROOT,
         h1: {
-            fontSize: '2.25rem',
+            fontSize: '2.125rem',
             fontWeight: 700,
         },
         h2: {
-            fontSize: '2rem',
+            fontSize: '1.9rem',
         },
         h3: {
             fontSize: '1.75rem',

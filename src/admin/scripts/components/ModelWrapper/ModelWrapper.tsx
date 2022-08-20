@@ -6,6 +6,7 @@ import React, {
 import { cloneDeep } from 'lodash';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
 import {
     modelKeyType,
@@ -239,7 +240,7 @@ const ModelWrapper = (props: ModelWrapperProps) => {
     };
 
     return (
-        <>
+        <Box>
             <DataTable
                 modelKey={modelKey}
                 pathPrefix={`${routes[modelKey].path}/`}
@@ -272,7 +273,7 @@ const ModelWrapper = (props: ModelWrapperProps) => {
                 content={confirmMeta.content}
                 {...confirmDialogProps}
             />
-        </>
+        </Box>
     );
 };
 

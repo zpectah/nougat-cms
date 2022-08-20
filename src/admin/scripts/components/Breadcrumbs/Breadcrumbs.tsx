@@ -35,21 +35,21 @@ const Breadcrumbs = (props: BreadcrumbsProps) => {
 
     const visible = onlyDesktop ? isDesktop : true;
 
-    const { t } = useTranslation([ 'common', 'views' ]);
+    const { t } = useTranslation([ 'common', 'views', 'modules' ]);
     const { cms, detail, panel } = useBreadcrumbs();
     const { route } = useRoutes();
-    const { language } = useLanguage();
+    const { locale } = useLanguage();
 
     const navItems = [
         {
             key: 'system',
             label: cms.name,
-            active: true,
+            active: FEATURES.breadcrumbsShowSystem,
             path: routes.Dashboard.path,
         },
         {
             key: 'language',
-            label: language,
+            label: locale.label.a,
             active: FEATURES.breadcrumbsShowLanguage,
         },
         {
@@ -60,13 +60,13 @@ const Breadcrumbs = (props: BreadcrumbsProps) => {
         },
         {
             key: 'detail',
-            label: `${t(`common:detail`)}: ${detail}`,
+            label: `${detail === 'new' ? t(`plurals.newItem`, { item: t(`plurals.${route?.name}`, { count: 1 }).toLowerCase(), count: 1 }) : `${t(`common:detail`)}: #${detail}`}`,
             active: !!detail,
             path: withDetailLink && `${route?.path}/${RouteParamKeys['detail']}/${detail}`,
         },
         {
             key: 'panel',
-            label: `${t(`common:panel`)}: ${panel}`,
+            label: `${t(`common:panel`)}: ${t(`modules:Settings.panel.${panel}`)}`,
             active: !!panel,
         },
     ];

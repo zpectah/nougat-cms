@@ -1,1 +1,10 @@
-{}
+{
+  "Settings": {
+    "panel": {
+      "global": "Global",
+      "web": "Web",
+      "modules": "Modules",
+      "admin": "Admin"
+    }
+  }
+}
