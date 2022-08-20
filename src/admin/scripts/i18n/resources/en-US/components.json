@@ -6,7 +6,7 @@
     },
     "dropdownMenu": {
       "profile": "Profile",
-      "themeToggle": "Set theme to {{theme}}",
+      "themeToggle": "Set {{theme}} theme",
       "logout": "Log out"
     }
   },

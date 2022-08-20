@@ -3,7 +3,6 @@ import React from 'react';
 import { DetailFormProps } from '../../types';
 import {
     ControlledFormRow,
-    ControlledFormRowProps,
     Input,
 } from '../../components';
 
@@ -26,29 +25,29 @@ const UsersDetail = (props: UsersDetailProps) => {
             <br />
             <div>
                 <ControlledFormRow
-                    name="fieldA"
+                    name="email"
                     control={control}
                     label="Label field A"
-                    render={({ field: { onChange, onBlur, value, name, ref }}) => (
+                    render={({ field: { ref, ...fieldRest }}) => (
                         <Input
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            value={value}
-                            name={name}
+                            type="email"
+                            {...fieldRest}
                             inputRef={ref}
                         />
                     )}
                     helpers={[ 'Some text helper' ]}
                 />
                 <ControlledFormRow
-                    name="fieldB"
+                    name="type"
                     control={control}
                     label="Label field B"
-                    render={(row) => (
-                        <>
-                            rendered field ... B ... {JSON.stringify(row, null, 2)}
-                        </>
+                    render={({ field: { ref, ...fieldRest }}) => (
+                        <Input
+                            {...fieldRest}
+                            inputRef={ref}
+                        />
                     )}
+                    helpers={[ 'Some text helper' ]}
                     errors={[ 'Some error text' ]}
                 />
             </div>

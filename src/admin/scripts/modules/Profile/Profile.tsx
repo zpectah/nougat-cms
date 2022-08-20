@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, {useMemo, useState} from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     Box,
     Grid,
     Stack,
-    ButtonGroup,
+    // ButtonGroup, // TODO
 } from '@mui/material';
 
 import config from '../../config';
@@ -16,7 +16,11 @@ import {
     Card,
     Button,
     Dialog,
+    Toggle,
+    AvatarCustomizer,
+    ToggleButtonProps,
 } from '../../components';
+import { EntityDetail } from '../Entity';
 
 const Profile = () => {
     const [ dialogCredentials, setDialogCredentials ] = useState(false);
@@ -46,6 +50,21 @@ const Profile = () => {
 
         closeEditAvatarHandler();
     };
+
+    const languageOptions = useMemo(() => {
+        const list: ToggleButtonProps[] = [];
+        languagesList.map((lng) => {
+            list.push({
+                id: lng,
+                value: lng,
+                selected: language === lng,
+                children: config.locales[lng].label.a,
+                'aria-label': config.locales[lng].label.b,
+            });
+        });
+
+        return list;
+    }, [ language, languagesList ]);
 
     return (
         <>
@@ -127,21 +146,12 @@ const Profile = () => {
                                     >
                                         Edit credentials
                                     </Button>
-                                    <ButtonGroup
-                                        variant="outlined"
-                                        color="secondary"
-                                    >
-                                        {languagesList.map((lng) => (
-                                            <Button
-                                                key={lng}
-                                                disabled={lng === language}
-                                                onClick={() => setLanguage(lng)}
-                                                small
-                                            >
-                                                {config.locales[lng].label.a}
-                                            </Button>
-                                        ))}
-                                    </ButtonGroup>
+                                    <Toggle
+                                        size="small"
+                                        items={languageOptions}
+                                        exclusive
+                                        onChange={(e, value) => setLanguage(value as string)}
+                                    />
                                 </Stack>
                             </Grid>
                         </Grid>
@@ -167,7 +177,7 @@ const Profile = () => {
                         }
                         forceActionsClose
                     >
-                        ... avatar dialog ...
+                        <AvatarCustomizer />
                     </Dialog>
                     <Dialog
                         open={dialogCredentials}
@@ -182,7 +192,7 @@ const Profile = () => {
                         }
                         forceActionsClose
                     >
-                        ... credentials dialog ...
+                        <EntityDetail />
                     </Dialog>
                 </>
             ) : (
