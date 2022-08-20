@@ -2,17 +2,21 @@ import {
     Themes,
     ViewTypes,
     RouteParamKeys,
+    ToastContextKeys,
 } from '../enums';
 
 export type themeKeyType = keyof typeof Themes;
+
 export type viewLayoutKeyType = keyof typeof ViewTypes;
+
 export type routeParamKeyType = keyof typeof RouteParamKeys;
 
+export type toastItemContextType = keyof typeof ToastContextKeys;
 export type toastItemType = {
     id?: string | number;
     title: string;
     content?: string;
-    context?: 'info' | 'success' | 'error';
+    context?: toastItemContextType;
     timeout?: number;
     onRemove?: (id: string) => void;
 };

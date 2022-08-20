@@ -15,7 +15,17 @@
     "expand": "Expand",
     "collapse": "Collapse",
     "disable": "Disable",
-    "active": "Active"
+    "active": "Active",
+    "reload": "Reload"
+  },
+  "status": {
+    "active": "Active",
+    "disabled": "Disabled",
+    "loading": "Loading",
+    "updating": "Updating"
+  },
+  "type": {
+    "default": "Default"
   },
   "page": "Page",
   "detail": "Detail",

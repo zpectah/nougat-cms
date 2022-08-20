@@ -2,7 +2,7 @@ import { useLocation, useParams } from 'react-router-dom';
 
 import config from '../config';
 import { RouteParamKeys } from '../enums';
-import { routeParamKeyType } from '../types';
+import { modelIdType, routeParamKeyType } from '../types';
 
 const useBreadcrumbs = () => {
     const doc = window.document;
@@ -26,16 +26,21 @@ const useBreadcrumbs = () => {
         if (pageDescription) window.document.querySelector('meta[name="description"]')?.setAttribute('content', description);
     };
 
+    const page = parsedPath[1];
+    const detail = getParamByKey(RouteParamKeys['detail']) as modelIdType;
+    const panel = getParamByKey(RouteParamKeys['panel']);
+    const token = getParamByKey(RouteParamKeys['token']);
+
     return {
         cms,
         copyright,
         location,
         params,
         parsedPath,
-        page: parsedPath[1],
-        detail: getParamByKey(RouteParamKeys['detail']),
-        panel: getParamByKey(RouteParamKeys['panel']),
-        token: getParamByKey(RouteParamKeys['token']),
+        page,
+        detail: detail && (detail === 'new' ? detail : Number(detail)),
+        panel,
+        token,
         setDocumentMeta,
     };
 };

@@ -1,4 +1,9 @@
+import { PostsTypeKeys } from '../../enums';
+import { modelIdType } from './common';
+
+export type PostsTypesProps = keyof typeof PostsTypeKeys;
+
 export interface PostsItemProps {
-    id: number | 'new',
-    type: 'default',
+    id: modelIdType,
+    type: PostsTypesProps,
 }

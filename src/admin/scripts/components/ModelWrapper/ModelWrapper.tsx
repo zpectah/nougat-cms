@@ -5,6 +5,7 @@ import React, {
 } from 'react';
 import { cloneDeep } from 'lodash';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 
 import {
@@ -12,6 +13,7 @@ import {
     availableActionsProps,
     commonItemModelProps,
     formProps,
+    modelIdType,
 } from '../../types';
 import {
     useBreadcrumbs,
@@ -68,6 +70,7 @@ const ModelWrapper = (props: ModelWrapperProps) => {
         defaultValues,
         ...formProps,
     });
+    const { t } = useTranslation([ 'common', 'messages' ]);
     const { detail } = useBreadcrumbs();
     const { routes, navigate } = useRoutes();
     const {
@@ -84,7 +87,15 @@ const ModelWrapper = (props: ModelWrapperProps) => {
     const [ confirmData, setConfirmData ] = useState<number[] | null>(null);
 
     /* Detail handler */
-    const openDetailHandler = (id: string) => {
+    const openDetailHandler = (id: modelIdType) => {
+        // const master = cloneDeep({});
+        let detail = null;
+        if (id === 'new') {
+
+        } else {
+            // TODO: find
+            items.map((item) => {});
+        }
 
         // TODO ... check if detail exist in array, else show error toast and return to list ...
         setDetailData({
@@ -180,7 +191,7 @@ const ModelWrapper = (props: ModelWrapperProps) => {
 
             default:
                 return (
-                    <>no model selected</>
+                    <>{t('messages.noModelSelected')}</>
                 );
         }
     }, [ modelKey, control, formValues ]);
@@ -194,7 +205,7 @@ const ModelWrapper = (props: ModelWrapperProps) => {
             <button
                 onClick={() => onReload && onReload()}
             >
-                reload
+                {t('btn.reload')}
             </button>
             <DataTable
                 modelKey={modelKey}

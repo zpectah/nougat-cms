@@ -17,3 +17,9 @@ export enum RouteParamKeys {
     panel = 'panel',
     token = 'token',
 }
+
+export enum ToastContextKeys {
+    info = 'info',
+    success = 'success',
+    error = 'error',
+}

@@ -1,6 +1,11 @@
+import { UsersTypeKeys } from '../../enums';
+import { modelIdType } from './common';
+
+export type UsersTypesProps = keyof typeof UsersTypeKeys;
+
 export interface UsersItemProps {
-    id: number | 'new',
-    type: 'default',
+    id: modelIdType,
+    type: UsersTypesProps,
     email: string,
     password?: string,
     firstname: string,
