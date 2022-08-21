@@ -1,13 +1,13 @@
 import { PostsItemProps } from '../../types';
 
-export interface UsePostsReturnProps {
-    Posts: PostsItemProps[],
-    loadPosts: () => Promise<unknown>, // TODO
-    createPosts: () => Promise<unknown>, // TODO
-    updatePosts: () => Promise<unknown>, // TODO
-    togglePosts: () => Promise<unknown>, // TODO
-    deletePosts: () => Promise<unknown>, // TODO
-}
+// export interface UsePostsReturnProps {
+//     Posts: PostsItemProps[],
+//     loadPosts: () => Promise<unknown>, // TODO
+//     createPosts: () => Promise<unknown>, // TODO
+//     updatePosts: () => Promise<unknown>, // TODO
+//     togglePosts: () => Promise<unknown>, // TODO
+//     deletePosts: () => Promise<unknown>, // TODO
+// }
 
 const usePosts = () => {
     const items: PostsItemProps[] = [];
