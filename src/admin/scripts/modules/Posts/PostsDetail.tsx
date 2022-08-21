@@ -28,8 +28,9 @@ const PostsDetail = (props: PostsDetailProps) => {
                     name="name"
                     control={control}
                     label="Label field A"
-                    render={({ field: { ref, ...fieldRest }}) => (
+                    renderField={({ field: { ref, ...fieldRest }, id }) => (
                         <Input
+                            id={id}
                             {...fieldRest}
                             inputRef={ref}
                         />
@@ -40,8 +41,9 @@ const PostsDetail = (props: PostsDetailProps) => {
                     name="type"
                     control={control}
                     label="Label field B"
-                    render={({ field: { ref, ...fieldRest }}) => (
+                    renderField={({ field: { ref, ...fieldRest }, id }) => (
                         <Input
+                            id={id}
                             {...fieldRest}
                             inputRef={ref}
                         />
@@ -54,4 +56,3 @@ const PostsDetail = (props: PostsDetailProps) => {
 };
 
 export default PostsDetail;
-

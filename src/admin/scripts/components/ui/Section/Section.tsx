@@ -47,7 +47,8 @@ const Section: React.FC<SectionProps> = (props) => {
             component="section"
             id={id}
             sx={{
-                mb: 3,
+                my: 2,
+                pb: 2,
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 2,

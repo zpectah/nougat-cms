@@ -10,6 +10,7 @@ const Select = (props: SelectProps) => {
 
     return (
         <SelectBase
+            size="small"
             {...rest}
         />
     );

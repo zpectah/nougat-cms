@@ -1,4 +1,5 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import {
     Box,
     Tabs,
@@ -12,12 +13,10 @@ import {
     commonItemModelProps,
 } from '../../types';
 import { useBreadcrumbs, useRoutes } from '../../hooks';
-import palette from '../../styles/palette';
 import {
-    ControlledForm,
-    ControlledFormRow,
-    Card,
-    Button, Input,
+    Form,
+    Button,
+    FormRow,
 } from '../../components';
 import {
     GlobalPanel,
@@ -71,6 +70,11 @@ const SettingsForm = (props: SettingsFormProps) => {
             label: 'Admin',
         },
     };
+    const form = useForm({
+        mode: 'all',
+        defaultValues: {},
+    });
+    const handleSubmit = form.handleSubmit;
 
     const setPanelHandler = (payload: string | false) => {
         let panelName;
@@ -87,6 +91,11 @@ const SettingsForm = (props: SettingsFormProps) => {
 
         }
     };
+    const updateHandler = (formData: commonItemModelProps) => {
+        // TODO: master ...
+        console.log('submitHandler', formData);
+        onUpdate && onUpdate(formData);
+    };
 
     useEffect(() => {
         setPanelHandler(panel);
@@ -94,88 +103,85 @@ const SettingsForm = (props: SettingsFormProps) => {
 
     return (
         <Box>
-            <ControlledForm
+            <Form
                 id="SettingsForm"
                 name="SettingsForm"
-                formProps={{
-                    mode: 'all',
-                }}
-                // onSubmit={() => {}}
-                render={(form) => {
-                    const panelProps = {
-                        form,
-                    };
-
-                    return (
+                onSubmit={handleSubmit(updateHandler)}
+            >
+                <>
+                    <Tabs
+                        value={activePanel}
+                        variant="scrollable"
+                        scrollButtons="auto"
+                    >
+                        <Tab
+                            value={panels.global.name}
+                            label={panels.global.label}
+                            onClick={() => setPanelHandler(panels.global.name)}
+                        />
+                        <Tab
+                            value={panels.web.name}
+                            label={panels.web.label}
+                            onClick={() => setPanelHandler(panels.web.name)}
+                        />
+                        <Tab
+                            value={panels.modules.name}
+                            label={panels.modules.label}
+                            onClick={() => setPanelHandler(panels.modules.name)}
+                        />
+                        <Tab
+                            value={panels.admin.name}
+                            label={panels.admin.label}
+                            onClick={() => setPanelHandler(panels.admin.name)}
+                        />
+                    </Tabs>
+                    <Box
+                        sx={{
+                            pt: 2,
+                            borderTopLeftRadius: 0,
+                            borderTopRightRadius: 0,
+                        }}
+                    >
                         <>
-                            <Tabs
-                                value={activePanel}
-                                variant="scrollable"
-                                scrollButtons="auto"
-                            >
-                                <Tab
-                                    value={panels.global.name}
-                                    label={panels.global.label}
-                                    onClick={() => setPanelHandler(panels.global.name)}
-                                />
-                                <Tab
-                                    value={panels.web.name}
-                                    label={panels.web.label}
-                                    onClick={() => setPanelHandler(panels.web.name)}
-                                />
-                                <Tab
-                                    value={panels.modules.name}
-                                    label={panels.modules.label}
-                                    onClick={() => setPanelHandler(panels.modules.name)}
-                                />
-                                <Tab
-                                    value={panels.admin.name}
-                                    label={panels.admin.label}
-                                    onClick={() => setPanelHandler(panels.admin.name)}
-                                />
-                            </Tabs>
-                            <Box
-                                sx={{
-                                    pt: 2,
-                                    borderTopLeftRadius: 0,
-                                    borderTopRightRadius: 0,
-                                }}
-                            >
-                                <>
-                                    {
-                                        {
-                                            global: <GlobalPanel {...panelProps} />,
-                                            web: <WebPanel {...panelProps} />,
-                                            modules: <ModulesPanel {...panelProps} />,
-                                            admin: <AdminPanel {...panelProps} />,
-                                        }[activePanel as panelTypes]
-                                    }
-                                </>
-                            </Box>
-                            <Stack
-                                direction="row"
-                                spacing={2}
-                                alignItems="center"
-                                justifyContent="flex-start"
-                                sx={{
-                                    my: 2,
-                                }}
-                            >
-                                <Button
-                                    secondary
-                                >
-                                    revert changes
-                                </Button>
-                                <Button
-                                    submit
-                                >
-                                    update changes
-                                </Button>
-                            </Stack>
+                            {
+                                {
+                                    global: <GlobalPanel form={form} />,
+                                    web: <WebPanel form={form} />,
+                                    modules: <ModulesPanel form={form} />,
+                                    admin: <AdminPanel form={form} />,
+                                }[activePanel as panelTypes]
+                            }
                         </>
-                    );
-                }}
-            />
+                    </Box>
+                    <Box>
+                        <FormRow
+                            emptyLabel
+                        >
+                            spaced empty field without label ...
+                        </FormRow>
+                    </Box>
+                    <Stack
+                        direction="row"
+                        spacing={2}
+                        alignItems="center"
+                        justifyContent="flex-start"
+                        sx={{
+                            my: 2,
+                        }}
+                    >
+                        <Button
+                            secondary
+                        >
+                            revert changes
+                        </Button>
+                        <Button
+                            submit
+                        >
+                            update changes
+                        </Button>
+                    </Stack>
+                </>
+            </Form>
         </Box>
     );
 };

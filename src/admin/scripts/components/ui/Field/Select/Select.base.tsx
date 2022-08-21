@@ -18,16 +18,19 @@ const SelectBase = (props: SelectBaseProps) => {
     const {
         items = [],
         formControlProps,
+        size,
         children,
         ...rest
     } = props;
 
     return (
         <FormControl
+            size={size}
             fullWidth
             {...formControlProps}
         >
             <Select
+                size={size}
                 {...rest}
             >
                 {children && children}

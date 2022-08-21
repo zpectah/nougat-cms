@@ -26,6 +26,14 @@ const routes: routesType = {
         auth: false,
         level: 0,
     },
+    UiDemo: {
+        key: 'ui-demo',
+        name: 'UiDemo',
+        match: `${paths.root}/ui-demo/*`,
+        path: `${paths.root}/ui-demo`,
+        auth: true,
+        level: 3,
+    },
     Dashboard: {
         key: 'dashboard',
         name: 'Dashboard',

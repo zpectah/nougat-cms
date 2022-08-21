@@ -6,6 +6,30 @@
     "title": "Error 404",
     "subtitle": "This page was not found or was deleted"
   },
+  "Login": {
+    "meta": {
+      "title": "Login"
+    },
+    "title": "Login to system",
+    "subtitle": "Login page view",
+    "label": "Login"
+  },
+  "LostPassword": {
+    "meta": {
+      "title": "Lost password"
+    },
+    "title": "Lost password",
+    "subtitle": "LostPassword page view",
+    "label": "Lost password"
+  },
+  "UiDemo": {
+    "meta": {
+      "title": "UI Demo"
+    },
+    "title": "UI Demo",
+    "subtitle": "UI Demo page view",
+    "label": "UI Demo"
+  },
   "Dashboard": {
     "meta": {
       "title": "Dashboard"
@@ -29,22 +53,6 @@
     "title": "Settings",
     "subtitle": "Settings page view",
     "label": "Settings"
-  },
-  "Login": {
-    "meta": {
-      "title": "Login"
-    },
-    "title": "Login to system",
-    "subtitle": "Login page view",
-    "label": "Login"
-  },
-  "LostPassword": {
-    "meta": {
-      "title": "Lost password"
-    },
-    "title": "Lost password",
-    "subtitle": "LostPassword page view",
-    "label": "Lost password"
   },
   "Users": {
     "meta": {

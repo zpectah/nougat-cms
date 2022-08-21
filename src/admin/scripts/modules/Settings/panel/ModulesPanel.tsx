@@ -30,8 +30,9 @@ const ModulesPanel = (props: ModulesPanelProps) => {
                     name="name"
                     control={control}
                     label="Label field ... Modules panel"
-                    render={({ field: { ref, ...fieldRest }}) => (
+                    renderField={({ field: { ref, ...fieldRest }, id }) => (
                         <Input
+                            id={id}
                             {...fieldRest}
                             inputRef={ref}
                         />
@@ -45,8 +46,9 @@ const ModulesPanel = (props: ModulesPanelProps) => {
                 name="name"
                 control={control}
                 label="Label field ... Modules panel"
-                render={({ field: { ref, ...fieldRest }}) => (
+                renderField={({ field: { ref, ...fieldRest }, id }) => (
                     <Input
+                        id={id}
                         {...fieldRest}
                         inputRef={ref}
                     />

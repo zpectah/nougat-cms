@@ -30,8 +30,9 @@ const WebPanel = (props: WebPanelProps) => {
                     name="name"
                     control={control}
                     label="Label field ... Web panel"
-                    render={({ field: { ref, ...fieldRest }}) => (
+                    renderField={({ field: { ref, ...fieldRest }, id }) => (
                         <Input
+                            id={id}
                             {...fieldRest}
                             inputRef={ref}
                         />
@@ -45,8 +46,9 @@ const WebPanel = (props: WebPanelProps) => {
                 name="name"
                 control={control}
                 label="Label field ... Web panel"
-                render={({ field: { ref, ...fieldRest }}) => (
+                renderField={({ field: { ref, ...fieldRest }, id }) => (
                     <Input
+                        id={id}
                         {...fieldRest}
                         inputRef={ref}
                     />

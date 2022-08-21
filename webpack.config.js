@@ -9,6 +9,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const meta = require('./meta.json');
 const constants = require('./constants.json');
+const { getTimestamp, getToken } = require('./libs/js/helpers');
 
 const modifyWebManifest = (buffer) => {
     let manifest = JSON.parse(buffer.toString());
@@ -25,7 +26,7 @@ const modifyEnv = (buffer, env, token) => {
     const envFile = JSON.parse(buffer.toString());
     envFile.version = pkg.version;
     envFile['environment'] = env;
-    envFile['timestamp'] = Math.round(new Date().getTime()/1000);
+    envFile['timestamp'] = getTimestamp();
 	envFile['token'] = token;
     envFile['debug'] = env !== 'prod';
     envFile['_meta'] = meta;
@@ -101,7 +102,7 @@ module.exports = (env) => {
     };
     const resolveModules = [ path.join(__dirname, 'node_modules') ];
     const configTarget = `../${destination}/${constants.APP.config}`;
-	const token = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 12);
+	const token = getToken();
 	const extraBundleEnv = {
 		BUNDLE_ENVIRONMENT: JSON.stringify(mode),
 		BUNDLE_DEBUG: env.env === constants.ENV.dev.key,

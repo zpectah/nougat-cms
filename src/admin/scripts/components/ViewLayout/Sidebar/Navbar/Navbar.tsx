@@ -34,6 +34,7 @@ import {
     useRoutes,
     useSidebar,
 } from '../../../../hooks';
+import UiDemo from "../../../../modules/UiDemo/UiDemo";
 
 const Navbar = () => {
     const { t } = useTranslation('views');
@@ -114,6 +115,16 @@ const Navbar = () => {
             active: true,
             icon: <SupervisedUserCircleIcon {...iconProps} />,
         },
+
+        {
+            key: routes.UiDemo.key,
+            label: t('UiDemo.label'),
+            path: routes.UiDemo.path,
+            disabled: false,
+            active: true,
+            icon: <SupervisedUserCircleIcon {...iconProps} />,
+        },
+
     ];
 
     const linkHandler = (path: string) => {

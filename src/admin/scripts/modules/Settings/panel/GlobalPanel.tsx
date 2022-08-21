@@ -30,8 +30,9 @@ const GlobalPanel = (props: GlobalPanelProps) => {
                     name="name"
                     control={control}
                     label="Label field ... Global panel"
-                    render={({ field: { ref, ...fieldRest }}) => (
+                    renderField={({ field: { ref, ...fieldRest }, id }) => (
                         <Input
+                            id={id}
                             {...fieldRest}
                             inputRef={ref}
                         />
@@ -43,8 +44,9 @@ const GlobalPanel = (props: GlobalPanelProps) => {
                     name="name"
                     control={control}
                     label="Label field ... Global panel"
-                    render={({ field: { ref, ...fieldRest }}) => (
+                    renderField={({ field: { ref, ...fieldRest }, id }) => (
                         <Input
+                            id={id}
                             {...fieldRest}
                             inputRef={ref}
                         />
@@ -58,8 +60,9 @@ const GlobalPanel = (props: GlobalPanelProps) => {
                 name="name"
                 control={control}
                 label="Label field ... Global panel"
-                render={({ field: { ref, ...fieldRest }}) => (
+                renderField={({ field: { ref, ...fieldRest }, id }) => (
                     <Input
+                        id={id}
                         {...fieldRest}
                         inputRef={ref}
                     />

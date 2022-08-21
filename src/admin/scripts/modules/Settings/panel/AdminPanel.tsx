@@ -30,8 +30,9 @@ const AdminPanel = (props: AdminPanelProps) => {
                     name="name"
                     control={control}
                     label="Label field ... Admin panel"
-                    render={({ field: { ref, ...fieldRest }}) => (
+                    renderField={({ field: { ref, ...fieldRest }, id }) => (
                         <Input
+                            id={id}
                             {...fieldRest}
                             inputRef={ref}
                         />
@@ -45,8 +46,9 @@ const AdminPanel = (props: AdminPanelProps) => {
                 name="name"
                 control={control}
                 label="Label field ... Admin panel"
-                render={({ field: { ref, ...fieldRest }}) => (
+                renderField={({ field: { ref, ...fieldRest }, id }) => (
                     <Input
+                        id={id}
                         {...fieldRest}
                         inputRef={ref}
                     />

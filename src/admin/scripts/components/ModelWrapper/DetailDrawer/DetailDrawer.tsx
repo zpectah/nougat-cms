@@ -201,7 +201,8 @@ const DetailDrawer: React.FC<DetailDrawerProps> = (props) => {
             headerNode={renderHeading}
             actionBarProps={{
                 id: `${modelKey}-${detailId}-detailDrawer-actionBar`,
-                menu: actionBarMenu
+                menu: actionBarMenu,
+                menuButtonTooltip: t('btn.more'),
             }}
             sx={merge(sx, {
                 width,

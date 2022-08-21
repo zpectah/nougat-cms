@@ -6,11 +6,15 @@ import {
     GridProps,
 } from '@mui/material';
 
+import { getToken } from '../../../utils';
 import { HelperText, HelperTextProps } from '../HelperText';
 import FormLabel, { FormLabelProps } from './FormLabel';
 import { FormRowVariantKeys } from './enums';
 import { FormRowVariantTypes } from './types';
 
+export type FormRowRenderProps = {
+    id: string,
+}
 type gridLayoutProps = {
     label: GridProps,
     field: GridProps,
@@ -29,6 +33,8 @@ type FormRowBaseProps = {
     gridContainerProps?: GridProps,
     gridLabelProps?: GridProps,
     gridFieldProps?: GridProps,
+    render?: (props: FormRowRenderProps) => React.ReactNode,
+    emptyLabel?: boolean,
 }
 export type FormRowProps = FormRowBaseProps
 
@@ -47,7 +53,11 @@ const FormRow: React.FC<FormRowProps> = (props) => {
         gridContainerProps,
         gridLabelProps,
         gridFieldProps,
+        render,
+        emptyLabel,
     } = props;
+
+    const uid = id || getToken();
 
     const gridLayout: gridLayoutProps = useMemo(() => {
         const gridLabelBaseSx = {
@@ -139,20 +149,23 @@ const FormRow: React.FC<FormRowProps> = (props) => {
     }, [ variant ]);
     const renderLabel = useMemo(() => {
         const elProps = merge(gridLayout.label, gridLabelProps);
-        if (label) return (
+        if (label || emptyLabel) return (
             <Grid
                 item
                 {...elProps}
             >
                 <FormLabel
-                    htmlFor={id}
+                    htmlFor={uid}
                     required={required}
                     sx={merge({
                         pt: 1.45,
                     }, labelProps?.sx)}
                     {...labelProps}
                 >
-                    {label}
+                    {label && label}
+                    {emptyLabel && (
+                        <>&nbsp;</>
+                    )}
                 </FormLabel>
             </Grid>
         );
@@ -161,8 +174,9 @@ const FormRow: React.FC<FormRowProps> = (props) => {
         gridLayout,
         gridLabelProps,
         required,
-        id,
+        uid,
         labelProps,
+        emptyLabel,
     ]);
     const renderMessages = useMemo(() => {
         const show = helpers.length > 0 || errors.length > 0;
@@ -211,11 +225,14 @@ const FormRow: React.FC<FormRowProps> = (props) => {
                     }}
                 >
                     {children}
+                    {render && render({ id: uid })}
                 </Box>
                 {renderMessages}
             </Grid>
         );
     }, [
+        uid,
+        render,
         children,
         renderMessages,
         gridLayout,
