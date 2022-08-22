@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { merge } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import {
     Dialog as MuiDialog,
@@ -80,12 +81,13 @@ const Dialog: React.FC<DialogProps> = (props) => {
             <ActionBar
                 id={`${id}-actionBar`}
                 onClose={closeHandler}
-                sx={{
-                    position: 'absolute',
-                    top: '.5rem',
-                    right: '.5rem',
-                }}
-                {...actionBarProps}
+                {...merge({
+                    sx: {
+                        position: 'absolute',
+                        top: '.5rem',
+                        right: '.5rem',
+                    },
+                }, actionBarProps)}
             />
             {title && (
                 <DialogTitle
@@ -109,17 +111,20 @@ const Dialog: React.FC<DialogProps> = (props) => {
             {secondary && (
                 <DialogContent
                     dividers={dividers}
-                    sx={{ marginTop: dividers ? '-1px' : 0 }}
-                    {...contentProps}
-                    {...secondaryContentProps}
+                    {...merge({
+                        sx: {
+                            marginTop: dividers ? '-1px' : 0
+                        },
+                    }, contentProps, secondaryContentProps)}
                 >
                     {secondary}
                 </DialogContent>
             )}
             {(actions || forceActionsClose) && (
                 <DialogActions
-                    sx={{ gap: 1 }}
-                    {...actionsProps}
+                    {...merge({
+                        sx: { gap: 1 },
+                    }, actionsProps)}
                 >
                     {actions && actions}
                     {!disableActionsClose && (

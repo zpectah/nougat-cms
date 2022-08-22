@@ -1,5 +1,9 @@
 import React, { useMemo } from 'react';
-import { Button as MuiButton, ButtonProps as MuiButtonProps } from '@mui/material';
+import { merge } from 'lodash';
+import {
+    Button as MuiButton,
+    ButtonProps as MuiButtonProps,
+} from '@mui/material';
 
 type ButtonBaseProps = {
     primary?: boolean,
@@ -69,8 +73,7 @@ const Button = (props: ButtonProps) => {
 
     return (
         <MuiButton
-            {...propsByType}
-            {...rest}
+            {...merge(propsByType, rest)}
         />
     );
 };

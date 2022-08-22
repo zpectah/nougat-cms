@@ -32,6 +32,9 @@ const Slider = (props: SliderProps) => {
     if (iconStart || iconEnd) {
         return (
             <Stack
+                direction="row"
+                spacing={2}
+                alignItems="center"
                 {...stackProps}
             >
                 {iconStart && iconStart}

@@ -1,6 +1,8 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Box, Divider, Stack } from '@mui/material';
+import VolumeDown from '@mui/icons-material/VolumeDown';
+import VolumeUp from '@mui/icons-material/VolumeUp';
 
 import { commonItemModelProps } from '../../types';
 import {
@@ -18,6 +20,8 @@ import {
     SwitchLabel,
     SwitchGroup,
     RadioGroup,
+    Code,
+    Slider,
 } from '../../components';
 
 type UiDemoFormBaseProps = {
@@ -409,10 +413,40 @@ const UiDemoForm = (props: UiDemoFormProps) => {
                         </Section>
 
                         <Section
-                            title="Slider ❌"
+                            title="Slider ✅"
                         >
 
-                            slider
+                            <ControlledFormRow
+                                name="slider"
+                                label="Slider"
+                                control={control}
+                                renderField={({ field: { ref, ...fieldRest }, id }) => (
+                                    <Slider
+                                        id={id}
+                                        // inputRef={ref}
+                                        sx={{ my: '.5rem' }}
+                                        {...fieldRest}
+                                    />
+                                )}
+                            />
+
+                            <ControlledFormRow
+                                name="slider"
+                                label="Slider"
+                                control={control}
+                                renderField={({ field: { ref, ...fieldRest }, id }) => (
+                                    <Slider
+                                        id={id}
+                                        // inputRef={ref}
+                                        iconStart={<VolumeDown />}
+                                        iconEnd={<VolumeUp />}
+                                        stackProps={{
+                                            sx: { mt: 1 },
+                                        }}
+                                        {...fieldRest}
+                                    />
+                                )}
+                            />
 
                         </Section>
 
@@ -442,6 +476,13 @@ const UiDemoForm = (props: UiDemoFormProps) => {
 
                     </Stack>
                     <Divider />
+                    <Code
+                        json={formValues}
+                        sx={{
+                            my: 2,
+                        }}
+                    />
+                    {/*
                     <Box
                         sx={{
                             my: 2,
@@ -456,6 +497,7 @@ const UiDemoForm = (props: UiDemoFormProps) => {
                             </code>
                         </pre>
                     </Box>
+                    */}
                     <Stack
                         direction="row"
                         spacing={2}

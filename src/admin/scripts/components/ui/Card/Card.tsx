@@ -1,4 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
+import { merge } from 'lodash';
 import {
     Card as MuiCard,
     CardProps as MuiCardProps,
@@ -52,6 +57,7 @@ const Card: React.FC<CardProps> = (props) => {
 
     const renderHeader = useMemo(() => {
         const toggle = () => collapsible && setOpen(!open);
+        const actionBarVisible = headerActions || collapsible || actionBarProps;
         if (title || subtitle || headerActions) return (
             <>
                 <Stack
@@ -81,7 +87,7 @@ const Card: React.FC<CardProps> = (props) => {
                             </Typography>
                         )}
                     </Stack>
-                    {(headerActions || collapsible || actionBarProps) && (
+                    {actionBarVisible && (
                         <ActionBar
                             id={`${id}-actionBar`}
                             onExpandToggle={(collapsible && !hiddenArrowButton) && toggle}
@@ -106,12 +112,13 @@ const Card: React.FC<CardProps> = (props) => {
     const renderContent = useMemo(() => {
         const content = (
             <CardContent
-                sx={{
-                    '&:last-child': {
-                        pb: 2,
+                {...merge({
+                    sx: {
+                        '&:last-child': {
+                            pb: 2,
+                        },
                     },
-                }}
-                {...cardContentProps}
+                }, cardContentProps)}
             >
                 {children}
             </CardContent>

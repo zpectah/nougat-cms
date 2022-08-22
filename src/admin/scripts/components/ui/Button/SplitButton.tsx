@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { merge } from 'lodash';
 import { ButtonGroup, ButtonGroupProps } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
@@ -59,8 +60,7 @@ const SplitButton = (props: SplitButtonProps) => {
             >
                 <Button
                     disabled={disabled}
-                    {...buttonProps}
-                    {...mainButtonProps}
+                    {...merge(buttonProps, mainButtonProps)}
                 >
                     {label}
                 </Button>

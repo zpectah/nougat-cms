@@ -76,44 +76,42 @@ const Drawer: React.FC<DrawerProps> = (props) => {
                 variant: 'elevation',
                 elevation: 0,
             }}
-            sx={merge(sx, {
-                    flexShrink: 0,
-                    '& .MuiDrawer-paper': {
-                        boxSizing: 'border-box',
-                    },
-                }
-            )}
+            sx={merge({
+                flexShrink: 0,
+                '& .MuiDrawer-paper': {
+                    boxSizing: 'border-box',
+                },
+            }, sx)}
             {...rest}
         >
             <ActionBar
                 id={`${id}-actionBar`}
                 onClose={!disableClose && closeHandler}
-                sx={{
-                    position: 'absolute',
-                    top: '.5rem',
-                    right: '.5rem',
-                }}
-                {...actionBarProps}
+                {...merge({
+                    sx: {
+                        position: 'absolute',
+                        top: '.5rem',
+                        right: '.5rem',
+                    },
+                }, actionBarProps)}
             />
             <Box
-                sx={{
+                sx={merge({
                     width: '100%',
                     height: '100%',
                     display: 'flex',
                     flexDirection: 'column',
-                    ...bodySx,
-                }}
+                }, bodySx)}
             >
                 {(title || headerNode) && (
                     <Box
-                        sx={{
+                        sx={merge({
                             width: '100%',
                             p: spacing,
                             display: 'flex',
                             alignItems: 'flex-start',
                             justifyContent: 'flex-start',
-                            ...headerSx,
-                        }}
+                        }, headerSx)}
                     >
                         {title && (
                             <Typography
@@ -131,27 +129,25 @@ const Drawer: React.FC<DrawerProps> = (props) => {
                     </Box>
                 )}
                 <Box
-                    sx={{
+                    sx={merge({
                         display: 'flex',
                         flex: 'auto',
                         flexDirection: 'column',
                         position: 'relative',
-                        ...contentSx,
-                    }}
+                    }, contentSx)}
                 >
                     {renderContent()}
                 </Box>
                 {actions && (
                     <Box
-                        sx={{
+                        sx={merge({
                             width: '100%',
                             p: spacing,
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             gap: spacing,
-                            ...actionsSx,
-                        }}
+                        }, actionsSx)}
                     >
                         {actions}
                     </Box>
