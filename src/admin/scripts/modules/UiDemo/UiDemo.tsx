@@ -14,6 +14,7 @@ const uiDemoDefaultValues = {
     search: '',
     number: 0,
     select: '',
+    select2: '2',
     selectMultiple: [],
     checkbox: true,
     checkboxLabel: false,
@@ -21,9 +22,11 @@ const uiDemoDefaultValues = {
     switch: false,
     switchLabel: true,
     switchGroup: [ '2' ],
+    radio: '',
     radioGroup: '1',
     wysiwyg: '',
     slider: 0,
+    toggle: '3',
 };
 
 const UiDemo = () => {

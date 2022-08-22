@@ -19,9 +19,12 @@ import {
     Switch,
     SwitchLabel,
     SwitchGroup,
+    Radio,
     RadioGroup,
     Code,
     Slider,
+    Toggle,
+    Wysiwyg,
 } from '../../components';
 
 type UiDemoFormBaseProps = {
@@ -190,6 +193,35 @@ const UiDemoForm = (props: UiDemoFormProps) => {
                                             },
                                             {
                                                 id: '3',
+                                                value: '3',
+                                                children: 'Value 3',
+                                            },
+                                        ]}
+                                        inputRef={ref}
+                                        {...fieldRest}
+                                    />
+                                )}
+                            />
+                            <ControlledFormRow
+                                name="select2"
+                                label="Select with value"
+                                control={control}
+                                renderField={({ field: { ref, ...fieldRest }, id }) => (
+                                    <Select
+                                        id={id}
+                                        items={[
+                                            {
+                                                id: 's2.1',
+                                                value: '1',
+                                                children: 'Value 1',
+                                            },
+                                            {
+                                                id: 's2.2',
+                                                value: '2',
+                                                children: 'Value 2',
+                                            },
+                                            {
+                                                id: 's2.3',
                                                 value: '3',
                                                 children: 'Value 3',
                                             },
@@ -381,6 +413,21 @@ const UiDemoForm = (props: UiDemoFormProps) => {
                         >
 
                             <ControlledFormRow
+                                name="radio"
+                                label="Radio value"
+                                control={control}
+                                renderField={({ field: { ref, value, ...fieldRest }, id }) => (
+                                    <Radio
+                                        id={id}
+                                        checked={value === '33'}
+                                        value={'33'}
+                                        inputRef={ref}
+                                        {...fieldRest}
+                                    />
+                                )}
+                            />
+
+                            <ControlledFormRow
                                 name="radioGroup"
                                 label="Radio group value"
                                 control={control}
@@ -424,7 +471,7 @@ const UiDemoForm = (props: UiDemoFormProps) => {
                                     <Slider
                                         id={id}
                                         // inputRef={ref}
-                                        sx={{ my: '.5rem' }}
+                                        sx={{ my: .5 }}
                                         {...fieldRest}
                                     />
                                 )}
@@ -454,15 +501,58 @@ const UiDemoForm = (props: UiDemoFormProps) => {
                             title="Wysiwyg ❌"
                         >
 
-                            wysiwyg
+                            <ControlledFormRow
+                                name="wysiwyg"
+                                label="Wysiwyg"
+                                control={control}
+                                renderField={({ field: { ref, ...fieldRest }, id }) => (
+                                    <Wysiwyg
+                                        // id={id}
+                                        // inputRef={ref}
+                                        {...fieldRest}
+                                    />
+                                )}
+                                helpers={[ 'Some text helper' ]}
+                                errors={[ 'Some error text' ]}
+                            />
 
                         </Section>
 
                         <Section
-                            title="Toggle ❌"
+                            title="Toggle ✅"
                         >
 
-                            toggle
+                            <ControlledFormRow
+                                name="toggle"
+                                label="Toggle"
+                                control={control}
+                                renderField={({ field: { ref, ...fieldRest }, id }) => (
+                                    <Toggle
+                                        id={id}
+                                        // inputRef={ref}
+                                        size="small"
+                                        sx={{ mt: .5 }}
+                                        items={[
+                                            {
+                                                id: 'g4.1',
+                                                value: '1',
+                                                children: 'Value 1',
+                                            },
+                                            {
+                                                id: 'g4.2',
+                                                value: '2',
+                                                children: 'Value 2',
+                                            },
+                                            {
+                                                id: 'g4.3',
+                                                value: '3',
+                                                children: 'Value 3',
+                                            },
+                                        ]}
+                                        {...fieldRest}
+                                    />
+                                )}
+                            />
 
                         </Section>
 
@@ -475,29 +565,6 @@ const UiDemoForm = (props: UiDemoFormProps) => {
                         </Section>
 
                     </Stack>
-                    <Divider />
-                    <Code
-                        json={formValues}
-                        sx={{
-                            my: 2,
-                        }}
-                    />
-                    {/*
-                    <Box
-                        sx={{
-                            my: 2,
-                            p: 2,
-                            fontSize: '.75rem',
-                            backgroundColor: 'rgba(200,200,200,.25)',
-                        }}
-                    >
-                        <pre>
-                            <code>
-                                {JSON.stringify(formValues, null, 2)}
-                            </code>
-                        </pre>
-                    </Box>
-                    */}
                     <Stack
                         direction="row"
                         spacing={2}
@@ -518,6 +585,13 @@ const UiDemoForm = (props: UiDemoFormProps) => {
                             update changes
                         </Button>
                     </Stack>
+                    <Divider />
+                    <Code
+                        json={formValues}
+                        sx={{
+                            my: 2,
+                        }}
+                    />
                 </>
             </Form>
         </>

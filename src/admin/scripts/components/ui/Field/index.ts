@@ -5,3 +5,4 @@ export * from './Switch';
 export * from './Select';
 export * from './Slider';
 export * from './Toggle';
+export * from './Wysiwyg';
