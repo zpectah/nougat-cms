@@ -24,7 +24,7 @@ const uiDemoDefaultValues = {
     switchGroup: [ '2' ],
     radio: '',
     radioGroup: '1',
-    wysiwyg: '',
+    wysiwyg: '<p>Some value on start ... maybe it is HTML</p>',
     slider: 0,
     toggle: '3',
 };

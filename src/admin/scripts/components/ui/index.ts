@@ -18,3 +18,4 @@ export * from './Code';
 export * from './Backdrop';
 export * from './Preloader';
 export * from './BackdropPreloader';
+export * from './Icons';

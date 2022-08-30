@@ -565,26 +565,33 @@ const UiDemoForm = (props: UiDemoFormProps) => {
                         </Section>
 
                     </Stack>
-                    <Stack
-                        direction="row"
-                        spacing={2}
-                        alignItems="center"
-                        justifyContent="flex-start"
+                    <Box
                         sx={{
                             my: 2,
                         }}
                     >
-                        <Button
-                            secondary
+                        <FormRow
+                            emptyLabel
                         >
-                            revert changes
-                        </Button>
-                        <Button
-                            submit
-                        >
-                            update changes
-                        </Button>
-                    </Stack>
+                            <Stack
+                                direction="row"
+                                spacing={2}
+                                alignItems="center"
+                                justifyContent="flex-start"
+                            >
+                                <Button
+                                    secondary
+                                >
+                                    revert changes
+                                </Button>
+                                <Button
+                                    submit
+                                >
+                                    update changes
+                                </Button>
+                            </Stack>
+                        </FormRow>
+                    </Box>
                     <Divider />
                     <Code
                         json={formValues}
