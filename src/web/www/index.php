@@ -26,6 +26,10 @@ $no_js_text = __CONSTANTS['DEFAULTS']['no_js_text'];
     <noscript><?=($no_js_text)?></noscript>
     <?php $wvc -> render(); ?>
 </div>
+<script src="http://cdn.cms23/js/CookieConsentScope.js"></script>
+<script>
+    const cc = new CookieConsentScope({});
+</script>
 <script src="<?=($document['scripts'])?>?v=<?=(TIMESTAMP)?>"></script>
 </body>
 </html>

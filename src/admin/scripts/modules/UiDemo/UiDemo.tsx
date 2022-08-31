@@ -27,6 +27,7 @@ const uiDemoDefaultValues = {
     wysiwyg: '<p>Some value on start ... maybe it is HTML</p>',
     slider: 0,
     toggle: '3',
+    tagPicker: [],
 };
 
 const UiDemo = () => {

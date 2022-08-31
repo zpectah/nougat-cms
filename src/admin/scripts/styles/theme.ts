@@ -46,10 +46,6 @@ const themeCommonProps = {
     },
 };
 const paletteCommonProps = {
-    primary: {
-        main: palette.primary,
-        contrastText: palette.white,
-    },
     secondary: {
         main: palette.secondary,
         contrastText: palette.dark,
@@ -59,6 +55,10 @@ const paletteCommonProps = {
 const lightTheme = createTheme({
     palette: {
         mode: 'light',
+        primary: {
+            main: palette.primary,
+            contrastText: palette.white,
+        },
         ...paletteCommonProps,
     },
     ...themeCommonProps,
@@ -66,6 +66,10 @@ const lightTheme = createTheme({
 const darkTheme = createTheme({
     palette: {
         mode: 'dark',
+        primary: {
+            main: palette.blueGrey,
+            contrastText: palette.white,
+        },
         ...paletteCommonProps,
     },
     ...themeCommonProps,

@@ -6,3 +6,4 @@ export * from './Select';
 export * from './Slider';
 export * from './Toggle';
 export * from './Wysiwyg';
+export * from './TagPicker';

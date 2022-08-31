@@ -11,6 +11,8 @@ import {
     ControlledFormRow,
     Section,
     Input,
+    InputNumber,
+    InputPassword,
     Select,
     Button,
     Checkbox,
@@ -25,6 +27,7 @@ import {
     Slider,
     Toggle,
     Wysiwyg,
+    TagPicker,
 } from '../../components';
 
 type UiDemoFormBaseProps = {
@@ -160,6 +163,41 @@ const UiDemoForm = (props: UiDemoFormProps) => {
                                 renderField={({ field: { ref, ...fieldRest }, id }) => (
                                     <Input
                                         type="number"
+                                        id={id}
+                                        inputRef={ref}
+                                        {...fieldRest}
+                                    />
+                                )}
+                            />
+
+                        </Section>
+
+                        <Section
+                            title="Input with adornment ✅"
+                        >
+
+                            <ControlledFormRow
+                                name="number"
+                                label="Number value"
+                                control={control}
+                                renderField={({ field: { ref, ...fieldRest }, id }) => (
+                                    <InputNumber
+                                        id={id}
+                                        inputRef={ref}
+                                        min={0}
+                                        max={10}
+                                        step={2}
+                                        {...fieldRest}
+                                    />
+                                )}
+                            />
+
+                            <ControlledFormRow
+                                name="password"
+                                label="Password value"
+                                control={control}
+                                renderField={({ field: { ref, ...fieldRest }, id }) => (
+                                    <InputPassword
                                         id={id}
                                         inputRef={ref}
                                         {...fieldRest}
@@ -560,7 +598,18 @@ const UiDemoForm = (props: UiDemoFormProps) => {
                             title="Pickers ❌"
                         >
 
-                            pickers ... tag picker
+                            <ControlledFormRow
+                                name="tagPicker"
+                                label="Tag picker"
+                                control={control}
+                                renderField={({ field: { ref, ...fieldRest }, id }) => (
+                                    <TagPicker
+                                        id={id}
+                                        elementRef={ref}
+                                        {...fieldRest}
+                                    />
+                                )}
+                            />
 
                         </Section>
 

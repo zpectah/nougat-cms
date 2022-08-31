@@ -1,6 +1,6 @@
 // https://draftjs.org/
 
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { merge } from 'lodash';
 import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import { Editor, EditorProps } from 'react-draft-wysiwyg';
@@ -168,12 +168,12 @@ const Wysiwyg = (props: WysiwygProps) => {
 
     const [ editorState, setEditorState ] = useState<EditorState>(() => EditorState.createEmpty());
 
-    const editor: React.MutableRefObject<any> = React.useRef(inputRef);
+    const editor: React.MutableRefObject<any> = useRef(inputRef);
     const toolbar = {
         options: [
             'inline',
+            'blockType',
             'textAlign',
-            // 'blockType',
             'list',
             'link',
             'embedded',
@@ -187,6 +187,7 @@ const Wysiwyg = (props: WysiwygProps) => {
             // bold: {
             //     icon: 'B',
             // },
+            options: [ 'bold', 'italic', 'underline', 'strikethrough' ],
         },
     };
 
