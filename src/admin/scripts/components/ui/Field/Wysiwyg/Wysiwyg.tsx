@@ -1,6 +1,6 @@
 // https://draftjs.org/
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { merge } from 'lodash';
 import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import { Editor, EditorProps } from 'react-draft-wysiwyg';
@@ -8,8 +8,6 @@ import { convertToHTML } from 'draft-convert';
 import { Box, styled, BoxProps } from '@mui/material';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
-// import { Button } from '../../Button';
-import { useIcons } from '../../Icons';
 import defaultToolbar from './toolbar';
 
 const EditorWrapper = styled(Box)(({ theme }) => `
@@ -45,8 +43,7 @@ const EditorWrapper = styled(Box)(({ theme }) => `
             
         }
         &-editor{
-            height: 45vh; 
-            min-height: 300px;
+            min-height: 350px;
             margin: 0;
             padding: ${theme.spacing(2)};
             color: ${theme.palette.getContrastText(theme.palette.background.paper)};
@@ -61,10 +58,10 @@ const EditorWrapper = styled(Box)(({ theme }) => `
             display: flex;
             align-items: center;
             justify-content: center;
-            color: ${theme.palette.getContrastText(theme.palette.background.paper)};            
+            color: ${theme.palette.common.black};            
             border: 1px solid ${theme.palette.divider};
-            border-radius: ${theme.shape.borderRadius};
-            background-color: ${theme.palette.background.paper};     
+            border-radius: calc(${theme.shape.borderRadius} * 1px);
+            background-color: ${theme.palette.mode === 'light' ? theme.palette.background.paper : 'rgb(150,150,150)'};  
             text-decoration: none; 
             
             &:hover{
@@ -79,10 +76,11 @@ const EditorWrapper = styled(Box)(({ theme }) => `
         height: 36px;
         margin: 0;
         padding: 0;
-        gap: .125rem;          
+        gap: .125rem;
+        color: ${theme.palette.common.black};        
         border: 1px solid ${theme.palette.divider};
-        border-radius: ${theme.shape.borderRadius};
-        background-color: ${theme.palette.background.paper};      
+        border-radius: calc(${theme.shape.borderRadius} * 1px);
+        background-color: ${theme.palette.mode === 'light' ? theme.palette.background.paper : 'rgb(150,150,150)'};   
         
         &:hover{
             box-shadow: ${theme.shadows[1]};
@@ -99,15 +97,21 @@ const EditorWrapper = styled(Box)(({ theme }) => `
             padding: 0;
             gap: .125rem;  
         }
+        
+        & img, & svg{
+            fill: ${theme.palette.getContrastText(theme.palette.background.paper)};
+            color: ${theme.palette.getContrastText(theme.palette.background.paper)};                      
+        }
                               
     }
     .rdw-dropdown-wrapper{
         height: 36px;
-        margin: .15rem;
+        margin: 0;
         padding: 0 .15rem;
+        color: ${theme.palette.common.black};            
         border: 1px solid ${theme.palette.divider};
-        border-radius: ${theme.shape.borderRadius};
-        background-color: ${theme.palette.background.paper};    
+        border-radius: calc(${theme.shape.borderRadius} * 1px);
+        background-color: ${theme.palette.mode === 'light' ? theme.palette.background.paper : 'rgb(150,150,150)'};   
         
         &:hover{
             box-shadow: ${theme.shadows[1]};
@@ -120,6 +124,9 @@ const EditorWrapper = styled(Box)(({ theme }) => `
             background-color: transparent;
         }        
               
+    }
+    .rdw-dropdown-optionwrapper{
+        color: ${theme.palette.common.black};    
     }
     
 `);
@@ -135,36 +142,38 @@ const EditorActionbar = styled(Box)(({ theme }) => `
 `);
 
 type WysiwygBaseProps = {
+    id?: string,
     value?: string,
     onChange?: (html: string, editor: EditorState) => void,
     onFocus?: () => void,
     onBlur?: () => void,
     actions?: React.ReactNode,
     actionsSx?: BoxProps['sx'],
+    inputRef?: React.Ref<any>,
 }
 export type WysiwygProps = Partial<EditorProps> & WysiwygBaseProps
 
 const Wysiwyg = (props: WysiwygProps) => {
     const {
+        id,
         value,
         onChange,
         onFocus,
         onBlur,
         actions,
         actionsSx,
+        inputRef = null,
         ...rest
     } = props;
 
     const [ editorState, setEditorState ] = useState<EditorState>(() => EditorState.createEmpty());
-    const { formatBold } = useIcons();
 
-    const editor: React.MutableRefObject<any> = React.useRef(null);
-    // Icons: https://materialui.co/icons/
+    const editor: React.MutableRefObject<any> = React.useRef(inputRef);
     const toolbar = {
         options: [
             'inline',
-            'blockType',
             'textAlign',
+            // 'blockType',
             'list',
             'link',
             'embedded',
@@ -173,9 +182,11 @@ const Wysiwyg = (props: WysiwygProps) => {
             'history',
         ],
         inline: {
-            bold: {
-                icon: formatBold,
-            },
+            // Icons: https://materialui.co/icons/
+            //
+            // bold: {
+            //     icon: 'B',
+            // },
         },
     };
 
@@ -189,25 +200,24 @@ const Wysiwyg = (props: WysiwygProps) => {
         onChange && onChange(html, editorState);
     };
 
-    const renderCustomButtons = useMemo(() => {
-
-        return [
-            <a
-                href="#"
-                onClick={(e) => {
-                    e.preventDefault();
-                }}
-                className="ui-wysiwyg-button"
-            >
-                my link
-            </a>,
-        ]
-    }, []);
+    // const renderCustomButtons = useMemo(() => {
+    //
+    //     return [
+    //         <button
+    //             className="ui-wysiwyg-button"
+    //             onClick={(e) => {
+    //                 e.preventDefault();
+    //             }}
+    //         >
+    //             show html
+    //         </button>,
+    //     ]
+    // }, []);
 
     useEffect(() => setStateValueHandler(value), []);
 
     return (
-        <EditorWrapper>
+        <EditorWrapper id={id}>
             <Editor
                 ref={editor}
                 toolbar={merge(toolbar, defaultToolbar)}
@@ -215,7 +225,7 @@ const Wysiwyg = (props: WysiwygProps) => {
                 onEditorStateChange={changeHandler}
                 onFocus={onFocus && onFocus}
                 onBlur={onBlur && onBlur}
-                toolbarCustomButtons={renderCustomButtons}
+                // toolbarCustomButtons={renderCustomButtons}
                 wrapperClassName="ui-wysiwyg-wrapper"
                 toolbarClassName="ui-wysiwyg-toolbar"
                 editorClassName="ui-wysiwyg-editor"

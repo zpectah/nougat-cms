@@ -498,7 +498,7 @@ const UiDemoForm = (props: UiDemoFormProps) => {
                         </Section>
 
                         <Section
-                            title="Wysiwyg ❌"
+                            title="Wysiwyg ✅"
                         >
 
                             <ControlledFormRow
@@ -507,8 +507,8 @@ const UiDemoForm = (props: UiDemoFormProps) => {
                                 control={control}
                                 renderField={({ field: { ref, ...fieldRest }, id }) => (
                                     <Wysiwyg
-                                        // id={id}
-                                        // inputRef={ref}
+                                        id={id}
+                                        inputRef={ref}
                                         {...fieldRest}
                                     />
                                 )}
