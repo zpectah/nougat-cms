@@ -1,22 +1,51 @@
 const lodash = window._;
 
+const getTimestamp = () => Math.round(new Date().getTime()/1000);
+const getToken = (length = 12) => Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, length);
+const cookies = {
+    get: function (cname) {
+        let name = cname + '=';
+        let ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) === 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return '';
+    },
+    set: function (cname, cvalue, exdays) {
+        const d = new Date();
+        d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+        let expires = 'expires=' + d.toUTCString();
+        document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
+    },
+};
+
 class CookieConsentLayer {
 
     constructor(
         options = {},
         scope = 'default',
-        token = '6sd5f4g6sd5f4g',
+        token = null,
     ) {
+        this.uuid = token || getToken(6);
         this.state = {
             banner: {
                 init: false,
                 show: false,
+                destroyed: false,
             },
             dialog: {
                 init: false,
                 show: false,
+                destroyed: false,
             },
             language: options.language || 'en-US',
+            cookie: null,
         };
         this.preferences = {
             event: 'pending',
@@ -26,7 +55,7 @@ class CookieConsentLayer {
         };
         this.options = lodash.merge({
             meta: {
-                token,
+                token: this.uuid,
                 scope: scope,
                 revision: 0,
                 debug: true,
@@ -37,6 +66,7 @@ class CookieConsentLayer {
                 expiration: 365,
                 path: '/',
                 sameSite: 'Lax',
+                rfc: false,
             },
             scripts: {
                 autoload: true, // If true, check all scripts elements on page with: 'data-cc-scope="true"' ... or something similar
@@ -44,6 +74,7 @@ class CookieConsentLayer {
             },
             consent: {
                 force: true, // Display transparent layer above page
+                categories: [ 'necessary', 'analytics', 'marketing', 'others' ],
             },
             banner: {
                 id: 'CookieConsentScope_Banner',
@@ -70,7 +101,7 @@ class CookieConsentLayer {
                     },
                 },
             },
-            language: 'en-US',
+            language: 'en-US', // Default language
             locales: {
                 'en-US': {
                     common: {
@@ -87,6 +118,24 @@ class CookieConsentLayer {
                         primary: `I use cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want. For more details relative to cookies and other sensitive data, please read the full <a href="#">privacy policy</a>.`,
                         secondary: `This is secondary content block ... for some reasons ... with <a href="#" target="_blank">outer link</a> or <button type="button" data-ccl="hide_dialog">close dialog</button>`
                     },
+                    category: {
+                        necessary: {
+                            title: 'Strictly necessary cookies',
+                            description: 'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly',
+                        },
+                        analytics: {
+                            title: 'Analytics and performance cookies',
+                            description: 'These cookies allow the website to remember the choices you have made in the past',
+                        },
+                        marketing: {
+                            title: 'Marketing and advertisement cookies',
+                            description: 'These cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you',
+                        },
+                        others: {
+                            title: 'Other cookies',
+                            description: 'Other and not specified cookies',
+                        },
+                    },
                 },
                 'cs-CZ': {
                     common: {
@@ -102,6 +151,24 @@ class CookieConsentLayer {
                         title: 'Preference koláčků',
                         primary: `I use cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want. For more details relative to cookies and other sensitive data, please read the full <a href="#">privacy policy</a>.`,
                         secondary: `This is secondary content block ... for some reasons ... with <a href="#" target="_blank">outer link</a> or <button type="button" data-ccl="hide_dialog">close dialog</button>`
+                    },
+                    category: {
+                        necessary: {
+                            title: 'Nezbytné cookies pro provoz',
+                            description: 'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly',
+                        },
+                        analytics: {
+                            title: 'Analytické cookies',
+                            description: 'These cookies allow the website to remember the choices you have made in the past',
+                        },
+                        marketing: {
+                            title: 'Marketingové cookies',
+                            description: 'These cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you',
+                        },
+                        others: {
+                            title: 'Ostatní cookies',
+                            description: 'Other and not specified cookies',
+                        },
                     },
                 },
             },
@@ -125,8 +192,6 @@ class CookieConsentLayer {
         classPfx: 'ccl_',
     };
 
-    getTimestamp = () => Math.round(new Date().getTime()/1000);
-
     getState() {
         return this.state;
     }
@@ -134,14 +199,14 @@ class CookieConsentLayer {
         return this.preferences;
     }
 
-    setPreferences(event, allowed = [], declined = [], timestamp = null) {
-        this.preferences = {
-            event,
-            allowed,
-            declined,
-            timestamp: timestamp || this.getTimestamp(),
-        };
-    }
+    // setPreferences(event, allowed = [], declined = [], timestamp = null) {
+    //     this.preferences = {
+    //         event,
+    //         allowed,
+    //         declined,
+    //         timestamp: timestamp || this.getTimestamp(),
+    //     };
+    // }
 
 
     changeLanguage(lang = this.options.language, changeLanguage = true) {
@@ -175,75 +240,101 @@ class CookieConsentLayer {
 
     }
 
+    getCookie(name = this.options.cookie.name) {
+        return cookies.get(name);
+    }
+    setCookie(value, name = this.options.cookie.name, expiration = this.options.cookie.expiration) {
+        return cookies.set(name, value, expiration);
+    }
+    destroyCookie() {
+        // clear cookie row
+    }
 
     onAcceptAll() {
-        /* Triggers when user accept all */
-
-        // TODO: ... onAcceptAll
-        // console.log('onAcceptAll() ... triggered', cookie, preferences);
-
-        const cookie = {};
+        const allowed_cat = [ 'necessary', 'analytics', 'marketing', 'others' ]; // TODO
+        const declined_cat = []; // TODO
+        const timestamp = getTimestamp();
         const preferences = {
             event: 'all',
-            allowed: [ 'necessary' ],
-            declined: [ 'analytics', 'marketing', 'others' ],
-            timestamp: this.getTimestamp(),
+            allowed: allowed_cat,
+            declined: declined_cat,
+            timestamp,
+        };
+        const cookie = {
+            categories: allowed_cat,
+            consent_uuid: this.uuid,
+            revision: this.options.meta.revision,
+            rfc_cookie: this.options.cookie.rfc,
+            consent_date: "2022-09-01T20:48:54.496Z", // TODO
+            last_consent_update: "2022-09-01T20:48:54.496Z", // TODO
         };
 
-        this.preferences = preferences;
         this.banner.hide();
         this.dialog.hide();
-
+        this.preferences = preferences;
+        this.state.cookie = cookie;
+        this.setCookie(JSON.stringify(cookie));
         if (this.options.onAcceptAll) this.options.onAcceptAll(cookie, preferences);
     }
     onAcceptNecessary() {
-        /* Triggers when user accept only necessary */
-
-        // TODO: ... onAcceptNecessary
-        // console.log('onAcceptNecessary() ... triggered', cookie, preferences);
-
-        const cookie = {};
+        const allowed_cat = [ 'necessary' ]; // TODO
+        const declined_cat = [ 'analytics', 'marketing', 'others' ]; // TODO
+        const timestamp = getTimestamp();
         const preferences = {
-            event: 'all',
-            allowed: [ 'necessary', 'analytics', 'marketing', 'others' ],
-            declined: [],
-            timestamp: this.getTimestamp(),
+            event: 'necessary',
+            allowed: allowed_cat,
+            declined: declined_cat,
+            timestamp,
+        };
+        const cookie = {
+            categories: allowed_cat,
+            consent_uuid: this.uuid,
+            revision: this.options.meta.revision,
+            rfc_cookie: this.options.cookie.rfc,
+            consent_date: "2022-09-01T20:48:54.496Z", // TODO
+            last_consent_update: "2022-09-01T20:48:54.496Z", // TODO
         };
 
-        this.preferences = preferences;
         this.banner.hide();
         this.dialog.hide();
-
+        this.preferences = preferences;
+        this.state.cookie = cookie;
+        this.setCookie(JSON.stringify(cookie));
         if (this.options.onAcceptNecessary) this.options.onAcceptNecessary(cookie, preferences);
     }
     onSave() {
-        /* Triggers when user triggers save button */
-
-        // TODO: ... onSave
-        // console.log('onSave() ... triggered', cookie, preferences);
-
-        const cookie = {};
+        const allowed_cat = [ 'necessary' ]; // TODO
+        const declined_cat = []; // TODO
+        const timestamp = getTimestamp();
         const preferences = {
-            event: 'all',
-            // allowed: [ 'necessary', 'analytics', 'marketing', 'others' ],
-            allowed: [], // TODO
-            declined: [], // TODO
-            timestamp: this.getTimestamp(),
+            event: 'save',
+            allowed: allowed_cat,
+            declined: declined_cat,
+            timestamp,
+        };
+        const cookie = {
+            categories: allowed_cat,
+            consent_uuid: this.uuid,
+            revision: this.options.meta.revision,
+            rfc_cookie: this.options.cookie.rfc,
+            consent_date: "2022-09-01T20:48:54.496Z", // TODO
+            last_consent_update: "2022-09-01T20:48:54.496Z", // TODO
         };
 
-        this.preferences = preferences;
         this.banner.hide();
         this.dialog.hide();
-
+        this.preferences = preferences;
+        this.state.cookie = cookie;
+        this.setCookie(JSON.stringify(cookie));
         if (this.options.onSave) this.options.onSave(cookie, preferences);
     }
-    whenChange(cookie, preferences) {
+    whenChange() {
         /* Triggers when some values is changed */
 
-        // TODO: ... onChange
+        // TODO: ... onChange ... must be updated value
         // console.log('onChange() ... triggered', cookie, preferences);
 
-        if (this.options.onChange) this.options.whenChange(cookie, preferences);
+        if (this.options.onChange) this.options.whenChange(this.preferences);
 
     }
 
@@ -277,7 +368,22 @@ class CookieConsentLayer {
     // }
 
 
-    getCreatedElement(tagName, id = null, className = null, css = null, text = null, html = null, cclData = null) {
+    getCreatedElement(
+        tagName,
+        id = null,
+        className = null,
+        css = null,
+        text = null,
+        html = null,
+        cclData = null,
+        arias = {
+            label: null,
+            labeledBy: null,
+            modal: null,
+            hidden: null,
+            describedBy: null,
+        },
+    ) {
         const element = document.createElement(tagName);
         if (id) element.id = id;
         if (className) element.className = className;
@@ -285,10 +391,16 @@ class CookieConsentLayer {
         if (text) element.innerText = text;
         if (html) element.innerHTML = html;
         if (cclData) element.dataset.ccl = cclData;
+        if (arias) {
+            if (arias.label) element.ariaLabel = arias.label;
+            if (arias.labeledBy) element.ariaLabelledBy = arias.labeledBy;
+            if (arias.modal) element.ariaModal = arias.modal;
+            if (arias.hidden) element.ariaHidden = String(arias.hidden);
+            if (arias.describedBy) element.ariaDescribedBy = arias.describedBy;
+        }
 
         return element;
     }
-
     createBannerElement() {
         const locales = this.getLocales();
         const elWrapper = this.getCreatedElement(
@@ -296,6 +408,12 @@ class CookieConsentLayer {
             this.options.banner.id,
             `ccl_banner-wrapper`,
             'width:250px;height:200px;padding:1rem;background-color:gray;color:black;display:none;position:fixed;z-index:999;bottom:1rem;left:1rem;',
+            null,
+            null,
+            null,
+            {
+                hidden: true,
+            },
         );
         const elBody = this.getCreatedElement(
             'div',
@@ -344,7 +462,6 @@ class CookieConsentLayer {
         elWrapper.appendChild(elActions);
         document.body.appendChild(elWrapper);
     }
-
     createDialogElement() {
         const locales = this.getLocales();
         const elWrapper = this.getCreatedElement(
@@ -352,6 +469,12 @@ class CookieConsentLayer {
             this.options.dialog.id,
             `${this.c.classPfx}dialog-wrapper`,
             'width:500px;height:auto;min-height:300px;padding:1rem;background-color:grey;color:black;display:none;position:fixed;z-index:999;top:10rem;left:10rem;',
+            null,
+            null,
+            null,
+            {
+                hidden: true,
+            },
         );
         const elBody = this.getCreatedElement(
             'div',
@@ -421,6 +544,7 @@ class CookieConsentLayer {
             const elem = document.getElementById(this.options.banner.id);
 
             elem.style.display = 'block';
+            elem.ariaHidden = 'false';
 
             this.state.banner.show = true;
         },
@@ -428,21 +552,24 @@ class CookieConsentLayer {
             const elem = document.getElementById(this.options.banner.id);
 
             elem.style.display = 'none';
+            elem.ariaHidden = 'true';
 
             this.state.banner.show = false;
         },
         init: () => {
-            this.createBannerElement();
-
-            this.state.banner.init = true;
+            if (!this.state.dialog.destroyed) {
+                this.createBannerElement();
+                this.state.banner.init = true;
+            } else {
+                console.warn('Banner has been removed from DOM, try reload page');
+            }
         },
         destroy: () => {
             const elem = document.getElementById(this.options.banner.id);
-
             elem.remove();
-
             this.state.banner.init = false;
             this.state.banner.show = false;
+            this.state.banner.destroyed = true;
         },
     };
     dialog = {
@@ -450,6 +577,7 @@ class CookieConsentLayer {
             const elem = document.getElementById(this.options.dialog.id);
 
             elem.style.display = 'block';
+            elem.ariaHidden = 'false';
 
             this.state.dialog.show = true;
         },
@@ -457,21 +585,24 @@ class CookieConsentLayer {
             const elem = document.getElementById(this.options.dialog.id);
 
             elem.style.display = 'none';
+            elem.ariaHidden = 'true';
 
             this.state.dialog.show = false;
         },
         init: () => {
-            this.createDialogElement();
-
-            this.state.dialog.init = true;
+            if (!this.state.dialog.destroyed) {
+                this.createDialogElement();
+                this.state.dialog.init = true;
+            } else {
+                console.warn('Dialog has been removed from DOM, try reload page');
+            }
         },
         destroy: () => {
             const elem = document.getElementById(this.options.dialog.id);
-
             elem.remove();
-
             this.state.dialog.init = false;
             this.state.dialog.show = false;
+            this.state.dialog.destroyed = true;
         },
     };
 
@@ -479,47 +610,39 @@ class CookieConsentLayer {
 
 
     getWindowProps() {
-        // const options = this.options;
-        // options.onAcceptAll = this.onAcceptAll.bind(this);
-        // options.onAcceptNecessary = this.onAcceptNecessary.bind(this);
-        // options.onSave = this.onSave.bind(this);
-        // options.onChange = this.onChange.bind(this);
-
         return {
             options: this.options,
 
-            getState: this.getState.bind(this),
-            getPreferences: this.getPreferences.bind(this),
-            // changeLanguage: this.changeLanguage.bind(this),
-            initGlobalEvents: this.initGlobalEvents.bind(this), // If you want to bind button events after you added new button later
-            changeLanguage: this.changeLanguage.bind(this),
-            setLocalesContent: this.setLocalesContent.bind(this),
+            getState: this.getState.bind(this), // Returns current layer state
+            getPreferences: this.getPreferences.bind(this), // Returns current preferences
+            initGlobalEvents: this.initGlobalEvents.bind(this), // Initialize button events
+            changeLanguage: this.changeLanguage.bind(this), // Change language scope + setLocalesContent as default
+            setLocalesContent: this.setLocalesContent.bind(this), // Changes locales and replace content in banner & dialog
 
-            showBanner: this.banner.show.bind(this),
-            hideBanner: this.banner.hide.bind(this),
-            destroyBanner: this.banner.destroy.bind(this),
-            showDialog: this.dialog.show.bind(this),
-            hideDialog: this.dialog.hide.bind(this),
-            destroyDialog: this.dialog.destroy.bind(this),
+            showBanner: this.banner.show.bind(this), // Shows banner
+            hideBanner: this.banner.hide.bind(this), // Hides banner
+            destroyBanner: this.banner.destroy.bind(this), // Remove banner from DOM
+            showDialog: this.dialog.show.bind(this), // Shows dialog
+            hideDialog: this.dialog.hide.bind(this), // Hides dialog
+            destroyDialog: this.dialog.destroy.bind(this), // Remove dialog from DOM
 
         };
     }
-
     presenter() {
-
-        // TODO: logic, when creates ... and set some data
+        const cookie = this.getCookie();
 
         this.banner.init();
         this.dialog.init();
 
+        if (!cookie) {
+            this.banner.show();
+        } else {
+            this.state.cookie = JSON.parse(cookie);
+        }
     }
-
-
-
-
     init() {
         const windowsProps = this.getWindowProps();
-
+        window['CookieConsentLayer'] = windowsProps;
 
 
         //
@@ -528,7 +651,7 @@ class CookieConsentLayer {
 
 
 
-        window['CookieConsentLayer'] = windowsProps;
+
 
         this.presenter();
         this.initGlobalEvents();

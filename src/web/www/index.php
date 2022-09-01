@@ -62,14 +62,17 @@ $no_js_text = __CONSTANTS['DEFAULTS']['no_js_text'];
 
             onFirstAction: function(user_preferences, cookie){
                 // callback triggered only once on the first accept/reject action
+                console.log('onFirstAction', user_preferences, cookie);
             },
 
             onAccept: function (cookie) {
                 // callback triggered on the first accept/reject action, and after each page load
+                console.log('onAccept', cookie);
             },
 
             onChange: function (cookie, changed_categories) {
                 // callback triggered when user changes preferences after consent has already been given
+                console.log('onChange', changed_categories, cookie);
             },
 
             languages: {
