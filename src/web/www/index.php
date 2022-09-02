@@ -159,9 +159,9 @@ $no_js_text = __CONSTANTS['DEFAULTS']['no_js_text'];
 
 <!-- CookieConsentScope -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
-<script src="http://cdn.cms23/js/CookieConsentLayer.js"></script>
+<script src="http://cdn.cms23/js/CookieConsentLayer/CookieConsentLayer.js"></script>
 <script>
-    window.addEventListener('load', function(){
+    window.addEventListener('load', function() {
 
         const customOptions = {
             consent: {
@@ -176,16 +176,12 @@ $no_js_text = __CONSTANTS['DEFAULTS']['no_js_text'];
             onAcceptNecessary: function (cookie, preferences) {
                 console.log('custom onAcceptNecessary callback:', cookie, preferences);
             },
-            onSave: function (cookie, preferences) {
-                console.log('custom onSave callback:', cookie, preferences);
-            },
-            whenChange: function (preferences) {
-                // This is 'auto event trigger', when value of consent has changed, but not saved
-                console.log('custom whenChange callback:', preferences);
+            onChange: function (cookie, preferences) {
+                console.log('custom onChange callback:', cookie, preferences);
             },
         };
 
-        new CookieConsentLayer(
+        window.initCookieConsentLayer(
             customOptions,
             'demo',
             'sd2fg1sd2fg3sd12g3d',
