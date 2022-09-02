@@ -167,11 +167,6 @@ $no_js_text = __CONSTANTS['DEFAULTS']['no_js_text'];
             consent: {
                 force: true,
             },
-            meta: {
-                revision: 99,
-                debug: true,
-                delay: 1000,
-            },
             onAcceptAll: function (cookie, preferences) {
                 console.log('custom onAcceptAll callback:', cookie, preferences);
             },
