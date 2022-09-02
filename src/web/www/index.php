@@ -165,10 +165,12 @@ $no_js_text = __CONSTANTS['DEFAULTS']['no_js_text'];
 
         const customOptions = {
             consent: {
-                force: false,
+                force: true,
             },
             meta: {
-                revision: 7,
+                revision: 99,
+                debug: true,
+                delay: 1000,
             },
             onAcceptAll: function (cookie, preferences) {
                 console.log('custom onAcceptAll callback:', cookie, preferences);
