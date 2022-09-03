@@ -164,6 +164,9 @@ $no_js_text = __CONSTANTS['DEFAULTS']['no_js_text'];
     window.addEventListener('load', function() {
 
         const customOptions = {
+            meta: {
+                debug: true,
+            },
             consent: {
                 force: true,
             },

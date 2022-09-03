@@ -1,6 +1,7 @@
 /* Dependencies */
 const _ = window._;
 
+
 /* Helpers */
 const getTimestamp = () => Math.round(new Date().getTime()/1000);
 const getToken = (length = 12) => Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, length);
@@ -79,6 +80,7 @@ const createElement = ({
 
     return element;
 };
+
 
 /* Default values */
 const defaultState = {
@@ -253,9 +255,13 @@ const defaultOptions = {
                     title: 'Marketing and advertisement cookies',
                     description: 'These cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you',
                 },
-                others: {
-                    title: 'Other cookies',
-                    description: 'Other and not specified cookies',
+                functional: {
+                    title: 'Functional cookies',
+                    description: 'Functional and not specified cookies',
+                },
+                personalization: {
+                    title: 'Personalization cookies',
+                    description: 'Personalization and not specified cookies',
                 },
             },
         },
@@ -289,9 +295,13 @@ const defaultOptions = {
                     title: 'Marketingové cookies',
                     description: 'These cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you',
                 },
-                others: {
-                    title: 'Ostatní cookies',
-                    description: 'Other and not specified cookies',
+                functional: {
+                    title: 'Functional cookies',
+                    description: 'Functional and not specified cookies',
+                },
+                personalization: {
+                    title: 'Personalization cookies',
+                    description: 'Personalization and not specified cookies',
                 },
             },
         },
@@ -300,6 +310,7 @@ const defaultOptions = {
     onAcceptNecessary: function (cookie, preferences) { console.log('CCL Callback onAcceptNecessary()', cookie, preferences) },
     onChange: function (cookie, preferences) { console.log('CCL Callback onChange()', cookie, preferences) },
 };
+
 
 /* Class */
 class CookieConsentLayer {
@@ -315,13 +326,14 @@ class CookieConsentLayer {
     }
 
 
+    /* Static constants */
     tokens = {
         // Keep these tokens unchanged -->
         ROOT: 'CookieConsentLayer',
-        BTN_ACCEPT_ALL_ID: 'button-acceptAll',
-        BTN_ACCEPT_NECESSARY_ID: 'button-acceptNecessary',
-        BTN_SAVE_ID: 'button-save',
-        REVISION_ALERT_ID: 'revision-alert',
+        BTN_ACCEPT_ALL_CCL: 'button_acceptAll',
+        BTN_ACCEPT_NECESSARY_CCL: 'button_acceptNecessary',
+        BTN_SAVE_CCL: 'button_save',
+        REVISION_ALERT_CCL: 'revision_alert',
         BTN_SHOW_DIALOG_CCL: 'show_dialog',
         BTN_HIDE_DIALOG_CCL: 'hide_dialog',
         BTN_SHOW_BANNER_CCL: 'show_banner',
@@ -329,7 +341,7 @@ class CookieConsentLayer {
         CATEGORIES_TABLE_CCL: 'categories_table',
         // <--
     };
-    eventHandlers = {
+    events = {
         showBanner: (e) => {
             e.preventDefault();
             this.banner.show();
@@ -354,9 +366,20 @@ class CookieConsentLayer {
             e.preventDefault();
             this.onAcceptAllHandler();
         },
-        change: (e) => {
+        saveChanges: (e) => {
             e.preventDefault();
             this.onChangeHandler();
+        },
+    };
+    nodes = {
+        btn: {
+            showDialog: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_SHOW_DIALOG_CCL}"]`),
+            hideDialog: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_HIDE_DIALOG_CCL}"]`),
+            showBanner: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_SHOW_BANNER_CCL}"]`),
+            hideBanner: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_HIDE_BANNER_CCL}"]`),
+            acceptAll: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_ACCEPT_ALL_CCL}"]`),
+            acceptNecessary: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_ACCEPT_NECESSARY_CCL}"]`),
+            saveChanges: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_SAVE_CCL}"]`),            
         },
     };
     banner = {
@@ -441,7 +464,7 @@ class CookieConsentLayer {
     };
     layout = {
         bannerBody: (title, content, revision = null) => {
-            return `<div>${title}</div>${revision ? `<div id="${this.tokens.REVISION_ALERT_ID}">${revision}</div>` : ''}<div>${content}</div>`;
+            return `<div>${title}</div>${revision ? `<div id="${this.tokens.REVISION_ALERT_CCL}">${revision}</div>` : ''}<div>${content}</div>`;
         },
         dialogBody: (title, primary, secondary, close) => {
             return `<button type="button" data-ccl="${this.tokens.BTN_HIDE_DIALOG_CCL}">${close}</button><div>${title}</div><div>${primary}</div><div data-ccl-target="${this.tokens.CATEGORIES_TABLE_CCL}"> Loading, please wait </div>${secondary ? `<div>${secondary}</div>` : ''}`;
@@ -460,7 +483,7 @@ class CookieConsentLayer {
         return this.options;
     }
     log(...args) {
-        if (this.options.meta.debug) console.log(args);
+        if (this.options.meta.debug) console.log(...args);
     }
 
 
@@ -476,23 +499,23 @@ class CookieConsentLayer {
         const cookieData = this.getCookieData();
         const locales = this.getLocales(lang);
         const body = document.body;
-        const elBtnAcceptAll = body.querySelectorAll(`[data-ccl="${this.tokens.BTN_ACCEPT_ALL_ID}"]`);
-        const elBtnAcceptNecessary = body.querySelectorAll(`[data-ccl="${this.tokens.BTN_ACCEPT_NECESSARY_ID}"]`);
-        const elBtnSave = body.querySelectorAll(`[data-ccl="${this.tokens.BTN_SAVE_ID}"]`);
+        const elBtnAcceptAll = body.querySelectorAll(`[data-ccl="${this.tokens.BTN_ACCEPT_ALL_CCL}"]`);
+        const elBtnAcceptNecessary = body.querySelectorAll(`[data-ccl="${this.tokens.BTN_ACCEPT_NECESSARY_CCL}"]`);
+        const elBtnSave = body.querySelectorAll(`[data-ccl="${this.tokens.BTN_SAVE_CCL}"]`);
         const elBannerBodyHtml = document.getElementById(`${this.options.banner.id}_body`);
         const elDialogBodyHtml = document.getElementById(`${this.options.dialog.id}_body`);
-
-        elBtnAcceptAll.forEach((elem) => {
-            elem.innerText = `${locales.common.buttonAcceptAll}`;
+        elBtnAcceptAll.forEach((node) => {
+            node.innerText = `${locales.common.buttonAcceptAll}`;
         });
-        elBtnAcceptNecessary.forEach((elem) => {
-            elem.innerText = `${locales.common.buttonAcceptNecessary}`;
+        elBtnAcceptNecessary.forEach((node) => {
+            node.innerText = `${locales.common.buttonAcceptNecessary}`;
         });
-        elBtnSave.forEach((elem) => {
-            elem.innerText = `${locales.common.buttonChange}`;
+        elBtnSave.forEach((node) => {
+            node.innerText = `${locales.common.buttonChange}`;
         });
         elBannerBodyHtml.innerHTML = this.layout.bannerBody(locales.banner.title, locales.banner.content, cookieData.isExpiredRevision && locales.revisionAlert);
         elDialogBodyHtml.innerHTML = this.layout.dialogBody(locales.dialog.title, locales.dialog.primary, locales.dialog.secondary, locales.common.buttonClose);
+        this.renderCategoryTable();
     }
 
 
@@ -611,32 +634,62 @@ class CookieConsentLayer {
     }
 
 
-    /* Button events */
+    /* Global button events */
     initGlobalEvents() {
-        const openDialogButton = document.querySelector(`[data-ccl="${this.tokens.BTN_SHOW_DIALOG_CCL}"]`);
-        const closeDialogButton = document.querySelector(`[data-ccl="${this.tokens.BTN_HIDE_DIALOG_CCL}"]`);
-        const openBannerButton = document.querySelector(`[data-ccl="${this.tokens.BTN_SHOW_BANNER_CCL}"]`);
-        const closeBannerButton = document.querySelector(`[data-ccl="${this.tokens.BTN_HIDE_BANNER_CCL}"]`);
-
-        openDialogButton && openDialogButton.addEventListener('click', this.eventHandlers.showDialog);
-        closeDialogButton && closeDialogButton.addEventListener('click', this.eventHandlers.hideDialog);
-        openBannerButton && openBannerButton.addEventListener('click', this.eventHandlers.showBanner);
-        closeBannerButton && closeBannerButton.addEventListener('click', this.eventHandlers.hideBanner);
+        this.nodes.btn.showDialog().forEach((node) => { node.addEventListener('click', this.events.showDialog) });
+        this.nodes.btn.hideDialog().forEach((node) => { node.addEventListener('click', this.events.hideDialog) });
+        this.nodes.btn.showBanner().forEach((node) => { node.addEventListener('click', this.events.showBanner) });
+        this.nodes.btn.hideBanner().forEach((node) => { node.addEventListener('click', this.events.hideBanner) });
+        this.nodes.btn.acceptAll().forEach((node) => { node.addEventListener('click', this.events.acceptAll) });
+        this.nodes.btn.acceptNecessary().forEach((node) => { node.addEventListener('click', this.events.acceptNecessary) });
+        this.nodes.btn.saveChanges().forEach((node) => { node.addEventListener('click', this.events.saveChanges) });        
     }
     removeGlobalEvents() {
-        const openDialogButton = document.querySelector(`[data-ccl="${this.tokens.BTN_SHOW_DIALOG_CCL}"]`);
-        const closeDialogButton = document.querySelector(`[data-ccl="${this.tokens.BTN_HIDE_DIALOG_CCL}"]`);
-        const openBannerButton = document.querySelector(`[data-ccl="${this.tokens.BTN_SHOW_BANNER_CCL}"]`);
-        const closeBannerButton = document.querySelector(`[data-ccl="${this.tokens.BTN_HIDE_BANNER_CCL}"]`);
-
-        openDialogButton && openDialogButton.removeEventListener('click', this.eventHandlers.showDialog);
-        closeDialogButton && closeDialogButton.removeEventListener('click', this.eventHandlers.hideDialog);
-        openBannerButton && openBannerButton.removeEventListener('click', this.eventHandlers.showBanner);
-        closeBannerButton && closeBannerButton.removeEventListener('click', this.eventHandlers.hideBanner);
+        this.nodes.btn.showDialog().forEach((node) => { node.removeEventListener('click', this.events.showDialog) });
+        this.nodes.btn.hideDialog().forEach((node) => { node.removeEventListener('click', this.events.hideDialog) });
+        this.nodes.btn.showBanner().forEach((node) => { node.removeEventListener('click', this.events.showBanner) });
+        this.nodes.btn.hideBanner().forEach((node) => { node.removeEventListener('click', this.events.hideBanner) });
+        this.nodes.btn.acceptAll().forEach((node) => { node.removeEventListener('click', this.events.acceptAll) });
+        this.nodes.btn.acceptNecessary().forEach((node) => { node.removeEventListener('click', this.events.acceptNecessary) });
+        this.nodes.btn.saveChanges().forEach((node) => { node.removeEventListener('click', this.events.saveChanges) });
     }
 
 
     /* Renderers */
+    renderCategoryTable() {
+        const locales = this.getLocales();
+        const targets = document.querySelectorAll(`[data-ccl-target="${this.tokens.CATEGORIES_TABLE_CCL}"]`);
+
+        // Wrapper for categories
+        const _wrapper = createElement({
+            css: `width:100%;`,
+        });
+
+        this.options.consent.categories.map((ctg) => {
+            const _ctg = createElement({});
+            _ctg.appendChild(createElement({
+                css: `width:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;`,
+                html: `<div>${locales.categories[ctg].title ? locales.categories[ctg].title : `no-value-set:locales.categories[${ctg}].title`}</div><div>${locales.categories[ctg].description ? locales.categories[ctg].description : `no-value-set:locales.categories[${ctg}].description`}</div>`,
+            }));
+            _ctg.appendChild(createElement({
+                tag: 'table',
+                css: `width:100%;`,
+                html: `<thead><tr><th>table ...</th></tr></thead>`,
+            }));
+            _wrapper.appendChild(_ctg);
+        });
+
+        // Table for each category
+        const _table = createElement({
+            tag: 'table',
+            css: `width:100%;`,
+        });
+
+        targets && targets.forEach((node) => {
+            node.innerHTML = ``;
+            node.appendChild(_wrapper);
+        });
+    }
     renderBannerElement() {
         const cookieData = this.getCookieData();
         const locales = this.getLocales();
@@ -662,12 +715,9 @@ class CookieConsentLayer {
             id: this.options.banner.btnAcceptAllId,
             className: `${this.options.meta.classPrefix}button ${this.options.meta.classPrefix}button-primary`,
             text: `${locales.common.buttonAcceptAll}`,
-            cclData: this.tokens.BTN_ACCEPT_ALL_ID,
+            cclData: this.tokens.BTN_ACCEPT_ALL_CCL,
             arias: {
                 label: `button`,
-            },
-            on: {
-                click: this.eventHandlers.acceptAll,
             },
         });
         const _btnAcceptNecessary = createElement({
@@ -675,15 +725,11 @@ class CookieConsentLayer {
             id: this.options.banner.btnAcceptNecessaryId,
             className: `${this.options.meta.classPrefix}button`,
             text: `${locales.common.buttonAcceptNecessary}`,
-            cclData: this.tokens.BTN_ACCEPT_NECESSARY_ID,
+            cclData: this.tokens.BTN_ACCEPT_NECESSARY_CCL,
             arias: {
                 label: `button`,
             },
-            on: {
-                click: this.eventHandlers.acceptNecessary,
-            },
         });
-
         _actions.appendChild(_btnAcceptAll);
         _actions.appendChild(_btnAcceptNecessary);
         _wrapper.appendChild(_body);
@@ -714,12 +760,9 @@ class CookieConsentLayer {
             id: this.options.dialog.btnAcceptAllId,
             className: `${this.options.meta.classPrefix}button ${this.options.meta.classPrefix}button-primary`,
             text: `${locales.common.buttonAcceptAll}`,
-            cclData: this.tokens.BTN_ACCEPT_ALL_ID,
+            cclData: this.tokens.BTN_ACCEPT_ALL_CCL,
             arias: {
                 label: `button`,
-            },
-            on: {
-                click: this.eventHandlers.acceptAll,
             },
         });
         const _btnAcceptNecessary = createElement({
@@ -727,12 +770,9 @@ class CookieConsentLayer {
             id: this.options.dialog.btnAcceptNecessaryId,
             className: `${this.options.meta.classPrefix}button`,
             text: `${locales.common.buttonAcceptNecessary}`,
-            cclData: this.tokens.BTN_ACCEPT_NECESSARY_ID,
+            cclData: this.tokens.BTN_ACCEPT_NECESSARY_CCL,
             arias: {
                 label: `button`,
-            },
-            on: {
-                click: this.eventHandlers.acceptNecessary,
             },
         });
         const _btnSave = createElement({
@@ -740,21 +780,18 @@ class CookieConsentLayer {
             id: this.options.dialog.btnSaveId,
             className: `${this.options.meta.classPrefix}button`,
             text: `${locales.common.buttonChange}`,
-            cclData: this.tokens.BTN_SAVE_ID,
+            cclData: this.tokens.BTN_SAVE_CCL,
             arias: {
                 label: `button`,
             },
-            on: {
-                click: this.eventHandlers.change,
-            },
         });
-
         _actions.appendChild(_btnAcceptAll);
         _actions.appendChild(_btnAcceptNecessary);
         _actions.appendChild(_btnSave);
         _wrapper.appendChild(_body);
         _wrapper.appendChild(_actions);
         document.body.appendChild(_wrapper);
+        this.renderCategoryTable();
     }
 
 
@@ -768,7 +805,7 @@ class CookieConsentLayer {
             initGlobalEvents: this.initGlobalEvents.bind(this), // Initialize button events
             removeGlobalEvents: this.removeGlobalEvents.bind(this), // Remove button events
             changeLanguage: this.changeLanguage.bind(this), // Change language scope + setLocalesContent as default
-            setLocalesContent: this.setLocalesContent.bind(this), // Changes locales and replace content in banner & dialog
+            setLocalesContent: this.setLocalesContent.bind(this), // Changes locales and replace content in banner & dialog, also render category table
             showBanner: this.banner.show.bind(this), // Shows banner
             hideBanner: this.banner.hide.bind(this), // Hides banner
             destroyBanner: this.banner.destroy.bind(this), // Remove banner from DOM
@@ -791,6 +828,7 @@ class CookieConsentLayer {
             this.banner.show(this.options.meta.delay);
         } else {
             this.state.cookie = cookieData.current;
+            this.log('cookieData', cookieData);
 
             // Check when revision has changed
             if (cookieData.isExpiredRevision) {
@@ -824,12 +862,12 @@ class CookieConsentLayer {
     init() {
         const windowsProps = this.getWindowProps();
         window[this.tokens.ROOT] = windowsProps;
-        this.log(`${this.tokens.ROOT}: init(): `, windowsProps);
         this.presenter();
         this.initGlobalEvents();
         this.state.preferences.event = 'init';
         this.state.preferences.timestamp = getTimestamp();
         this.state.init = true;
+        this.log(`${this.tokens.ROOT}: init(): `, windowsProps);
     }
 
 }
