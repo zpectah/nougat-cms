@@ -380,7 +380,6 @@ const defaultOptions = {
 /* Class */
 class CookieConsentLayer {
 
-
     /* Static constants */
     tokens = {
         // Keep these constants unchanged -->
@@ -503,7 +502,31 @@ class CookieConsentLayer {
             return `${_close}${_title}${_primary}${_table}${_secondary}`;
         },
     };
+    cookies = {
+        get: (name = this.options.cookie.name) => {
+            const value = cookies.get(name);
 
+            return value && (this.options.cookie.rfc ? JSON.parse(decodeURIComponent(value)) : JSON.parse(value));
+        },
+        set: (value, name = this.options.cookie.name, expiration = this.options.cookie.expiration) => {
+            const parsedValue = this.options.cookie.rfc ? encodeURIComponent(JSON.stringify(value)) : JSON.stringify(value);
+            cookies.set(name, parsedValue, expiration);
+        },
+        destroy: (name = this.options.cookie.name) => this.cookies.set(null, name, -1),
+        getData: () => {
+            const cookie = this.cookies.get();
+            const today = new Date();
+            const updated = cookie.dateUpdated;
+            console.log('compare two dates, if date is expired ... (updated + expiration) >= today ... ', today.toISOString(), updated)
+            return {
+                current: cookie,
+                createdDate: updated || today.toISOString(),
+                updatedDate: today.toISOString(),
+                isExpiredDate: false, // TODO: compare dates with cookie expiration
+                isExpiredRevision: cookie && (cookie.revision !== this.options.meta.revision),
+            };
+        },
+    };
 
     /* Class constructor */
     constructor(
@@ -514,8 +537,6 @@ class CookieConsentLayer {
         this.uuid = uuid || getToken(6); // Instance UUID
         this.state = _.cloneDeep(defaultState); // Inner component state
         this.options = _.merge(defaultOptions, options); // Merged options object
-
-        /* Constants */
         this.selectors = {
             btn: {
                 acceptAllClassName: `${this.options.meta.classPrefix}button ${this.options.meta.classPrefix}button-primary`,
@@ -549,8 +570,11 @@ class CookieConsentLayer {
             categoryRows: {
                 categoryRowClassName: `${this.options.meta.classPrefix}category-row`,
                 categoryOuterClassName: `${this.options.meta.classPrefix}category-outer`,
-                categoryInnerClassName: `${this.options.meta.classPrefix}category-inner`,
+                categoryRowInnerClassName: `${this.options.meta.classPrefix}category-row-inner`,
                 categoryTableClassName: `${this.options.meta.classPrefix}category-table`,
+            },
+            state: {
+                isChecked: 'is-checked',
             },
         };
         this.nodes = {
@@ -598,10 +622,8 @@ class CookieConsentLayer {
                 this.toggleCategoryHandler(category, e);
             },
         };
-
-        this.init(); // Triggered once when class is loaded
+        this.init();
     }
-
 
     /* References, utils, common */
     getState() {
@@ -624,6 +646,23 @@ class CookieConsentLayer {
         this.state.history.push(arg);
     }
 
+    /* Scripts */
+    scriptsAutoloadController(event, data) {
+        if (this.options.scripts.autoload) {
+            // TODO: handle selected cookie category with loaded cookies ...
+            // toggle remove or call selected ...
+            console.log('Trigger: scriptsAutoloadController -> autoload features', event, data);
+        }
+    }
+    
+    /* Cookies */
+    cookieLoaderController(event, data) {
+        if (this.options.scripts.autoClearCookies) {
+            // TODO: Handle browser cookies when user save new settings
+            // get a list of current cookies and compare to categories which is accepted and delete rest
+            console.log('Trigger: cookieAutoloader() -> autoClearCookies features', event, data);
+        }
+    }
 
     /* Languages and locales */
     changeLanguage(lang = this.options.language, changeLanguage = true) {
@@ -634,7 +673,7 @@ class CookieConsentLayer {
         return this.options.locales[lang];
     }
     setLocalesContent(lang = this.state.language) {
-        const cookieData = this.getCookieData();
+        const cookieData = this.cookies.getData();
         const locales = this.getLocales(lang);
         const elBannerBodyHtml = document.getElementById(this.selectors.banner.bodyId);
         const elDialogBodyHtml = document.getElementById(this.selectors.dialog.bodyId);
@@ -652,71 +691,30 @@ class CookieConsentLayer {
         this.renderCategoryTable();
         this.log(`Locales has been re-rendered. New language set to "${lang}"`);
     }
-
-
-    /* Cookies */
-    getCookie(name = this.options.cookie.name) {
-        const value = cookies.get(name);
-
-        return value && (this.options.cookie.rfc ? JSON.parse(decodeURIComponent(value)) : JSON.parse(value));
-    }
-    setCookie(value, name = this.options.cookie.name, expiration = this.options.cookie.expiration) {
-        const parsedValue = this.options.cookie.rfc ? encodeURIComponent(JSON.stringify(value)) : JSON.stringify(value);
-        cookies.set(name, parsedValue, expiration);
-    }
-    destroyCookie(name = this.options.cookie.name) {
-        this.setCookie(null, name, -1);
-    }
-    getCookieData() {
-        const cookie = this.getCookie();
-        const today = new Date();
-        const updated = cookie.dateUpdated;
-        console.log('compare two dates, if date is expired ... (updated + expiration) >= today ... ', today.toISOString(), updated)
-        return {
-            current: cookie,
-            createdDate: updated || today.toISOString(),
-            updatedDate: today.toISOString(),
-            isExpiredDate: false, // TODO: compare dates with cookie expiration
-            isExpiredRevision: cookie && (cookie.revision !== this.options.meta.revision),
-        };
-    }
-    cookieScriptsController() {
-        // get a list of current cookies and compare to categories which is accepted and delete rest
-        // toggle remove or call selected ...
-        if (this.options.scripts.autoload) {
-            // TODO: handle selected cookie category with loaded cookies ...
-            console.log('Trigger: cookieAutoloader() -> autoload features');
-        }
-        if (this.options.scripts.autoClearCookies) {
-            // TODO: Handle browser cookies when user save new settings
-            console.log('Trigger: cookieAutoloader() -> autoClearCookies features');
-        }
-    }
-
-
+    
     /* Main callback handlers */
     getCallbackData(event) {
-        const cookieData = this.getCookieData();
+        const cookieData = this.cookies.getData();
         let categoriesAccepted, categoriesDeclined, categoriesChanged;
         switch (event) {
 
             case 'custom':
-                categoriesAccepted = this.state.preferences.accepted;
-                categoriesDeclined = this.state.preferences.declined;
-                categoriesChanged = this.state.preferences.changed;
+                categoriesAccepted = [ ...this.state.preferences.accepted ];
+                categoriesDeclined = [ ...this.state.preferences.declined ];
+                categoriesChanged = [ ...this.state.preferences.changed ];
                 break;
 
             case 'all':
                 categoriesAccepted = [ ...this.options.consent.categories ];
                 categoriesDeclined = [];
-                categoriesChanged = this.state.preferences.accepted.filter(x => categoriesAccepted.includes(x));
+                categoriesChanged = this.state.preferences.accepted.filter(x => this.options.consent.categories.includes(x));
                 break;
 
             case 'necessary':
             default:
-                categoriesAccepted = [ 'necessary' ];
-                categoriesDeclined = [ 'analytics', 'marketing', 'functional', 'personalization' ];
-                categoriesChanged = this.state.preferences.accepted.filter(x => categoriesAccepted.includes(x));
+                categoriesAccepted = [ ...this.options.consent.necessaryCategories ];
+                categoriesDeclined = [ ...this.options.consent.categories.filter(x => !this.options.consent.necessaryCategories.includes(x)) ];
+                categoriesChanged = this.state.preferences.accepted.filter(x => this.options.consent.necessaryCategories.includes(x));
                 break;
 
         }
@@ -748,10 +746,11 @@ class CookieConsentLayer {
         this.dialog.hide();
         this.state.preferences = preferences;
         this.state.cookie = cookie;
-        this.setCookie(cookie);
+        this.cookies.set(cookie);
         this.adjustToggleStates();
         this.pushHistory(event);
-        this.cookieScriptsController();
+        this.cookieLoaderController(event, data);
+        this.scriptsAutoloadController(event, data);
         if (callback && typeof callback === 'function') {
             callback(cookie, preferences);
         }
@@ -766,7 +765,6 @@ class CookieConsentLayer {
     onChangeHandler() {
         this.eventCallbackHelper('custom', this.options.onChange);
     }
-
 
     /* Toggle handlers */
     toggleCategoryHandler(ctg, event) {
@@ -791,7 +789,7 @@ class CookieConsentLayer {
         if (event && event.target) {
             const checked = _.indexOf(accepted, ctg) > -1;
             event.target.checked = checked && 'checked';
-            event.target.classList.toggle('is-checked', checked);
+            event.target.classList.toggle(this.selectors.state.isChecked, checked);
         }
         this.state.categories.dirty = true;
         this.log('toggleCategoryHandler', accepted, declined, changed);
@@ -805,11 +803,10 @@ class CookieConsentLayer {
             nodes.forEach((node) => {
                 const checked = list.indexOf(ctg) > -1;
                 node.checked = checked && 'checked';
-                node.classList.toggle('is-checked', checked);
+                node.classList.toggle(this.selectors.state.isChecked, checked);
             });
         });
     }
-
 
     /* Event listeners */
     initButtonEvents() {
@@ -855,7 +852,6 @@ class CookieConsentLayer {
         this.log(`Categories toggle events destroyed`);
     }
 
-
     /* Renderers */
     renderCategoryTable(showTable = true) {
         const locales = this.getLocales();
@@ -868,8 +864,9 @@ class CookieConsentLayer {
             return `<label><input type="checkbox" value="${category}" ${this.tokens.DATA_CCL_TOGGLE}="${key}" ${disabled ? 'disabled' : ''} /></label>`;
         };
         const getCategoryContent = (ctg) => {
-            const _title = `<div>${locales.categories[ctg].title ? locales.categories[ctg].title : `...`}</div>`;
-            const _description = `<div>${locales.categories[ctg].description ? locales.categories[ctg].description : `...`}</div>`;
+            const loc = locales.categories[ctg];
+            const _title = `<div>${loc.title ? loc.title : `...`}</div>`;
+            const _description = `<div>${loc.description ? loc.description : `...`}</div>`;
             const _checkbox = `<div>${getCategoryToggle(ctg)}</div>`;
 
             return `<div>${_title}${_description}</div>${_checkbox}`;
@@ -897,7 +894,6 @@ class CookieConsentLayer {
             return `${_colgroup}${_heading}${_body}`;
         };
         const _category = createElement({
-            css: `width:100%;`,
             className: this.selectors.categoryRows.categoryOuterClassName,
         });
         categories.map((ctg) => {
@@ -906,14 +902,12 @@ class CookieConsentLayer {
                 className: this.selectors.categoryRows.categoryRowClassName,
             });
             _ctg.appendChild(createElement({
-                className: this.selectors.categoryRows.categoryInnerClassName,
-                css: `width:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;`,
+                className: this.selectors.categoryRows.categoryRowInnerClassName,
                 html: getCategoryContent(ctg),
             }));
             showTable && _ctg.appendChild(createElement({
                 tag: 'table',
                 className: this.selectors.categoryRows.categoryTableClassName,
-                css: `width:100%;`,
                 html: getCategoryTableContent(ctg),
             }));
             _category.appendChild(_ctg);
@@ -930,12 +924,11 @@ class CookieConsentLayer {
         this.adjustToggleStates();
     }
     renderBannerElement() {
-        const cookieData = this.getCookieData();
+        const cookieData = this.cookies.getData();
         const locales = this.getLocales();
         const _wrapper = createElement({
             id: this.selectors.banner.wrapperId,
             className: this.selectors.banner.wrapperClassName,
-            css: `width:250px;min-height:100px;padding:1rem;background-color:gray;color:black;display:none;position:fixed;z-index:999;bottom:1rem;left:1rem;`,
             arias: {
                 hidden: true,
             },
@@ -972,7 +965,6 @@ class CookieConsentLayer {
         const _wrapper = createElement({
             id: this.selectors.dialog.wrapperId,
             className: this.selectors.dialog.wrapperClassName,
-            css: `width:50vw;height:auto;min-height:300px;max-height:50vh;overflow:scroll;padding:1rem;background-color:grey;color:black;display:none;position:fixed;z-index:999;top:10rem;left:25vw;`,
             arias: {
                 hidden: true,
             },
@@ -1013,10 +1005,9 @@ class CookieConsentLayer {
         this.options.consent.showCategory && this.renderCategoryTable(this.options.consent.showCategoryTable);
     }
 
-
     /* Presenters & controllers */
     presenter() {
-        const cookieData = this.getCookieData();
+        const cookieData = this.cookies.getData();
 
         // Initializing elements,but keep them hide until logic decides
         this.banner.init();
@@ -1080,7 +1071,6 @@ class CookieConsentLayer {
 
     }
 
-
     init() {
         const windowsProps = {
             init: this.init.bind(this), // For re-initialize service (reset)
@@ -1099,8 +1089,8 @@ class CookieConsentLayer {
             showDialog: this.dialog.show.bind(this), // Shows dialog
             hideDialog: this.dialog.hide.bind(this), // Hides dialog
             destroyDialog: this.dialog.destroy.bind(this), // Remove dialog from DOM
-            getCookie: this.setCookie.bind(this), // Returns cookie value
-            destroyCookie: this.destroyCookie.bind(this), // Destroys cookie row with consent
+            getCookie: this.cookies.get.bind(this), // Returns cookie value
+            destroyCookie: this.cookies.destroy.bind(this), // Destroys cookie row with consent
         };
         const bot = isClientBot();
         const shouldInit = (!(this.options.meta.hideFromBots && bot));
