@@ -183,6 +183,8 @@ $no_js_text = __CONSTANTS['DEFAULTS']['no_js_text'];
             },
             consent: {
                 force: true,
+                // showCategory: false,
+                // showCategoryTable: false,
             },
             onAcceptAll: function (cookie, preferences) {
                 console.log('custom onAcceptAll callback:', cookie, preferences);
@@ -192,6 +194,12 @@ $no_js_text = __CONSTANTS['DEFAULTS']['no_js_text'];
             },
             onChange: function (cookie, preferences) {
                 console.log('custom onChange callback:', cookie, preferences);
+            },
+            onInit: function (cookie, preferences) {
+                console.log('custom onInit callback:', cookie, preferences);
+            },
+            onToggle: function (preferences) {
+                console.log('custom onToggle callback:', preferences);
             },
         };
 
