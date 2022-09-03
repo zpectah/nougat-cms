@@ -3,6 +3,16 @@ const _ = window._;
 
 
 /* Helpers */
+const isClientIsBot = () => {
+    // https://github.com/monperrus/crawler-user-agents
+    let isBot = false;
+    const botPattern = "(googlebot\/|bot|Googlebot-Mobile|Googlebot-Image|Google favicon|Mediapartners-Google|bingbot|slurp|java|wget|curl|Commons-HttpClient|Python-urllib|libwww|httpunit|nutch|phpcrawl|msnbot|jyxobot|FAST-WebCrawler|FAST Enterprise Crawler|biglotron|teoma|convera|seekbot|gigablast|exabot|ngbot|ia_archiver|GingerCrawler|webmon |httrack|webcrawler|grub.org|UsineNouvelleCrawler|antibot|netresearchserver|speedy|fluffy|bibnum.bnf|findlink|msrbot|panscient|yacybot|AISearchBot|IOI|ips-agent|tagoobot|MJ12bot|dotbot|woriobot|yanga|buzzbot|mlbot|yandexbot|purebot|Linguee Bot|Voyager|CyberPatrol|voilabot|baiduspider|citeseerxbot|spbot|twengabot|postrank|turnitinbot|scribdbot|page2rss|sitebot|linkdex|Adidxbot|blekkobot|ezooms|dotbot|Mail.RU_Bot|discobot|heritrix|findthatfile|europarchive.org|NerdByNature.Bot|sistrix crawler|ahrefsbot|Aboundex|domaincrawler|wbsearchbot|summify|ccbot|edisterbot|seznambot|ec2linkfinder|gslfbot|aihitbot|intelium_bot|facebookexternalhit|yeti|RetrevoPageAnalyzer|lb-spider|sogou|lssbot|careerbot|wotbox|wocbot|ichiro|DuckDuckBot|lssrocketcrawler|drupact|webcompanycrawler|acoonbot|openindexspider|gnam gnam spider|web-archive-net.com.bot|backlinkcrawler|coccoc|integromedb|content crawler spider|toplistbot|seokicks-robot|it2media-domain-crawler|ip-web-crawler.com|siteexplorer.info|elisabot|proximic|changedetection|blexbot|arabot|WeSEE:Search|niki-bot|CrystalSemanticsBot|rogerbot|360Spider|psbot|InterfaxScanBot|Lipperhey SEO Service|CC Metadata Scaper|g00g1e.net|GrapeshotCrawler|urlappendbot|brainobot|fr-crawler|binlar|SimpleCrawler|Livelapbot|Twitterbot|cXensebot|smtbot|bnf.fr_bot|A6-Indexer|ADmantX|Facebot|Twitterbot|OrangeBot|memorybot|AdvBot|MegaIndex|SemanticScholarBot|ltx71|nerdybot|xovibot|BUbiNG|Qwantify|archive.org_bot|Applebot|TweetmemeBot|crawler4j|findxbot|SemrushBot|yoozBot|lipperhey|y!j-asr|Domain Re-Animator Bot|AddThis)";
+    const re = new RegExp(botPattern, 'i');
+    const userAgent = navigator.userAgent;
+    if (re.test(userAgent)) isBot = true;
+
+    return isBot;
+};
 const getTimestamp = () => Math.round(new Date().getTime()/1000);
 const getToken = (length = 12) => Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, length);
 const cookies = {
@@ -134,21 +144,23 @@ const defaultOptions = {
         debug: false, // If true, it wil display console logs with events for easier debugging
         delay: 0, // When set, banner will show after this value in ms
         classPrefix: 'ccl-', // Global class prefix used also in styles. Be sure you know, why changing this value
+        hideFromBots: false, // If you want to hide service from bot/crawler/webdriver. If set to true and service detects one of bot, will be not initialized
+        ltr: true, // TODO: If you want to keep text right-to-left, set to false
     },
     cookie: {
-        name: 'CCLAYER',
-        domain: '.your-domain.some',
-        expiration: 365,
-        path: '/',
-        sameSite: 'Lax',
-        rfc: false,
+        name: 'CCLAYER', // Name of a cookie which be save in browser
+        domain: '.your-domain.some', // Cookie domain
+        expiration: 365, // Expiration of consent, if expires, banner will be showed again
+        path: '/', // Cookie path
+        sameSite: 'Lax', // Cookie on same site
+        rfc: false, // RFC format of cookie, otherwise is json as string
     },
     scripts: {
-        autoload: true, // If true, check all scripts elements on page with: 'data-cc-scope="true"' ... or something similar // TODO
-        mode: 'opt-in', // ['opt-in', 'opt-out']
+        autoload: true, // TODO: If true, check all scripts elements on page with: 'data-cc-scope="true"' ... or something similar
+        mode: 'opt-in', // TODO: ['opt-in', 'opt-out']
     },
     consent: {
-        force: false, // User will be forced to select consent, displays transparent layer above the page
+        force: false, // TODO: User will be forced to select consent, displays transparent layer above the page
         categories: [ 'necessary', 'analytics', 'marketing', 'functional', 'personalization' ], // These categories will be rendered as options and also will be matched with locales[].categories
         staticCategories: [ 'necessary' ], // These categories will be set as unchangeable
         showCategory: true, // If set to true category article will be rendered
@@ -237,15 +249,21 @@ const defaultOptions = {
         },
     },
     banner: {
-        id: 'CookieConsentScope_Banner',
-        btnAcceptAllId: 'CookieConsentScope_Banner_btnAcceptAll',
-        btnAcceptNecessaryId: 'CookieConsentScope_Banner_btnAcceptNecessary',
+        id: 'CookieConsentLayerBanner',
+        btnAcceptAllId: 'CookieConsentLayerBannerBtnAcceptAll',
+        btnAcceptNecessaryId: 'CookieConsentLayerBannerBtnAcceptNecessary',
+        layout: 'cloud', // TODO: box/cloud/bar
+        position: 'bottom center', // TODO: bottom/middle/top + left/center/right
+        transition: 'default', // TODO: default/slide/zoom
     },
     dialog: {
-        id: 'CookieConsentScope_Dialog',
-        btnAcceptAllId: 'CookieConsentScope_Dialog_btnAcceptAll',
-        btnAcceptNecessaryId: 'CookieConsentScope_Dialog_btnAcceptNecessary',
-        btnSaveId: 'CookieConsentScope_Dialog_btnSave',
+        id: 'CookieConsentLayerDialog',
+        btnAcceptAllId: 'CookieConsentLayerDialogBtnAcceptAll',
+        btnAcceptNecessaryId: 'CookieConsentLayerDialogBtnAcceptNecessary',
+        btnSaveId: 'CookieConsentLayerDialogBtnSave',
+        layout: 'box', // TODO: box/bar
+        position: 'middle', // TODO: bottom/middle/top
+        transition: 'default', // TODO: default/slide/zoom
     },
     language: 'en-US', // Default language
     locales: {
@@ -932,7 +950,7 @@ class CookieConsentLayer {
     presenter() {
         const cookieData = this.getCookieData();
 
-        // Initializing banner and dialog elements
+        // Initializing elements,but keep them hide until logic decides
         this.banner.init();
         this.dialog.init();
 
@@ -1015,14 +1033,19 @@ class CookieConsentLayer {
             getCookie: this.setCookie.bind(this), // Returns cookie value
             destroyCookie: this.destroyCookie.bind(this), // Destroys cookie row with consent
         };
-        this.presenter();
-        this.initButtonEvents();
-        this.pushHistory('init');
-        this.state.init = true;
-        this.state.preferences.timestamp = getTimestamp();
-        this.state.preferences.event = 'init';
-        window[this.options.meta.name] = windowsProps;
-        this.log(`${this.options.meta.name}: init`, windowsProps);
+        const bot = isClientIsBot();
+        const shouldInit = (!(this.options.meta.hideFromBots && bot));
+        const runner = () => {
+            this.presenter();
+            this.initButtonEvents();
+            this.pushHistory('init');
+            this.state.init = true;
+            this.state.preferences.timestamp = getTimestamp();
+            this.state.preferences.event = 'init';
+            window[this.options.meta.name] = windowsProps;
+            this.log(`${this.options.meta.name}: init`, windowsProps);
+        };
+        if (shouldInit) runner();
     }
 
 }

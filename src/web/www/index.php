@@ -22,6 +22,7 @@ $no_js_text = __CONSTANTS['DEFAULTS']['no_js_text'];
     <link rel="manifest" href="./manifest.json" />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.8.5/dist/cookieconsent.css" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="http://cdn.cms23/js/CookieConsentLayer/CookieConsentLayer.css" media="print" onload="this.media='all'" />
 
 </head>
 <body>
@@ -173,13 +174,14 @@ $no_js_text = __CONSTANTS['DEFAULTS']['no_js_text'];
 
 <!-- CookieConsentScope -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
-<script src="http://cdn.cms23/js/CookieConsentLayer/CookieConsentLayer.js"></script>
+<script src="http://cdn.cms23/js/CookieConsentLayer/CookieConsentLayer.js" defer async></script>
 <script>
     window.addEventListener('load', function() {
 
         const customOptions = {
             meta: {
                 debug: true,
+                // hideFromBots: true,
             },
             consent: {
                 force: true,
