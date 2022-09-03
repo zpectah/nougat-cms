@@ -126,7 +126,7 @@ const defaultOptions = {
         revision: 0, // Instance revision, if value is changed and user have already accepted, banner will trigger again
         debug: false, // If true, it wil display console logs with events for easier debugging
         delay: 0, // When set, banner will show after this value in ms
-        classPrefix: 'ccl_', // Global class prefix used also in styles. Be sure you know, why changing this value
+        classPrefix: 'ccl-', // Global class prefix used also in styles. Be sure you know, why changing this value
     },
     cookie: {
         name: 'CookieConsentScope',
@@ -257,6 +257,12 @@ const defaultOptions = {
                 secondary: `This is secondary content block ... for some reasons ... with <a href="#" target="_blank">outer link</a> or <button type="button" data-ccl="hide_dialog">close dialog</button>`
             },
             revisionAlert: 'Sorry, but we changed our policy or whatever, so you must accept cookies again.',
+            table: {
+                colName: 'Name',
+                colDomain: 'Domain',
+                colExpiration: 'Expiration',
+                colDescription: 'Description',
+            },
             categories: {
                 necessary: {
                     title: 'Strictly necessary cookies',
@@ -297,6 +303,12 @@ const defaultOptions = {
                 secondary: `This is secondary content block ... for some reasons ... with <a href="#" target="_blank">outer link</a> or <button type="button" data-ccl="hide_dialog">close dialog</button>`
             },
             revisionAlert: 'Omlouváme se, ale došlo ke změně v našich pravidlech cookies a proto to musíte potvrdit znovu.',
+            table: {
+                colName: 'Název',
+                colDomain: 'Doména',
+                colExpiration: 'Expirace',
+                colDescription: 'Poznámka',
+            },
             categories: {
                 necessary: {
                     title: 'Nezbytné cookies pro provoz',
@@ -555,7 +567,7 @@ class CookieConsentLayer {
         this.state.language = lang;
         changeLanguage && this.setLocalesContent(lang);
     }
-    getLocales(lang = this.options.language) {
+    getLocales(lang = this.state.language) {
         return this.options.locales[lang];
     }
     setLocalesContent(lang = this.state.language) {
@@ -586,17 +598,16 @@ class CookieConsentLayer {
     }
     setCookie(value, name = this.options.cookie.name, expiration = this.options.cookie.expiration) {
         const parsedValue = this.options.cookie.rfc ? encodeURIComponent(JSON.stringify(value)) : JSON.stringify(value);
-
-        return cookies.set(name, parsedValue, expiration);
+        cookies.set(name, parsedValue, expiration);
     }
     destroyCookie(name = this.options.cookie.name) {
-        document.cookie = `${name}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
+        this.setCookie(null, name, -1);
     }
     getCookieData() {
         const cookie = this.getCookie();
         const today = new Date();
         const updated = cookie.consent_date;
-
+        console.log('compare two dates, if date is expired ... (updated + expiration) >= today ... ', today.toISOString(), updated)
         return {
             current: cookie,
             createdDate: updated || today.toISOString(),
@@ -701,7 +712,7 @@ class CookieConsentLayer {
         this.nodes.btn.hideBanner().forEach((node) => { node.addEventListener('click', this.events.hideBanner) });
         this.nodes.btn.acceptAll().forEach((node) => { node.addEventListener('click', this.events.acceptAll) });
         this.nodes.btn.acceptNecessary().forEach((node) => { node.addEventListener('click', this.events.acceptNecessary) });
-        this.nodes.btn.saveChanges().forEach((node) => { node.addEventListener('click', this.events.saveChanges) });        
+        this.nodes.btn.saveChanges().forEach((node) => { node.addEventListener('click', this.events.saveChanges) });
     }
     removeGlobalEvents() {
         this.nodes.btn.showDialog().forEach((node) => { node.removeEventListener('click', this.events.showDialog) });
@@ -719,34 +730,61 @@ class CookieConsentLayer {
         const locales = this.getLocales();
         const targets = document.querySelectorAll(`[data-ccl-target="${this.tokens.CATEGORIES_TABLE_CCL}"]`);
 
-        // Wrapper for categories
-        const _wrapper = createElement({
+        const getCategoryToggle = (ctg) => {
+
+            return `<input type="checkbox" value="${ctg}" checked />`;
+        };
+        const getCategoryContent = (ctg) => {
+            const _title = `<div>${locales.categories[ctg].title ? locales.categories[ctg].title : `no-value-set:locales.categories[${ctg}].title`}</div>`;
+            const _description = `<div>${locales.categories[ctg].description ? locales.categories[ctg].description : `no-value-set:locales.categories[${ctg}].description`}</div>`;
+            const _checkbox = `<div>${getCategoryToggle(ctg)}</div>`;
+
+            return `<div>${_title}${_description}</div>${_checkbox}`;
+        };
+        const getCategoryTableContent = (ctg) => {
+            const locales = this.getLocales();
+            const list = this.options.consent.cookies[ctg] || [];
+            const _headingColName = `<th>${locales.table.colName}</th>`;
+            const _headingColDomain = `<th>${locales.table.colDomain}</th>`;
+            const _headingColExpiration = `<th>${locales.table.colExpiration}</th>`;
+            const _headingColDescription = `<th>${locales.table.colDescription}</th>`;
+            const _heading = `<thead><tr>${_headingColName}${_headingColDomain}${_headingColExpiration}${_headingColDescription}</tr></thead>`;
+            const _bodyStart = `<tbody>`;
+            let _bodyRows = ``;
+            list.map((row) => {
+                const _name = `<th>${row.name}</th>`;
+                const _domain = `<td>${row.domain}</td>`;
+                const _expiration = `<td>${row.expiration}</td>`;
+                const _description = `<td>${row.description}</td>`;
+                _bodyRows += `<tr>${_name}${_domain}${_expiration}${_description}</tr>`;
+            });
+            const _bodyEnd = `</tbody>`;
+            const _body = `${_bodyStart}${_bodyRows}${_bodyEnd}`;
+            const _colgroup = `<colgroup><col style="width:auto;" /><col style="width:auto;" /><col style="width:150px;" /><col style="width:auto;" /></colgroup>`;
+
+            return `${_colgroup}${_heading}${_body}`;
+        };
+
+        const _table = createElement({
             css: `width:100%;`,
         });
-
         this.options.consent.categories.map((ctg) => {
-            const _ctg = createElement({});
+            const _ctg = createElement({ tag: 'article' });
             _ctg.appendChild(createElement({
                 css: `width:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;`,
-                html: `<div>${locales.categories[ctg].title ? locales.categories[ctg].title : `no-value-set:locales.categories[${ctg}].title`}</div><div>${locales.categories[ctg].description ? locales.categories[ctg].description : `no-value-set:locales.categories[${ctg}].description`}</div>`,
+                html: getCategoryContent(ctg),
             }));
             _ctg.appendChild(createElement({
                 tag: 'table',
                 css: `width:100%;`,
-                html: `<thead><tr><th>table ...</th></tr></thead>`,
+                html: getCategoryTableContent(ctg),
             }));
-            _wrapper.appendChild(_ctg);
-        });
-
-        // Table for each category
-        const _table = createElement({
-            tag: 'table',
-            css: `width:100%;`,
+            _table.appendChild(_ctg);
         });
 
         targets && targets.forEach((node) => {
             node.innerHTML = ``;
-            node.appendChild(_wrapper);
+            node.appendChild(_table);
         });
     }
     renderBannerElement() {
@@ -755,7 +793,7 @@ class CookieConsentLayer {
         const _wrapper = createElement({
             id: this.selectors.banner.wrapperId,
             className: this.selectors.banner.wrapperClassName,
-            css: `width:250px;min-height:200px;padding:1rem;background-color:gray;color:black;display:none;position:fixed;z-index:999;bottom:1rem;left:1rem;`,
+            css: `width:250px;min-height:100px;padding:1rem;background-color:gray;color:black;display:none;position:fixed;z-index:999;bottom:1rem;left:1rem;`,
             arias: {
                 hidden: true,
             },
@@ -792,7 +830,7 @@ class CookieConsentLayer {
         const _wrapper = createElement({
             id: this.selectors.dialog.wrapperId,
             className: this.selectors.dialog.wrapperClassName,
-            css: `width:500px;height:auto;min-height:300px;padding:1rem;background-color:grey;color:black;display:none;position:fixed;z-index:999;top:10rem;left:10rem;`,
+            css: `width:50vw;height:auto;min-height:300px;max-height:50vh;overflow:scroll;padding:1rem;background-color:grey;color:black;display:none;position:fixed;z-index:999;top:10rem;left:25vw;`,
             arias: {
                 hidden: true,
             },
