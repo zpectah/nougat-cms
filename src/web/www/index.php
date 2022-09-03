@@ -27,6 +27,20 @@ $no_js_text = __CONSTANTS['DEFAULTS']['no_js_text'];
 <body>
 <div id="root">
     <noscript><?=($no_js_text)?></noscript>
+    <div>
+        <button
+            type="button"
+            data-ccl="show_banner"
+        >
+            Show banner
+        </button>
+        <button
+                type="button"
+                data-ccl="show_dialog"
+        >
+            Show dialog
+        </button>
+    </div>
     <?php $wvc -> render(); ?>
 </div>
 
