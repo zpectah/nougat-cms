@@ -572,10 +572,17 @@ class CookieConsentLayer {
                 categoryOuterClassName: `${this.options.meta.classPrefix}category-outer`,
                 categoryRowInnerClassName: `${this.options.meta.classPrefix}category-row-inner`,
                 categoryTableClassName: `${this.options.meta.classPrefix}category-table`,
-                toggleIdPrefix: ``,
-                toggleClassName: `category-toggle`,
-                toggleLabelClassName: `category-toggle-label`,
-                toggleInputClassName: `category-toggle-input`,
+                toggleIdPrefix: `${this.uuid}_toggle_`,
+                toggleClassName: `${this.options.meta.classPrefix}category-toggle`,
+                toggleLabelClassName: `${this.options.meta.classPrefix}category-toggle-label`,
+                toggleInputClassName: `${this.options.meta.classPrefix}category-toggle-input`,
+                block: `${this.options.meta.classPrefix}category-block`,
+                blockHeading: `${this.options.meta.classPrefix}category-block-heading`,
+                blockHeadingToggle: `${this.options.meta.classPrefix}category-block-heading-toggle`,
+                blockTable: `${this.options.meta.classPrefix}category-block-table`,
+                blockCollapsible: `${this.options.meta.classPrefix}category-block-collapsible`,
+                blockHeadingTitle: `${this.options.meta.classPrefix}category-block-heading-title`,
+                blockDescription: `${this.options.meta.classPrefix}category-block-description`,
             },
             state: {
                 isChecked: 'is-checked',
@@ -862,11 +869,12 @@ class CookieConsentLayer {
         const targets = document.querySelectorAll(`[${this.tokens.DATA_CCL_TARGET}="${this.tokens.CATEGORIES_TABLE_CCL}"]`);
         const categories = this.options.consent.categories || [];
         const getCategoryToggle = (category) => {
+            const id = `${this.selectors.categoryRows.toggleIdPrefix}${category}`;
             const disabled = _.indexOf(this.options.consent.necessaryCategories, category) > -1 || _.indexOf(this.options.consent.staticCategories, category) > -1;
-            const _input = `<input type="checkbox" id="" class="category-toggle-input" value="${category}" ${this.tokens.DATA_CCL_TOGGLE}="${this.tokens.CATEGORY_TOGGLE_PFX_CCL}${category}" ${disabled ? 'disabled' : ''} />`;
-            const _label = `<label class="category-toggle-label">${_input}</label>`;
+            const _input = `<input type="checkbox" id="${id}" class="${this.selectors.categoryRows.toggleInputClassName}" value="${category}" ${this.tokens.DATA_CCL_TOGGLE}="${this.tokens.CATEGORY_TOGGLE_PFX_CCL}${category}" ${disabled ? 'disabled' : ''} />`;
+            const _label = `<label for="${id}" aria-labelledby="${id}" class="${this.selectors.categoryRows.toggleLabelClassName}">${_input}</label>`;
 
-            return `<span class="category-toggle" tabindex="1">${_label}</span>`;
+            return `<span class="${this.selectors.categoryRows.toggleClassName}" tabindex="1">${_label}</span>`;
         };
         const getCategoryTableContent = (category) => {
             const list = this.options.consent.cookies[category] || [];
@@ -890,17 +898,16 @@ class CookieConsentLayer {
 
             return `${_colgroup}${_heading}${_body}`;
         };
-        const getTableNode = (category) => `<table class="${this.selectors.categoryRows.categoryTableClassName}">${getCategoryTableContent(category)}</table>`;
         const getCategoryContent = (category) => {
             const loc = locales.categories[category];
-            const _title = `<div class="category-block-title">${loc.title ? loc.title : `undefined`}</div>`;
-            const _description = `<div class="category-block-description">${loc.description ? loc.description : `undefined`}</div>`;
-            const _checkbox = `<div class="category-block-toggle">${getCategoryToggle(category)}</div>`;
-            const _heading = `<div class="category-block-heading">${_title}${_checkbox}</div>`;
-            const _table = showTable && `<div class="category-block-table">${getTableNode(category)}</div>`;
-            const _collapsible = `<div class="category-block-collapsible">${_description}${_table}</div>`;
+            const _title = `<div class="${this.selectors.categoryRows.blockHeadingTitle}">${loc.title ? loc.title : `undefined`}</div>`;
+            const _description = `<div class="${this.selectors.categoryRows.blockDescription}">${loc.description ? loc.description : `undefined`}</div>`;
+            const _checkbox = `<div class="${this.selectors.categoryRows.blockHeadingToggle}">${getCategoryToggle(category)}</div>`;
+            const _heading = `<div class="${this.selectors.categoryRows.blockHeading}">${_title}${_checkbox}</div>`;
+            const _table = showTable && `<div class="${this.selectors.categoryRows.blockTable}"><table class="${this.selectors.categoryRows.categoryTableClassName}">${getCategoryTableContent(category)}</table></div>`;
+            const _collapsible = `<div class="${this.selectors.categoryRows.blockCollapsible}">${_description}${_table}</div>`;
 
-            return `<div class="category-block">${_heading}${_collapsible}</div>`;
+            return `<div class="${this.selectors.categoryRows.block}">${_heading}${_collapsible}</div>`;
         };
 
         const _category = createElement({
@@ -1096,6 +1103,11 @@ class CookieConsentLayer {
             destroyDialog: this.dialog.destroy.bind(this), // Remove dialog from DOM
             getCookie: this.cookies.get.bind(this), // Returns cookie value
             destroyCookie: this.cookies.destroy.bind(this), // Destroys cookie row with consent
+            scope: {
+                getSelectors: () => this.selectors,
+                getTokens: () => this.tokens,
+                getNodes: () => this.nodes,
+            },
         };
         const bot = isClientBot();
         const shouldInit = (!(this.options.meta.hideFromBots && bot));

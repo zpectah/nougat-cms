@@ -35,6 +35,18 @@
 .ccl-category-table{
     width:100%;
 }
-.ccl-category-table thead th{}
-.ccl-category-table tbody th{}
-.ccl-category-table tbody td{}
+.ccl-category-table > thead th{}
+.ccl-category-table > tbody th{}
+.ccl-category-table > tbody td{}
+
+.ccl-category-block{}
+.ccl-category-block-collapsible{}
+.ccl-category-block-description{}
+.ccl-category-block-heading{}
+.ccl-category-block-heading-title{}
+.ccl-category-block-heading-toggle{}
+.ccl-category-block-table{}
+
+.ccl-category-toggle{}
+.ccl-category-toggle-input{}
+.ccl-category-toggle-label{}
