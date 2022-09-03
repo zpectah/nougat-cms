@@ -29,6 +29,7 @@ const cookies = {
 };
 const createElement = ({
     tag = 'div',
+    type = null,
     id = null,
     className = null,
     css = null,
@@ -54,6 +55,7 @@ const createElement = ({
     },
 }) => {
     const element = document.createElement(tag);
+    if (type) element.type = type;
     if (id) element.id = id;
     if (className) element.className = className;
     if (css) element.style.cssText = css;
@@ -79,6 +81,19 @@ const createElement = ({
     }
 
     return element;
+};
+const createButtonElement = (id, className, text, cclData) => {
+    return createElement({
+        id,
+        className,
+        text,
+        cclData,
+        tag: 'button',
+        type: 'button',
+        arias: {
+            label: `button`,
+        },
+    });
 };
 
 
@@ -229,7 +244,7 @@ const defaultOptions = {
             common: {
                 buttonAcceptAll: 'Accept all',
                 buttonAcceptNecessary: 'Accept necessary',
-                buttonChange: 'Save settings',
+                buttonSave: 'Save settings',
                 buttonClose: 'Close',
             },
             banner: {
@@ -269,7 +284,7 @@ const defaultOptions = {
             common: {
                 buttonAcceptAll: 'Přimout vše',
                 buttonAcceptNecessary: 'Přimout nezbytné',
-                buttonChange: 'Uložit změny',
+                buttonSave: 'Uložit změny',
                 buttonClose: 'Zavřít',
             },
             banner: {
@@ -413,10 +428,20 @@ class CookieConsentLayer {
     };
     layout = {
         bannerBody: (title, content, revision = null) => {
-            return `<div>${title}</div>${revision ? `<div id="${this.tokens.REVISION_ALERT_CCL}">${revision}</div>` : ''}<div>${content}</div>`;
+            const _title = `<div class="${this.selectors.banner.bodyTitleClassName}">${title}</div>`;
+            const _content = `<div class="${this.selectors.banner.bodyContentClassName}">${content}</div>`;
+            const _revision = revision && `<div id="${this.tokens.REVISION_ALERT_CCL}" class="${this.selectors.banner.bodyRevisionClassName}">${revision}</div>`;
+
+            return `${_title}${_revision}${_content}`;
         },
         dialogBody: (title, primary, secondary, close) => {
-            return `<button type="button" data-ccl="${this.tokens.BTN_HIDE_DIALOG_CCL}">${close}</button><div>${title}</div><div>${primary}</div><div data-ccl-target="${this.tokens.CATEGORIES_TABLE_CCL}"> Loading, please wait </div>${secondary ? `<div>${secondary}</div>` : ''}`;
+            const _close = `<button type="button" data-ccl="${this.tokens.BTN_HIDE_DIALOG_CCL}" class="${this.selectors.dialog.bodyCloseClassName}">${close}</button>`;
+            const _title = `<div class="${this.selectors.dialog.bodyTitleClassName}">${title}</div>`;
+            const _primary = `<div class="${this.selectors.dialog.bodyPrimaryClassName}">${primary}</div>`;
+            const _secondary = secondary && `<div class="${this.selectors.dialog.bodySecondaryClassName}">${secondary}</div>`;
+            const _table = `<div data-ccl-target="${this.tokens.CATEGORIES_TABLE_CCL}" class="${this.selectors.dialog.bodyTableClassName}">Loading table, please wait</div>`;
+
+            return `${_close}${_title}${_primary}${_table}${_secondary}`;
         },
     };
 
@@ -433,11 +458,19 @@ class CookieConsentLayer {
 
         /* Constants */
         this.selectors = {
+            btn: {
+                acceptAllClassName: `${this.options.meta.classPrefix}button ${this.options.meta.classPrefix}button-primary`,
+                acceptNecessaryClassName: `${this.options.meta.classPrefix}button ${this.options.meta.classPrefix}button-secondary`,
+                saveChangesClassName: `${this.options.meta.classPrefix}button ${this.options.meta.classPrefix}button-secondary`,
+            },
             banner: {
                 wrapperId: this.options.banner.id,
                 wrapperClassName: `${this.options.meta.classPrefix}banner-wrapper`,
                 bodyId: `${this.options.banner.id}_body`,
                 bodyClassName: `${this.options.meta.classPrefix}banner-body`,
+                bodyTitleClassName: `${this.options.meta.classPrefix}banner-body-title`,
+                bodyRevisionClassName: `${this.options.meta.classPrefix}banner-body-revision`,
+                bodyContentClassName: `${this.options.meta.classPrefix}banner-body-content`,
                 actionsId: `${this.options.banner.id}_actions`,
                 actionsClassName: `${this.options.meta.classPrefix}banner-actions`,
             },
@@ -446,6 +479,11 @@ class CookieConsentLayer {
                 wrapperClassName: `${this.options.meta.classPrefix}dialog-wrapper`,
                 bodyId: `${this.options.dialog.id}_body`,
                 bodyClassName: `${this.options.meta.classPrefix}dialog-body`,
+                bodyCloseClassName: `${this.options.meta.classPrefix}dialog-body-close`,
+                bodyTitleClassName: `${this.options.meta.classPrefix}dialog-body-title`,
+                bodyTableClassName: `${this.options.meta.classPrefix}dialog-body-table`,
+                bodyPrimaryClassName: `${this.options.meta.classPrefix}dialog-body-primary`,
+                bodySecondaryClassName: `${this.options.meta.classPrefix}dialog-body-secondary`,
                 actionsId: `${this.options.dialog.id}_actions`,
                 actionsClassName: `${this.options.meta.classPrefix}dialog-actions`,
             },
@@ -532,7 +570,7 @@ class CookieConsentLayer {
             node.innerText = `${locales.common.buttonAcceptNecessary}`;
         });
         this.nodes.btn.saveChanges().forEach((node) => {
-            node.innerText = `${locales.common.buttonChange}`;
+            node.innerText = `${locales.common.buttonSave}`;
         });
         elBannerBodyHtml.innerHTML = this.layout.bannerBody(locales.banner.title, locales.banner.content, cookieData.isExpiredRevision && locales.revisionAlert);
         elDialogBodyHtml.innerHTML = this.layout.dialogBody(locales.dialog.title, locales.dialog.primary, locales.dialog.secondary, locales.common.buttonClose);
@@ -731,26 +769,18 @@ class CookieConsentLayer {
             id: this.selectors.banner.actionsId,
             className: this.selectors.banner.actionsClassName,
         });
-        const _btnAcceptAll = createElement({
-            tag: 'button',
-            id: this.options.banner.btnAcceptAllId,
-            className: `${this.options.meta.classPrefix}button ${this.options.meta.classPrefix}button-primary`,
-            text: `${locales.common.buttonAcceptAll}`,
-            cclData: this.tokens.BTN_ACCEPT_ALL_CCL,
-            arias: {
-                label: `button`,
-            },
-        });
-        const _btnAcceptNecessary = createElement({
-            tag: 'button',
-            id: this.options.banner.btnAcceptNecessaryId,
-            className: `${this.options.meta.classPrefix}button`,
-            text: `${locales.common.buttonAcceptNecessary}`,
-            cclData: this.tokens.BTN_ACCEPT_NECESSARY_CCL,
-            arias: {
-                label: `button`,
-            },
-        });
+        const _btnAcceptAll = createButtonElement(
+            this.options.banner.btnAcceptAllId,
+            this.selectors.btn.acceptAllClassName,
+            locales.common.buttonAcceptAll,
+            this.tokens.BTN_ACCEPT_ALL_CCL,
+        );
+        const _btnAcceptNecessary = createButtonElement(
+            this.options.banner.btnAcceptNecessaryId,
+            this.selectors.btn.acceptNecessaryClassName,
+            locales.common.buttonAcceptNecessary,
+            this.tokens.BTN_ACCEPT_NECESSARY_CCL,
+        );
         _actions.appendChild(_btnAcceptAll);
         _actions.appendChild(_btnAcceptNecessary);
         _wrapper.appendChild(_body);
@@ -776,36 +806,24 @@ class CookieConsentLayer {
             id: this.selectors.dialog.actionsId,
             className: this.selectors.dialog.actionsClassName,
         });
-        const _btnAcceptAll = createElement({
-            tag: 'button',
-            id: this.options.dialog.btnAcceptAllId,
-            className: `${this.options.meta.classPrefix}button ${this.options.meta.classPrefix}button-primary`,
-            text: `${locales.common.buttonAcceptAll}`,
-            cclData: this.tokens.BTN_ACCEPT_ALL_CCL,
-            arias: {
-                label: `button`,
-            },
-        });
-        const _btnAcceptNecessary = createElement({
-            tag: 'button',
-            id: this.options.dialog.btnAcceptNecessaryId,
-            className: `${this.options.meta.classPrefix}button`,
-            text: `${locales.common.buttonAcceptNecessary}`,
-            cclData: this.tokens.BTN_ACCEPT_NECESSARY_CCL,
-            arias: {
-                label: `button`,
-            },
-        });
-        const _btnSave = createElement({
-            tag: 'button',
-            id: this.options.dialog.btnSaveId,
-            className: `${this.options.meta.classPrefix}button`,
-            text: `${locales.common.buttonChange}`,
-            cclData: this.tokens.BTN_SAVE_CCL,
-            arias: {
-                label: `button`,
-            },
-        });
+        const _btnAcceptAll = createButtonElement(
+            this.options.dialog.btnAcceptAllId,
+            this.selectors.btn.acceptAllClassName,
+            locales.common.buttonAcceptAll,
+            this.tokens.BTN_ACCEPT_ALL_CCL,
+        );
+        const _btnAcceptNecessary = createButtonElement(
+            this.options.dialog.btnAcceptNecessaryId,
+            this.selectors.btn.acceptNecessaryClassName,
+            locales.common.buttonAcceptNecessary,
+            this.tokens.BTN_ACCEPT_NECESSARY_CCL,
+        );
+        const _btnSave = createButtonElement(
+            this.options.dialog.btnSaveId,
+            this.selectors.btn.saveChangesClassName,
+            locales.common.buttonSave,
+            this.tokens.BTN_SAVE_CCL,
+        );
         _actions.appendChild(_btnAcceptAll);
         _actions.appendChild(_btnAcceptNecessary);
         _actions.appendChild(_btnSave);
