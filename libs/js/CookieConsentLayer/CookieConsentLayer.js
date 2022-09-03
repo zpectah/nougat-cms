@@ -572,6 +572,10 @@ class CookieConsentLayer {
                 categoryOuterClassName: `${this.options.meta.classPrefix}category-outer`,
                 categoryRowInnerClassName: `${this.options.meta.classPrefix}category-row-inner`,
                 categoryTableClassName: `${this.options.meta.classPrefix}category-table`,
+                toggleIdPrefix: ``,
+                toggleClassName: `category-toggle`,
+                toggleLabelClassName: `category-toggle-label`,
+                toggleInputClassName: `category-toggle-input`,
             },
             state: {
                 isChecked: 'is-checked',
@@ -858,59 +862,60 @@ class CookieConsentLayer {
         const targets = document.querySelectorAll(`[${this.tokens.DATA_CCL_TARGET}="${this.tokens.CATEGORIES_TABLE_CCL}"]`);
         const categories = this.options.consent.categories || [];
         const getCategoryToggle = (category) => {
-            const key = `${this.tokens.CATEGORY_TOGGLE_PFX_CCL}${category}`;
             const disabled = _.indexOf(this.options.consent.necessaryCategories, category) > -1 || _.indexOf(this.options.consent.staticCategories, category) > -1;
+            const _input = `<input type="checkbox" id="" class="category-toggle-input" value="${category}" ${this.tokens.DATA_CCL_TOGGLE}="${this.tokens.CATEGORY_TOGGLE_PFX_CCL}${category}" ${disabled ? 'disabled' : ''} />`;
+            const _label = `<label class="category-toggle-label">${_input}</label>`;
 
-            return `<label><input type="checkbox" value="${category}" ${this.tokens.DATA_CCL_TOGGLE}="${key}" ${disabled ? 'disabled' : ''} /></label>`;
+            return `<span class="category-toggle" tabindex="1">${_label}</span>`;
         };
-        const getCategoryContent = (ctg) => {
-            const loc = locales.categories[ctg];
-            const _title = `<div>${loc.title ? loc.title : `...`}</div>`;
-            const _description = `<div>${loc.description ? loc.description : `...`}</div>`;
-            const _checkbox = `<div>${getCategoryToggle(ctg)}</div>`;
-
-            return `<div>${_title}${_description}</div>${_checkbox}`;
-        };
-        const getCategoryTableContent = (ctg) => {
-            const list = this.options.consent.cookies[ctg] || [];
-            const _headingColName = `<th>${locales.table.colName}</th>`;
-            const _headingColDomain = `<th>${locales.table.colDomain}</th>`;
-            const _headingColExpiration = `<th>${locales.table.colExpiration}</th>`;
-            const _headingColDescription = `<th>${locales.table.colDescription}</th>`;
-            const _heading = `<thead><tr>${_headingColName}${_headingColDomain}${_headingColExpiration}${_headingColDescription}</tr></thead>`;
-            const _bodyStart = `<tbody>`;
-            let _bodyRows = ``;
+        const getCategoryTableContent = (category) => {
+            const list = this.options.consent.cookies[category] || [];
+            let _heading = `<thead><tr>`;
+            _heading += `<th>${locales.table.colName}</th>`;
+            _heading += `<th>${locales.table.colDomain}</th>`;
+            _heading += `<th>${locales.table.colExpiration}</th>`;
+            _heading += `<th>${locales.table.colDescription}</th>`;
+            _heading += `</tr></thead>`;
+            let _body = `<tbody>`;
             list.map((row) => {
-                const _name = `<th>${row.name}</th>`;
-                const _domain = `<td>${row.domain}</td>`;
-                const _expiration = `<td>${row.expiration}</td>`;
-                const _description = `<td>${row.description}</td>`;
-                _bodyRows += `<tr>${_name}${_domain}${_expiration}${_description}</tr>`;
+                _body += `<tr>`;
+                _body += `<th>${row.name}</th>`;
+                _body += `<td>${row.domain}</td>`;
+                _body += `<td>${row.expiration}</td>`;
+                _body += `<td>${row.description}</td>`;
+                _body += `</tr>`;
             });
-            const _bodyEnd = `</tbody>`;
-            const _body = `${_bodyStart}${_bodyRows}${_bodyEnd}`;
+            _body += `</tbody>`;
             const _colgroup = `<colgroup><col style="width:auto;" /><col style="width:auto;" /><col style="width:150px;" /><col style="width:auto;" /></colgroup>`;
 
             return `${_colgroup}${_heading}${_body}`;
         };
+        const getTableNode = (category) => `<table class="${this.selectors.categoryRows.categoryTableClassName}">${getCategoryTableContent(category)}</table>`;
+        const getCategoryContent = (category) => {
+            const loc = locales.categories[category];
+            const _title = `<div class="category-block-title">${loc.title ? loc.title : `undefined`}</div>`;
+            const _description = `<div class="category-block-description">${loc.description ? loc.description : `undefined`}</div>`;
+            const _checkbox = `<div class="category-block-toggle">${getCategoryToggle(category)}</div>`;
+            const _heading = `<div class="category-block-heading">${_title}${_checkbox}</div>`;
+            const _table = showTable && `<div class="category-block-table">${getTableNode(category)}</div>`;
+            const _collapsible = `<div class="category-block-collapsible">${_description}${_table}</div>`;
+
+            return `<div class="category-block">${_heading}${_collapsible}</div>`;
+        };
+
         const _category = createElement({
             className: this.selectors.categoryRows.categoryOuterClassName,
         });
         categories.map((ctg) => {
-            const _ctg = createElement({
+            const _content = createElement({
                 tag: 'article',
                 className: this.selectors.categoryRows.categoryRowClassName,
             });
-            _ctg.appendChild(createElement({
+            _content.appendChild(createElement({
                 className: this.selectors.categoryRows.categoryRowInnerClassName,
                 html: getCategoryContent(ctg),
             }));
-            showTable && _ctg.appendChild(createElement({
-                tag: 'table',
-                className: this.selectors.categoryRows.categoryTableClassName,
-                html: getCategoryTableContent(ctg),
-            }));
-            _category.appendChild(_ctg);
+            _category.appendChild(_content);
         });
         if (targets) {
             this.state.categories.show = true;
