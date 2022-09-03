@@ -14,8 +14,14 @@
 .ccl-dialog-body-title{}
 .ccl-dialog-body-primary{}
 .ccl-dialog-body-secondary{}
+.ccl-dialog-body-actions{}
 .ccl-dialog-body-table{}
 .ccl-dialog-body-table table{}
 .ccl-dialog-body-table table thead th{}
 .ccl-dialog-body-table table tbody th{}
 .ccl-dialog-body-table table tbody td{}
+
+.ccl-category-row{}
+.ccl-category-outer{}
+.ccl-category-inner{}
+.ccl-category-table{}
