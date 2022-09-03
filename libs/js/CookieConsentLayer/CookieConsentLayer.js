@@ -314,16 +314,6 @@ const defaultOptions = {
 
 /* Class */
 class CookieConsentLayer {
-    constructor(
-        options = {}, // Custom options
-        scope = 'default', // Scope name
-        uuid = null, // Static instance UUID
-    ) {
-        this.uuid = uuid || getToken(6); // Instance UUID
-        this.state = _.cloneDeep(defaultState); // Inner component state
-        this.options = _.merge(defaultOptions, options); // Merged options object
-        this.init(); // Triggered once when class is loaded
-    }
 
 
     /* Static constants */
@@ -340,47 +330,6 @@ class CookieConsentLayer {
         BTN_HIDE_BANNER_CCL: 'hide_banner',
         CATEGORIES_TABLE_CCL: 'categories_table',
         // <--
-    };
-    events = {
-        showBanner: (e) => {
-            e.preventDefault();
-            this.banner.show();
-        },
-        hideBanner: (e) => {
-            e.preventDefault();
-            this.banner.hide();
-        },
-        showDialog: (e) => {
-            e.preventDefault();
-            this.dialog.show();
-        },
-        hideDialog: (e) => {
-            e.preventDefault();
-            this.dialog.hide();
-        },
-        acceptNecessary: (e) => {
-            e.preventDefault();
-            this.onAcceptNecessaryHandler();
-        },
-        acceptAll: (e) => {
-            e.preventDefault();
-            this.onAcceptAllHandler();
-        },
-        saveChanges: (e) => {
-            e.preventDefault();
-            this.onChangeHandler();
-        },
-    };
-    nodes = {
-        btn: {
-            showDialog: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_SHOW_DIALOG_CCL}"]`),
-            hideDialog: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_HIDE_DIALOG_CCL}"]`),
-            showBanner: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_SHOW_BANNER_CCL}"]`),
-            hideBanner: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_HIDE_BANNER_CCL}"]`),
-            acceptAll: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_ACCEPT_ALL_CCL}"]`),
-            acceptNecessary: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_ACCEPT_NECESSARY_CCL}"]`),
-            saveChanges: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_SAVE_CCL}"]`),            
-        },
     };
     banner = {
         show: (delay = 0) => {
@@ -472,6 +421,82 @@ class CookieConsentLayer {
     };
 
 
+    /* Class constructor */
+    constructor(
+        options = {}, // Custom options
+        scope = 'default', // Scope name
+        uuid = null, // Static instance UUID
+    ) {
+        this.uuid = uuid || getToken(6); // Instance UUID
+        this.state = _.cloneDeep(defaultState); // Inner component state
+        this.options = _.merge(defaultOptions, options); // Merged options object
+
+        /* Constants */
+        this.selectors = {
+            banner: {
+                wrapperId: this.options.banner.id,
+                wrapperClassName: `${this.options.meta.classPrefix}banner-wrapper`,
+                bodyId: `${this.options.banner.id}_body`,
+                bodyClassName: `${this.options.meta.classPrefix}banner-body`,
+                actionsId: `${this.options.banner.id}_actions`,
+                actionsClassName: `${this.options.meta.classPrefix}banner-actions`,
+            },
+            dialog: {
+                wrapperId: this.options.dialog.id,
+                wrapperClassName: `${this.options.meta.classPrefix}dialog-wrapper`,
+                bodyId: `${this.options.dialog.id}_body`,
+                bodyClassName: `${this.options.meta.classPrefix}dialog-body`,
+                actionsId: `${this.options.dialog.id}_actions`,
+                actionsClassName: `${this.options.meta.classPrefix}dialog-actions`,
+            },
+            table: {},
+        };
+        this.nodes = {
+            btn: {
+                showDialog: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_SHOW_DIALOG_CCL}"]`),
+                hideDialog: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_HIDE_DIALOG_CCL}"]`),
+                showBanner: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_SHOW_BANNER_CCL}"]`),
+                hideBanner: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_HIDE_BANNER_CCL}"]`),
+                acceptAll: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_ACCEPT_ALL_CCL}"]`),
+                acceptNecessary: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_ACCEPT_NECESSARY_CCL}"]`),
+                saveChanges: () => document.querySelectorAll(`[data-ccl="${this.tokens.BTN_SAVE_CCL}"]`),
+            },
+        };
+        this.events = {
+            showBanner: (e) => {
+                e.preventDefault();
+                this.banner.show();
+            },
+            hideBanner: (e) => {
+                e.preventDefault();
+                this.banner.hide();
+            },
+            showDialog: (e) => {
+                e.preventDefault();
+                this.dialog.show();
+            },
+            hideDialog: (e) => {
+                e.preventDefault();
+                this.dialog.hide();
+            },
+            acceptNecessary: (e) => {
+                e.preventDefault();
+                this.onAcceptNecessaryHandler();
+            },
+            acceptAll: (e) => {
+                e.preventDefault();
+                this.onAcceptAllHandler();
+            },
+            saveChanges: (e) => {
+                e.preventDefault();
+                this.onChangeHandler();
+            },
+        };
+
+        this.init(); // Triggered once when class is loaded
+    }
+
+
     /* References, utils, common */
     getState() {
         return this.state;
@@ -498,19 +523,15 @@ class CookieConsentLayer {
     setLocalesContent(lang = this.state.language) {
         const cookieData = this.getCookieData();
         const locales = this.getLocales(lang);
-        const body = document.body;
-        const elBtnAcceptAll = body.querySelectorAll(`[data-ccl="${this.tokens.BTN_ACCEPT_ALL_CCL}"]`);
-        const elBtnAcceptNecessary = body.querySelectorAll(`[data-ccl="${this.tokens.BTN_ACCEPT_NECESSARY_CCL}"]`);
-        const elBtnSave = body.querySelectorAll(`[data-ccl="${this.tokens.BTN_SAVE_CCL}"]`);
-        const elBannerBodyHtml = document.getElementById(`${this.options.banner.id}_body`);
-        const elDialogBodyHtml = document.getElementById(`${this.options.dialog.id}_body`);
-        elBtnAcceptAll.forEach((node) => {
+        const elBannerBodyHtml = document.getElementById(this.selectors.banner.bodyId);
+        const elDialogBodyHtml = document.getElementById(this.selectors.dialog.bodyId);
+        this.nodes.btn.acceptAll().forEach((node) => {
             node.innerText = `${locales.common.buttonAcceptAll}`;
         });
-        elBtnAcceptNecessary.forEach((node) => {
+        this.nodes.btn.acceptNecessary().forEach((node) => {
             node.innerText = `${locales.common.buttonAcceptNecessary}`;
         });
-        elBtnSave.forEach((node) => {
+        this.nodes.btn.saveChanges().forEach((node) => {
             node.innerText = `${locales.common.buttonChange}`;
         });
         elBannerBodyHtml.innerHTML = this.layout.bannerBody(locales.banner.title, locales.banner.content, cookieData.isExpiredRevision && locales.revisionAlert);
@@ -694,21 +715,21 @@ class CookieConsentLayer {
         const cookieData = this.getCookieData();
         const locales = this.getLocales();
         const _wrapper = createElement({
-            id: this.options.banner.id,
-            className: 'ccl_banner-wrapper',
+            id: this.selectors.banner.wrapperId,
+            className: this.selectors.banner.wrapperClassName,
             css: `width:250px;min-height:200px;padding:1rem;background-color:gray;color:black;display:none;position:fixed;z-index:999;bottom:1rem;left:1rem;`,
             arias: {
                 hidden: true,
             },
         });
         const _body = createElement({
-            id: `${this.options.banner.id}_body`,
-            className: `${this.options.meta.classPrefix}banner-body`,
+            id: this.selectors.banner.bodyId,
+            className: this.selectors.banner.bodyClassName,
             html: this.layout.bannerBody(locales.banner.title, locales.banner.content, cookieData.isExpiredRevision && locales.revisionAlert),
         });
         const _actions = createElement({
-            id: `${this.options.banner.id}_actions`,
-            className: `${this.options.meta.classPrefix}banner-actions`,
+            id: this.selectors.banner.actionsId,
+            className: this.selectors.banner.actionsClassName,
         });
         const _btnAcceptAll = createElement({
             tag: 'button',
@@ -739,21 +760,21 @@ class CookieConsentLayer {
     renderDialogElement() {
         const locales = this.getLocales();
         const _wrapper = createElement({
-            id: this.options.dialog.id,
-            className: `${this.options.meta.classPrefix}dialog-wrapper`,
+            id: this.selectors.dialog.wrapperId,
+            className: this.selectors.dialog.wrapperClassName,
             css: `width:500px;height:auto;min-height:300px;padding:1rem;background-color:grey;color:black;display:none;position:fixed;z-index:999;top:10rem;left:10rem;`,
             arias: {
                 hidden: true,
             },
         });
         const _body = createElement({
-            id: `${this.options.dialog.id}_body`,
-            className: `${this.options.meta.classPrefix}dialog-body`,
+            id: this.selectors.dialog.bodyId,
+            className: this.selectors.dialog.bodyClassName,
             html: this.layout.dialogBody(locales.dialog.title, locales.dialog.primary, locales.dialog.secondary, locales.common.buttonClose),
         });
         const _actions = createElement({
-            id: `${this.options.dialog.id}_actions`,
-            className: `${this.options.meta.classPrefix}dialog-actions`,
+            id: this.selectors.dialog.actionsId,
+            className: this.selectors.dialog.actionsClassName,
         });
         const _btnAcceptAll = createElement({
             tag: 'button',
