@@ -47,9 +47,7 @@ const createElement = ({
     html = null,
     cclData = null,
     cclTarget = null,
-    cclSource = null,
     cclToggle = null,
-    cclControl = null,
     arias = {
         label: null,
         labeledBy: null,
@@ -75,9 +73,7 @@ const createElement = ({
     if (html) element.innerHTML = html;
     if (cclData) element.dataset['ccl'] = cclData;
     if (cclTarget) element.dataset['ccl-target'] = cclTarget;
-    if (cclSource) element.dataset['ccl-source'] = cclSource;
     if (cclToggle) element.dataset['ccl-toggle'] = cclToggle;
-    if (cclControl) element.dataset['ccl-control'] = cclControl;
     if (arias) {
         if (arias.label) element.ariaLabel = arias.label;
         if (arias.labeledBy) element.ariaLabelledBy = arias.labeledBy;
@@ -378,7 +374,7 @@ const defaultOptions = {
 
 
 /* Class */
-class CookieConsentLayer {
+class CookieConsentLayer_ {
 
     /* Static constants */
     tokens = {
@@ -394,9 +390,7 @@ class CookieConsentLayer {
         CATEGORIES_TABLE_CCL: 'categories_table',
         CATEGORY_TOGGLE_PFX_CCL: 'category_',
         DATA_CCL: 'data-ccl',
-        // DATA_CCL_SOURCE: 'data-ccl-source',
         DATA_CCL_TARGET: 'data-ccl-target',
-        // DATA_CCL_CONTROL: 'data-ccl-control',
         DATA_CCL_TOGGLE: 'data-ccl-toggle',
         // <--
     };
@@ -1131,5 +1125,5 @@ class CookieConsentLayer {
 }
 
 /* Initializer */
-const initCookieConsentLayer = (options, scope, uuid) => { new CookieConsentLayer(options, scope, uuid); };
-window.initCookieConsentLayer = initCookieConsentLayer;
+const initCookieConsentLayer_ = (options, scope, uuid) => { new CookieConsentLayer_(options, scope, uuid); };
+window.initCookieConsentLayer_ = initCookieConsentLayer_;

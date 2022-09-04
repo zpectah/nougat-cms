@@ -22,7 +22,7 @@ $no_js_text = __CONSTANTS['DEFAULTS']['no_js_text'];
     <link rel="manifest" href="./manifest.json" />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.8.5/dist/cookieconsent.css" media="print" onload="this.media='all'" />
-    <link rel="stylesheet" href="http://cdn.cms23/js/CookieConsentLayer/CookieConsentLayer.css" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="http://cdn.rc.cookie-consent-layer/index.css" media="print" onload="this.media='all'" />
 
 </head>
 <body>
@@ -174,7 +174,7 @@ $no_js_text = __CONSTANTS['DEFAULTS']['no_js_text'];
 
 <!-- CookieConsentScope -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
-<script src="http://cdn.cms23/js/CookieConsentLayer/CookieConsentLayer.js" defer async></script>
+<script src="http://cdn.rc.cookie-consent-layer/index.js" defer></script>
 <script>
     window.addEventListener('load', function() {
 
@@ -189,25 +189,25 @@ $no_js_text = __CONSTANTS['DEFAULTS']['no_js_text'];
                 // showCategoryTable: false,
             },
             onAcceptAll: function (cookie, preferences) {
-                console.log('custom onAcceptAll callback:', cookie, preferences);
+                console.log('$$ custom onAcceptAll callback:', cookie, preferences);
             },
             onAcceptNecessary: function (cookie, preferences) {
-                console.log('custom onAcceptNecessary callback:', cookie, preferences);
+                console.log('$$ custom onAcceptNecessary callback:', cookie, preferences);
             },
             onChange: function (cookie, preferences) {
-                console.log('custom onChange callback:', cookie, preferences);
+                console.log('$$ custom onChange callback:', cookie, preferences);
             },
             onInit: function (cookie, preferences) {
-                console.log('custom onInit callback:', cookie, preferences);
+                console.log('$$ custom onInit callback:', cookie, preferences);
             },
             onToggle: function (preferences) {
-                console.log('custom onToggle callback:', preferences);
+                console.log('$$ custom onToggle callback:', preferences);
             },
         };
 
-        window.initCookieConsentLayer(
+        window.initCookieConsentLayer && window.initCookieConsentLayer(
             customOptions,
-            'demo',
+            'demo22',
             'sd2fg1sd2fg3sd12g3d',
         );
 
